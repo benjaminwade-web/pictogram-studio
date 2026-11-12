@@ -5,6 +5,12 @@
  "aspect": "9:16",
  "style": "blueprint",
  "progress": true,
+ "hero": {
+  "outfit": "shirt",
+  "hair": "short",
+  "skin": 3,
+  "beard": true
+ },
  "scenes": [
   {
    "visual": "custom",
@@ -2691,6 +2697,7 @@
   "pattern": "grid",
   "glow": 0.3,
   "figure": "outline",
+  "people": "real",
   "cap": "color",
   "caps": true,
   "ground": "solid",

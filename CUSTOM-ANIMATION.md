@@ -66,12 +66,14 @@ Scene lengths are set from the word count after you write the scene, so anchor t
 
 ## Characters
 
-Every video is told by characters. A `person` part has a face that blinks, a mood, arms that gesture, and it can talk and react.
+Every video is told by characters. People are drawn as realistic adults in the flat vector style used by most explainer channels: about seven heads tall, real clothes, skin tones and hairstyles, small eyes and brows that carry the mood, two-joint arms and legs, and calm motion. A `person` part blinks, shows a mood, gestures, walks, talks and reacts. (The older round "pawn" figures are still there: pick People: Simple under Look, or set `"look": {"people": "simple"}`.)
+
+Why this style: explainer studios find that characters with adult proportions (7 to 8 heads), smaller eyes and restrained motion read as credible rather than childish, while flat vector stays clean at phone size. Fully photoreal figures are mostly used for medical work and cost far more to animate.
 
 | Field | What it does |
 |---|---|
 | `mood` | `happy`, `sad`, `shock`, `angry`, `think`, `worried`, `smug`, `sleep`. Changes the eyes, brows and mouth. |
-| `act` | `point`, `wave`, `cheer`, `jump`, `walk`, `run`, `talk`, `think`, `shrug`, `hips`, `facepalm`, `hold`, `nod`, `no`, `slump`, `dig`. |
+| `act` | `point`, `wave`, `cheer`, `jump`, `walk`, `run`, `talk`, `think`, `shrug`, `hips`, `cross` (arms folded), `facepalm`, `hold`, `nod`, `no`, `slump`, `dig`. |
 | `says` | A speech bubble of 1 to 4 words. It types itself on and the mouth moves. `saysSide` (`left` / `right`) picks the side, `saysAt` the moment, `saysSize` the text size. The bubble leaves by itself after a few seconds. |
 | `emote` | `!`, `?`, `# Custom animation
 
@@ -141,14 +143,17 @@ Scene lengths are set from the word count after you write the scene, so anchor t
 
  or `zzz` above the head. |
 | `look` | `[x, y]` on the stage to look at, or `left`, `right`, `up`, `down`, `camera`. |
-| `hat`, `hair`, `glasses` | `helmet`, `cap`, `crown`, `grad`; `tuft`, `bun`, `long`; `true`. These make a character recognisable from scene to scene. |
+| `hat`, `hair`, `glasses`, `beard` | `helmet`, `cap`, `crown`, `grad`; `short`, `side`, `long`, `bun`, `curly`, `spiky`, `bald`; `true`; `true`. |
+| `outfit`, `skin`, `hairCol` | `shirt`, `tee`, `suit`, `coat`, `dress`; 1 (light) to 6 (dark) or a colour; a colour such as `#7a4e2d`. |
+| project `hero` | `"hero": {"outfit": "suit", "hair": "side", "skin": 2, "beard": true}` at the top level of the project fixes how the main character (colour accent) looks in every scene, ready-made scenes included. Without it the main character still looks the same all video, picked from the title. |
+| `extra` | `true` on an accent-coloured person who is not the main character, so it gets its own look. |
 | `name` | A small label under the feet. |
 | `then` | A list of changes: `[{"at": "line1", "mood": "shock", "act": "", "says": "WAIT, WHAT?", "emote": "!"}]`. This is how a character reacts to what happens. |
 | `move` | A person with a `move` walks there by itself (feet step, arms swing, it faces the way it goes). `"walk": false` makes it slide instead. |
 
 Casting rules:
 
-1. Pick one main character for the whole video: accent colour, the same hat or hair in every scene. Give the topic a face (an engineer for a plane story, an investor for a money story, a shopper for a price story).
+1. Pick one main character for the whole video: accent colour, and a `hero` look in the project that fits the topic (a suit for a money story, a shirt, beard and helmet for an engineer). Give the topic a face (an engineer for a plane story, an investor for a money story, a shopper for a price story).
 2. Put the main character in nearly every custom scene, next to the thing the line talks about, looking at it.
 3. The character reacts when the main line lands: one `then` step on `line1` that changes the mood (think to shock, worried to happy).
 4. At most one speech bubble at a time, 1 to 4 words. It adds a feeling ("MY DESIGN!", "HMM...", "FIXED IT!") and never repeats the caption.

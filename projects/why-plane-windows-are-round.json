@@ -5,6 +5,12 @@
  "aspect": "9:16",
  "style": "blueprint",
  "progress": true,
+ "hero": {
+  "outfit": "shirt",
+  "hair": "short",
+  "skin": 3,
+  "beard": true
+ },
  "scenes": [
   {
    "visual": "custom",

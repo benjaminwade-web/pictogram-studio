@@ -3,8 +3,7 @@ Idea: Almost all of Warren Buffett's money arrived after he turned 65
 Style: Neon terminal. Shape: 9:16. Length: 32.8 seconds, 8 scenes, 74 spoken words.
 
 ## Retention check
-11 of 12 pass.
-- NOT PASSING: A character is on screen in most scenes. Only 4 of 8 scenes show a character. Add a person to the picture, or a "cast" list to a ready-made scene.
+12 of 12 pass.
 
 ## Files
 - `buffett-dug-for-fifty-years_9x16.mp4`: the video (silent).

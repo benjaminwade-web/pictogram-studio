@@ -57,7 +57,22 @@
       "p": {
         "big": "$1M",
         "sub": "AT AGE 32",
-        "icon": "none"
+        "icon": "none",
+        "cast": [
+          {
+            "is": "person",
+            "x": 16,
+            "y": 99,
+            "h": 28,
+            "mood": "smug",
+            "act": "hips",
+            "look": [
+              50,
+              40
+            ],
+            "emote": "$"
+          }
+        ]
       }
     },
     {
@@ -89,7 +104,38 @@
         "rightValue": 81.5,
         "prefix": "$",
         "suffix": "B",
-        "winner": "right"
+        "winner": "right",
+        "cast": [
+          {
+            "is": "person",
+            "x": 50,
+            "y": 99,
+            "h": 21,
+            "mood": "think",
+            "act": "think",
+            "look": [
+              75,
+              30
+            ],
+            "then": [
+              {
+                "at": "line1+0.4",
+                "mood": "shock",
+                "act": "",
+                "emote": "$"
+              },
+              {
+                "at": "line1+1.4",
+                "mood": "happy",
+                "act": "point",
+                "look": [
+                  75,
+                  30
+                ]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -179,5 +225,11 @@
       "url": "https://grahammann.net/book-notes/the-psychology-of-money-morgan-housel"
     }
   ],
-  "notes": "The report card grades are a visual joke, not data. The tunnel and the ages on its counter are a metaphor for years invested."
+  "notes": "The report card grades are a visual joke, not data. The tunnel and the ages on its counter are a metaphor for years invested.",
+  "hero": {
+    "outfit": "suit",
+    "hair": "side",
+    "hairCol": "#c4beb4",
+    "skin": 1
+  }
 }

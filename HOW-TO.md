@@ -33,7 +33,7 @@ Your work is remembered in the browser. The voice file is not, so add it again i
 
 ## What the animation can do
 
-- **Custom animation.** A picture built for one line out of parts: characters with faces who show a mood, react when something happens, talk in short speech bubbles and point, wave, cheer, walk or dig, icons, coins, labels, counting numbers, boxes, circles, bars, dotted grids, arrows, paths and outlines that draw themselves, speech bubbles and stamps. Parts can arrive, move, turn, grow, pulse, shake and leave at set moments. Claude writes these. To change one, tell Claude what you want to see.
+- **Custom animation.** A picture built for one line out of parts: realistic flat-vector people (adult proportions, clothes, skin tones, hairstyles) who show a mood, react when something happens, talk in short speech bubbles and point, wave, cheer, walk or dig, icons, coins, labels, counting numbers, boxes, circles, bars, dotted grids, arrows, paths and outlines that draw themselves, speech bubbles and stamps. Parts can arrive, move, turn, grow, pulse, shake and leave at set moments. Claude writes these. To change one, tell Claude what you want to see.
 - **Ready-made scenes (29).** Big statement, Numbered steps, A versus B, Percent ring, Timeline, Bar chart, Growth curve, Big counting number, Follow button, Digging toward the goal, Late at night, Report card, Proof cards, What most people think, Forced or wanted, Teacher and student, and the story scenes with figures (crowds, pedestals, spotlight, tracking table and so on).
 - **Camera and texture.** Between scenes the camera drops, whips sideways or punches through. Hits shake the frame. Captions arrive word by word. Stones or dust drift behind the scene and a light film grain sits on top.
 
