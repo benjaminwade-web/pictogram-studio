@@ -5,4 +5,4 @@
 
 ## Notes
 
-Detail for the pinned comment: the fatal crack is usually traced to the corner of a squarish cutout in the cabin roof, not a passenger window, but the cause is the same. Every picture in this video is a custom animation drawn for it.
+Detail for the pinned comment: the fatal crack is usually traced to the corner of a squarish cutout in the cabin roof, not a passenger window, but the cause is the same. Every picture in this video is a custom animation drawn for it, told by one engineer character who reacts in every scene.

@@ -1,6 +1,6 @@
 # Pictogram Studio
 
-Short animated explainer videos (TikTok, Reels, Shorts) made from a small JSON project: custom animation drawn for each idea, ready-made pictogram scenes, bold captions, seven switchable styles, and checks for viewer retention.
+Short animated explainer videos (TikTok, Reels, Shorts) made from a small JSON project: custom animation drawn for each idea and told by characters who react and talk, ready-made pictogram scenes, bold captions, seven switchable styles, and checks for viewer retention.
 
 ## What is in here
 

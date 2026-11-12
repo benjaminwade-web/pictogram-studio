@@ -73,24 +73,79 @@
       const c = this.ctx; r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r);
       c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
     }
-    person(x, h, o = {}) {
-      const a = o.a ?? 1; if (a <= 0) return; const c = this.ctx, by = o.y ?? this.GY, col = o.col || this.fg, dir = o.dir || 1;
-      const r = h * 0.2, hy = by - h + r, bw = h * 0.62, tw = bw * 0.42, bt = by - h * 0.56, rad = tw * 0.9, lean = (o.lean || 0) * h;
-      const ou = this.outline; c.save(); c.globalAlpha *= a; c.fillStyle = ou ? this.bg : col; c.strokeStyle = col; c.lineJoin = 'round';
-      c.beginPath(); c.moveTo(x - bw / 2, by); c.lineTo(x - tw + lean, bt + rad); c.quadraticCurveTo(x - tw + lean, bt, x - tw + rad + lean, bt);
-      c.lineTo(x + tw - rad + lean, bt); c.quadraticCurveTo(x + tw + lean, bt, x + tw + lean, bt + rad); c.lineTo(x + bw / 2, by); c.closePath();
-      if (o.ol) { c.save(); c.strokeStyle = this.bg; c.lineWidth = h * 0.05; c.stroke(); c.beginPath(); c.arc(x + lean * 1.4, hy, r + h * 0.025, 0, TAU); c.fillStyle = this.bg; c.fill(); c.restore(); c.beginPath(); c.moveTo(x - bw / 2, by); c.lineTo(x - tw + lean, bt + rad); c.quadraticCurveTo(x - tw + lean, bt, x - tw + rad + lean, bt); c.lineTo(x + tw - rad + lean, bt); c.quadraticCurveTo(x + tw + lean, bt, x + tw + lean, bt + rad); c.lineTo(x + bw / 2, by); c.closePath(); }
-      c.fill(); if (ou) { c.lineWidth = Math.max(3, h * 0.035); c.stroke(); }
-      const pt = o.pt || 0;
-      if (pt > 0) {
-        c.lineWidth = h * 0.115; c.lineCap = 'round'; c.beginPath(); const sx = x + dir * tw * 0.55 + lean, sy = bt + h * 0.16;
-        c.moveTo(sx, sy); c.lineTo(sx + dir * h * 0.36 * pt, sy - h * 0.085 * pt); c.stroke();
+    person(x, h, o = {}) { // a character: pawn body, a face that blinks and shows a mood, arms that gesture, feet that walk
+      const a = o.a ?? 1; if (a <= 0) return; const c = this.ctx, t = this.t, col = o.col || this.fg, dir = o.dir || 1, ou = this.outline, sd = hash(Math.round(x) * 0.37 + Math.round(h));
+      const mood = o.mood || '', act = o.act || '', st = o.st ?? t, talk = !!o.talk || act === 'talk', moving = act === 'walk' || act === 'run', k = act === 'run' ? 1.7 : 1;
+      let lean = o.lean || 0, sq = 1 + 0.012 * Math.sin(t * 2.1 + sd * 6), hop = 0; // breathing, then whatever the act asks for
+      if (act === 'jump' || act === 'cheer') { const ph = mod(st * 1.9, 1); hop = ph < 0.62 ? Math.sin((ph / 0.62) * Math.PI) * h * 0.2 : 0; sq *= ph > 0.62 ? 1 - 0.1 * Math.sin(((ph - 0.62) / 0.38) * Math.PI) : 1 + 0.05 * Math.sin((ph / 0.62) * Math.PI); }
+      else if (moving) { hop = Math.abs(Math.sin(st * 8 * k)) * h * 0.035 * k; lean += 0.035 * dir * k; }
+      else if (talk) hop = Math.abs(Math.sin(t * 9)) * h * 0.012; else if (act === 'nod') lean += 0.022 * Math.sin(st * 7); else if (act === 'slump' || mood === 'sleep') lean += 0.09 * dir;
+      if (mood === 'shock' && st < 0.4) hop += Math.sin((st / 0.4) * Math.PI) * h * 0.07; if (mood === 'worried') lean += 0.006 * Math.sin(t * 31);
+      const r = h * 0.2, hy = -h + r, bw = h * 0.62, tw = bw * 0.42, bt = -h * 0.56, rad = tw * 0.9, L = lean * h, hx = L * 1.4 + (act === 'no' ? Math.sin(st * 10) * r * 0.2 : 0), lwO = Math.max(3, h * 0.035), fc = ou ? col : this.bg;
+      c.save(); c.globalAlpha *= a; c.translate(x, (o.y ?? this.GY) - hop); c.scale(2 - sq, sq); c.fillStyle = ou ? this.bg : col; c.strokeStyle = col; c.lineJoin = 'round'; c.lineCap = 'round';
+      if (moving || o.feet) [-1, 1].forEach(s => { const ph = st * 8 * k + (s > 0 ? Math.PI : 0), lift = moving ? Math.max(0, Math.sin(ph)) * h * 0.06 : 0; c.save(); c.fillStyle = col; c.beginPath(); c.ellipse(s * bw * 0.24 + dir * h * 0.03 + (moving ? Math.cos(ph) * h * 0.05 * dir : 0), -h * 0.02 - lift + hop, h * 0.085, h * 0.04, 0, 0, TAU); c.fill(); c.restore(); });
+      const body = () => { c.beginPath(); c.moveTo(-bw / 2, 0); c.lineTo(-tw + L, bt + rad); c.quadraticCurveTo(-tw + L, bt, -tw + rad + L, bt); c.lineTo(tw - rad + L, bt); c.quadraticCurveTo(tw + L, bt, tw + L, bt + rad); c.lineTo(bw / 2, 0); c.closePath(); };
+      // arms: a pose for each side, picked from the act
+      const pt = o.pt || (act === 'point' ? eo(clamp(st / 0.35)) : 0), wantArms = o.arms ?? !!(act && act !== 'dig' && act !== 'slump' && act !== 'nod' && act !== 'no'), sw = Math.sin(t * 2 + sd * 9) * 0.012;
+      const pose = s => { const front = s === dir;
+        if (pt > 0 && front) return { hx: lerp(s * 0.13, dir * 0.36, pt), hy: lerp(0.27, -0.085, pt), ex: lerp(s * 0.12, dir * 0.18, pt), ey: lerp(0.13, 0.0, pt) };
+        if (act === 'cheer' || act === 'jump') return { hx: s * 0.22, hy: -0.42 + Math.sin(t * 11 + s) * 0.03, ex: s * 0.24, ey: -0.14 };
+        if (act === 'wave' && front) return { hx: s * (0.25 + 0.08 * Math.sin(t * 10)), hy: -0.4, ex: s * 0.25, ey: -0.1 };
+        if (act === 'think') return front ? { ax: hx + s * r * 0.55, ay: hy + r * 1.0, ex: s * 0.27, ey: 0.14 } : { hx: s * 0.05, hy: 0.2, ex: s * 0.27, ey: 0.1 };
+        if (act === 'hips') return { hx: s * 0.05, hy: 0.2, ex: s * 0.27, ey: 0.1 };
+        if (act === 'shrug') return { hx: s * 0.31, hy: -0.07 + Math.sin(t * 3) * 0.012, ex: s * 0.2, ey: 0.1 };
+        if (act === 'facepalm' && front) return { ax: hx + s * r * 0.15, ay: hy + r * 0.05, ex: s * 0.32, ey: -0.02 };
+        if (act === 'hold') return { hx: dir * 0.3, hy: 0.03, ex: dir * 0.16 + s * 0.05, ey: 0.13 };
+        if (talk && front) return { hx: s * 0.27, hy: 0.0 + 0.08 * Math.sin(t * 5.5 + sd * 9), ex: s * 0.2, ey: 0.12 };
+        if (moving) { const q = Math.sin(st * 8 * k + (s > 0 ? Math.PI : 0)); return { hx: s * 0.13 + q * 0.12 * dir, hy: 0.24 - Math.abs(q) * 0.03, ex: s * 0.13 + q * 0.05 * dir, ey: 0.13 }; }
+        return { hx: s * 0.14 + sw * s, hy: 0.27, ex: s * 0.13, ey: 0.13 };
+      };
+      const arm = (s, outline) => { const p = pose(s), sx = s * tw * 0.72 + L, sy = bt + h * 0.13, ax = p.ax != null ? p.ax : sx + p.hx * h, ay = p.ay != null ? p.ay : sy + p.hy * h, ex = sx + p.ex * h, ey = sy + p.ey * h;
+        const draw = (w, cc) => { c.strokeStyle = cc; c.lineWidth = w; c.beginPath(); c.moveTo(sx, sy); c.quadraticCurveTo(ex, ey, ax, ay); c.stroke(); c.fillStyle = cc; c.beginPath(); c.arc(ax, ay, w * 0.62, 0, TAU); c.fill(); };
+        if (outline) draw(h * 0.105 + h * 0.045, this.bg); draw(h * 0.105, col); c.fillStyle = ou ? this.bg : col; c.strokeStyle = col; };
+      const arms = wantArms || pt > 0; if (wantArms) arm(-dir, false);
+      if (o.ol) { body(); c.save(); c.strokeStyle = this.bg; c.lineWidth = h * 0.05; c.stroke(); c.beginPath(); c.arc(hx, hy, r + h * 0.025, 0, TAU); c.fillStyle = this.bg; c.fill(); c.restore(); }
+      body(); c.fill(); if (ou) { c.lineWidth = lwO; c.stroke(); }
+      if (o.hair === 'long') { c.save(); c.fillStyle = col; c.beginPath(); c.ellipse(hx - dir * r * 0.15, hy + r * 0.25, r * 1.12, r * 1.25, 0, 0, TAU); c.fill(); c.restore(); }
+      c.beginPath(); c.arc(hx, hy, r, 0, TAU); c.fill(); if (ou) { c.lineWidth = lwO; c.stroke(); }
+      if (o.hair === 'tuft') { c.save(); c.fillStyle = col; c.beginPath(); [-0.5, 0, 0.5].forEach(q => { c.moveTo(hx + q * r - r * 0.22, hy - r * 0.86); c.lineTo(hx + q * r + dir * r * 0.12, hy - r * 1.42); c.lineTo(hx + q * r + r * 0.22, hy - r * 0.86); }); c.fill(); c.restore(); }
+      else if (o.hair === 'bun') { c.save(); c.fillStyle = col; c.beginPath(); c.arc(hx - dir * r * 0.25, hy - r * 1.08, r * 0.42, 0, TAU); c.fill(); if (ou) { c.fillStyle = this.bg; c.fill(); c.lineWidth = lwO; c.stroke(); } c.restore(); }
+      // face
+      if (o.face !== false && r >= 9) {
+        const lk = Array.isArray(o.look) ? o.look : [dir * 0.45, 0], lx = clamp(+lk[0] || 0, -1, 1), ly = clamp(+lk[1] || 0, -1, 1), blink = mod(t + sd * 7, 3.4) < 0.13 && mood !== 'shock', gl = !!o.gl;
+        const fx0 = hx + lx * r * 0.22, ey0 = hy - r * 0.06 + ly * r * 0.14 + (o.hat === 'helmet' || o.hat === 'cap' ? r * 0.14 : 0), ex0 = r * 0.37, er = r * (mood === 'shock' ? (gl ? 0.16 : 0.21) : 0.13), lwF = Math.max(1.6, r * 0.1);
+        c.save(); c.fillStyle = fc; c.strokeStyle = fc; c.lineWidth = lwF; c.lineCap = 'round';
+        if (gl) { c.lineWidth = Math.max(2, r * 0.12); c.beginPath(); c.arc(fx0 - ex0, ey0, r * 0.34, 0, TAU); c.stroke(); c.beginPath(); c.arc(fx0 + ex0, ey0, r * 0.34, 0, TAU); c.stroke(); c.lineWidth = lwF; }
+        [-1, 1].forEach(s => { const cx = fx0 + s * ex0 + (gl ? lx * r * 0.08 : 0), cy = ey0; c.beginPath();
+          if (mood === 'sleep') { c.arc(cx, cy - er * 0.4, er * 1.2, 0.15 * Math.PI, 0.85 * Math.PI); c.stroke(); }
+          else if (blink) { c.moveTo(cx - er, cy); c.lineTo(cx + er, cy); c.stroke(); }
+          else if ((mood === 'happy' || act === 'cheer') && !gl) { c.arc(cx, cy + er * 0.7, er * 1.25, 1.15 * Math.PI, 1.85 * Math.PI); c.stroke(); }
+          else if (mood === 'smug') { c.arc(cx, cy - er * 0.2, er * 1.15, 0, Math.PI); c.fill(); }
+          else { c.arc(cx, cy, gl ? er * 0.85 : er, 0, TAU); c.fill(); }
+          if (r >= 15 && (mood === 'angry' || mood === 'sad' || mood === 'worried' || mood === 'shock' || (mood === 'think' && s === dir))) { const up = mood === 'shock' || mood === 'think' ? r * 0.16 : 0, tilt = mood === 'angry' ? 1 : mood === 'sad' || mood === 'worried' ? -1 : 0, by0 = cy - r * (gl ? 0.54 : 0.38) - (o.hat === 'helmet' || o.hat === 'cap' ? up * 0.3 : up); c.beginPath(); c.moveTo(cx - r * 0.2, by0 + s * tilt * r * 0.1); c.lineTo(cx + r * 0.2, by0 - s * tilt * r * 0.1); c.stroke(); }
+        });
+        const mx = hx + lx * r * 0.14, my = hy + r * 0.48 + ly * r * 0.08; c.lineWidth = lwF; c.beginPath();
+        if (talk) { c.ellipse(mx, my, r * 0.17, r * (0.05 + 0.17 * Math.abs(Math.sin(t * 13 + sd * 5))), 0, 0, TAU); c.fill(); }
+        else if (mood === 'shock') { c.ellipse(mx, my + r * 0.04, r * 0.13, r * 0.19, 0, 0, TAU); c.fill(); }
+        else if (mood === 'happy' || act === 'cheer') { c.arc(mx, my - r * 0.2, r * 0.36, 0.12 * Math.PI, 0.88 * Math.PI); c.stroke(); }
+        else if (mood === 'sad') { c.arc(mx, my + r * 0.3, r * 0.28, 1.2 * Math.PI, 1.8 * Math.PI); c.stroke(); }
+        else if (mood === 'angry') { c.moveTo(mx - r * 0.2, my + r * 0.04); c.lineTo(mx + r * 0.2, my + r * 0.04); c.stroke(); }
+        else if (mood === 'worried') { c.moveTo(mx - r * 0.24, my + r * 0.05); c.lineTo(mx - r * 0.08, my - r * 0.04); c.lineTo(mx + r * 0.08, my + r * 0.05); c.lineTo(mx + r * 0.24, my - r * 0.04); c.stroke(); }
+        else if (mood === 'think') { c.moveTo(mx - r * 0.05, my + r * 0.02); c.lineTo(mx + dir * r * 0.24, my - r * 0.04); c.stroke(); }
+        else if (mood === 'smug') { c.moveTo(mx - dir * r * 0.18, my + r * 0.04); c.quadraticCurveTo(mx, my + r * 0.12, mx + dir * r * 0.24, my - r * 0.08); c.stroke(); }
+        else if (mood !== 'sleep') { c.arc(mx, my - r * 0.1, r * 0.22, 0.2 * Math.PI, 0.8 * Math.PI); c.stroke(); }
+        else { c.arc(mx, my, r * 0.07, 0, TAU); c.fill(); }
+        c.restore();
+        if (mood === 'worried' && r >= 15) { const ph = mod(t * 0.9 + sd, 1); c.save(); c.globalAlpha *= 1 - ph; c.fillStyle = ou ? col : this.fg === col ? this.ac : this.fg; c.beginPath(); c.arc(hx - dir * r * 1.15, hy - r * 0.3 + ph * r * 0.9, r * 0.11, 0, TAU); c.fill(); c.restore(); }
+        if (mood === 'shock' && st < 0.7) { c.save(); c.globalAlpha *= 1 - st / 0.7; c.strokeStyle = ou ? col : this.fg; c.lineWidth = Math.max(2, r * 0.1); [-0.6, 0, 0.6].forEach(q => { c.beginPath(); c.moveTo(hx + Math.sin(q) * r * 1.35, hy - Math.cos(q) * r * 1.35); c.lineTo(hx + Math.sin(q) * r * (1.7 + st), hy - Math.cos(q) * r * (1.7 + st)); c.stroke(); }); c.restore(); }
       }
-      c.beginPath(); c.arc(x + lean * 1.4, hy, r, 0, TAU); c.fill(); if (ou) { c.lineWidth = Math.max(3, h * 0.035); c.stroke(); }
-      if (o.gl) {
-        c.strokeStyle = ou ? col : this.bg; c.lineWidth = Math.max(2, r * 0.13); const gx = x + lean * 1.4 + dir * r * 0.12, gr = r * 0.34;
-        c.beginPath(); c.arc(gx - gr * 1.08, hy, gr, 0, TAU); c.stroke(); c.beginPath(); c.arc(gx + gr * 1.08, hy, gr, 0, TAU); c.stroke();
-      }
+      // hats
+      const hc = o.hatCol || (col === this.ac ? this.fg : this.ac);
+      if (o.hat === 'helmet') { c.save(); c.fillStyle = hc; c.beginPath(); c.arc(hx, hy - r * 0.46, r * 1.06, Math.PI, 0); c.closePath(); c.fill(); c.fillRect(hx - r * 1.3, hy - r * 0.58, r * 2.6, r * 0.2); c.restore(); }
+      else if (o.hat === 'cap') { c.save(); c.fillStyle = hc; c.beginPath(); c.arc(hx, hy - r * 0.46, r * 0.99, Math.PI, 0); c.closePath(); c.fill(); c.fillRect(hx + (dir > 0 ? 0 : -r * 1.5), hy - r * 0.6, r * 1.5, r * 0.2); c.restore(); }
+      else if (o.hat === 'crown') { c.save(); c.fillStyle = hc; c.beginPath(); c.moveTo(hx - r * 0.8, hy - r * 0.62); c.lineTo(hx - r * 0.86, hy - r * 1.5); c.lineTo(hx - r * 0.4, hy - r * 1.05); c.lineTo(hx, hy - r * 1.62); c.lineTo(hx + r * 0.4, hy - r * 1.05); c.lineTo(hx + r * 0.86, hy - r * 1.5); c.lineTo(hx + r * 0.8, hy - r * 0.62); c.closePath(); c.fill(); c.restore(); }
+      else if (o.hat === 'grad') { c.save(); c.fillStyle = hc; c.beginPath(); c.moveTo(hx - r * 1.35, hy - r * 0.95); c.lineTo(hx, hy - r * 1.4); c.lineTo(hx + r * 1.35, hy - r * 0.95); c.lineTo(hx, hy - r * 0.55); c.closePath(); c.fill(); c.strokeStyle = hc; c.lineWidth = Math.max(2, r * 0.09); c.beginPath(); c.moveTo(hx + r * 1.1, hy - r * 0.92); c.lineTo(hx + r * 1.1, hy - r * 0.3 + Math.sin(t * 4) * r * 0.06); c.stroke(); c.restore(); }
+      if (arms) arm(dir, true);
       c.restore();
     }
     crowd(x, n, h, o = {}) { // overlapping group, back to front
@@ -196,7 +251,7 @@
     worker(x, h, o = {}) { // the hero at work: helmet, headlamp beam and a pick. o.swing runs 0 to 1 through one swing, hitting at 0.7
       const a = o.a ?? 1; if (a <= 0) return; const c = this.ctx, by = o.y ?? this.GY, dir = o.dir || 1, col = o.col || this.ac, r = h * 0.2, hy = by - h + r, q = o.swing ?? 0.3;
       if (o.beam > 0) { const gr = c.createLinearGradient(x, 0, x + dir * h * 1.7, 0); gr.addColorStop(0, rgba(this.fg, 0.55 * o.beam * a)); gr.addColorStop(1, rgba(this.fg, 0)); c.save(); c.fillStyle = gr; c.beginPath(); c.moveTo(x + dir * r * 1.05, hy - r * 0.25); c.lineTo(x + dir * h * 1.7, hy - h * 0.42); c.lineTo(x + dir * h * 1.7, hy + h * 0.36); c.closePath(); c.fill(); c.restore(); }
-      const lean = q > 0.5 && q < 0.85 ? 0.03 : 0; this.person(x, h, { col, a, y: by, lean });
+      const lean = q > 0.5 && q < 0.85 ? 0.03 : 0; this.person(x, h, { col, a, y: by, lean, dir, mood: o.mood ?? 'angry', look: [dir * 0.6, 0.15], hat: 'helmet', hatCol: this.fg, arms: false, st: o.st });
       const th = q < 0.5 ? lerp(0.15, -1.9, eio(q / 0.5)) : q < 0.7 ? lerp(-1.9, 0.2, ei((q - 0.5) / 0.2)) : 0.2 - 0.3 * Math.sin(((q - 0.7) / 0.3) * Math.PI) * (1 - (q - 0.7) / 0.3) - 0.05 * ((q - 0.7) / 0.3);
       const sx = x + dir * h * 0.1, sy = by - h * 0.48, La = h * 0.36, hx = sx + dir * Math.cos(th) * La, hy2 = sy + Math.sin(th) * La, ph = th - 0.95, Lh = h * 0.42, bx = hx + dir * Math.cos(ph) * Lh, byy = hy2 + Math.sin(ph) * Lh, Lp = h * 0.2;
       const ux = dir * Math.cos(ph), uy = Math.sin(ph), nx = -dir * Math.sin(ph), ny = Math.cos(ph);
@@ -204,7 +259,6 @@
       c.strokeStyle = this.fg; c.lineWidth = Math.max(3, h * 0.028); c.beginPath(); c.moveTo(hx - ux * h * 0.06, hy2 - uy * h * 0.06); c.lineTo(bx, byy); c.stroke();
       c.lineWidth = Math.max(4, h * 0.042); c.beginPath(); c.moveTo(bx + nx * Lp - ux * Lp * 0.25, byy + ny * Lp - uy * Lp * 0.25); c.quadraticCurveTo(bx + ux * Lp * 0.3, byy + uy * Lp * 0.3, bx - nx * Lp - ux * Lp * 0.25, byy - ny * Lp - uy * Lp * 0.25); c.stroke();
       c.strokeStyle = col; c.lineWidth = h * 0.11; c.beginPath(); c.moveTo(sx, sy); c.lineTo(hx, hy2); c.stroke();
-      c.fillStyle = this.fg; c.beginPath(); c.arc(x + lean * h * 1.4, hy - r * 0.02, r * 1.1, Math.PI, 0); c.closePath(); c.fill(); c.fillRect(x + lean * h * 1.4 - r * 1.3, hy - r * 0.12, r * 2.6, r * 0.22);
       c.restore();
     }
     icon(name, x, y, s, col, lw, a = 1) {
@@ -285,7 +339,7 @@
       F('symbols', 'Show = ↑ ★ symbols', 'bool', true), F('doubters', 'Show confused onlookers', 'bool', true)],
     draw(g) {
       const P = g.P, t = g.t, c = g.ctx, T2 = g.hasL2 ? g.T2 : g.T1 + 1.0, hx = g.X(g.V(640, 560)), hh = g.V(290, 270);
-      g.halo(hx, g.GY - 140, 300, 0.14 * g.in(0, 0.6)); g.person(hx, hh, { col: g.ac, gl: 1, pt: g.in(T2 - 0.05, 0.4), a: g.in(0, 0.3) });
+      g.halo(hx, g.GY - 140, 300, 0.14 * g.in(0, 0.6)); g.person(hx, hh, { col: g.ac, gl: 1, pt: g.in(T2 - 0.05, 0.4), a: g.in(0, 0.3), arms: 1, act: t < T2 - 0.05 ? 'think' : '', mood: t < T2 - 0.05 ? 'think' : 'happy', st: t < T2 ? t : t - T2, look: t < T2 ? [0.3, -0.8] : [0.8, -0.5] });
       g.tag(P.tag, g.X(g.V(660, 600)), g.V(380, 420), { s: g.pop(0.6), strike: P.strike ? g.in(1.1, 0.3) : 0 });
       const bx = g.X(g.V(1180, 1330)), by = g.V(430, 520), bp = g.pop(T2);
       if (bp > 0) {
@@ -540,7 +594,7 @@
     draw(g) {
       const P = g.P, t = g.t, c = g.ctx, tc = Math.min(1.0, g.d * 0.4), done = t >= tc, hx = g.V(500, 960), bx = g.V(1265, 960), by = g.V(630, 520), bw = 560, bh = 150;
       const press = 1 - 0.07 * Math.sin(ramp(t, tc - 0.08, 0.3) * Math.PI), j = done ? Math.sin(t * 38) * 7 * (0.35 + 0.65 * Math.exp(-(t - tc) * 1.2)) : 0;
-      g.halo(hx, g.GY - 140, 300, 0.15 + (done ? 0.1 : 0)); g.person(hx + j, g.V(290, 270), { col: g.ac, gl: !done, a: g.in(0, 0.3), lean: j * 0.0012 });
+      g.halo(hx, g.GY - 140, 300, 0.15 + (done ? 0.1 : 0)); g.person(hx + j, g.V(290, 270), { col: g.ac, gl: P.glasses != null ? !!P.glasses : !done, hat: P.hat, hair: P.hair, a: g.in(0, 0.3), lean: j * 0.0012, arms: 1, mood: done ? 'happy' : '', act: done ? 'cheer' : 'point', st: done ? t - tc : t, dir: g.vert ? 1 : 1, look: done ? [0, 0] : [g.vert ? 0 : 0.8, g.vert ? -0.9 : -0.3] });
       if (done) { c.save(); c.strokeStyle = g.ac; c.lineWidth = 4; c.lineCap = 'round'; [1, 2].forEach(k => [-1, 1].forEach(s => { c.globalAlpha = 0.75 / k * (0.6 + 0.4 * Math.sin(t * 20 + k)); c.beginPath(); c.arc(hx, g.GY - 60, 120 + k * 28, s > 0 ? -0.5 : Math.PI - 0.5, s > 0 ? 0.5 : Math.PI + 0.5); c.stroke(); })); c.restore(); g.text(P.foot, hx, g.GY + 34, { size: 14, col: g.ac, a: g.in(tc + 0.1) }); }
       const s = g.pop(0.15) * press; if (s <= 0) return;
       if (done) g.halo(bx, by, 420, 0.3);
@@ -594,7 +648,7 @@
         c.save(); c.globalAlpha *= a; c.strokeStyle = col; c.fillStyle = g.ac; c.lineWidth = 4; c.beginPath(); c.arc(x0 + dx, y, 31, 0, TAU); hi ? c.fill() : c.stroke(); c.restore();
         g.text(i + 1, x0 + dx, y + 2, { size: 27, wt: 800, ls: 0, col: hi ? g.bg : g.fg, a }); g.text(s, x0 + 66 + dx, y + 2, { size, wt: 700, ls: 0.06, align: 'left', col, a });
       });
-      if (!g.vert) { g.halo(350, g.GY - 130, 280, 0.14); g.person(350, 260, { col: g.ac, gl: 1, pt: 0.9, a: g.in(0, 0.3) }); }
+      if (!g.vert) { g.halo(350, g.GY - 130, 280, 0.14); g.person(350, 260, { col: g.ac, gl: 1, pt: 0.9, a: g.in(0, 0.3), arms: 1, talk: true }); }
     },
   };
 
@@ -642,7 +696,7 @@
         if (isH) g.halo(x, ly, 190, 0.4 * clamp(s)); c.fillStyle = col; c.beginPath(); c.arc(x, ly, 17 * s, 0, TAU); c.fill();
         g.text(pt.y, x, ly - 72, { size: g.V(46, 34), wt: 800, ls: 0.01, col, a: clamp(s) }); g.text(pt.l, x, ly + 62, { size: g.V(17, 15), a: clamp(s) * 0.85, ls: g.V(0.2, 0.06) });
       });
-      const hx = Math.min(x0 + tot * prog, 960 + g.V(760, 395)); g.halo(hx, g.GY - 90, 200, 0.14); g.person(hx, g.V(190, 165), { col: g.ac, gl: 1, pt: 0.5, a: g.in(0, 0.3) });
+      const hx = Math.min(x0 + tot * prog, 960 + g.V(760, 395)); g.halo(hx, g.GY - 90, 200, 0.14); g.person(hx, g.V(190, 165), { col: g.ac, gl: 1, a: g.in(0, 0.3), act: prog < 1 ? 'walk' : 'cheer', mood: prog < 1 ? '' : 'happy', arms: 1 });
     },
   };
 
@@ -692,7 +746,7 @@
         for (let k = 0; k < 7; k++) { const p2 = ramp(t, tb + 0.08 + k * 0.07, 0.75); if (p2 > 0) g.coin(lerp(rx, wall - 40 - k * 36, eo(p2)), lerp(ry, GY - 16, p2 * p2) - Math.sin(p2 * Math.PI) * (120 + k * 14), 14, '', t * 5 + k, 1); }
       }
       if (hits && since < 0.36 && !broke) { const ix = wall + 4, iy = GY - h * 0.513; g.spray(ix, iy, 10, since / 0.36, { angle: Math.PI + 0.35, spread: 2.2, r: 130, len: 24, grav: 70, seed: hits * 3 }); g.spray(ix, iy, 5, since / 0.3, { angle: Math.PI, spread: 2.8, r: 80, len: 16, seed: hits * 5 + 1, col: g.ac }); g.halo(ix, iy, 90, 0.5 * (1 - since / 0.36), g.fg); }
-      g.halo(hx, GY - h * 0.5, h * 1.1, 0.16 * a0); g.worker(hx, h, { swing: broke ? lerp(0.72, 0.3, eo(ramp(t, tb, 0.5))) : mod(t, T) / T, beam: 0.85 * a0, a: a0 });
+      g.halo(hx, GY - h * 0.5, h * 1.1, 0.16 * a0); g.worker(hx, h, { swing: broke ? lerp(0.72, 0.3, eo(ramp(t, tb, 0.5))) : mod(t, T) / T, beam: 0.85 * a0, a: a0, mood: broke ? 'happy' : 'angry', st: broke ? t - tb : t });
       const val = broke ? +P.to : lerp(+P.from, +P.to, Math.min(1, hits / total)), px0 = hx + 30, py = top - g.V(88, 110);
       g.tag((P.label ? P.label + ' ' : '') + fmt(val), px0, py, { size: g.V(25, 27), s: g.pop(0.1, 0.4) * (1 + 0.1 * kick + (broke ? 0.14 * Math.exp(-(t - tb) * 5) : 0)), solid: !broke, fill: broke });
       g.tag(P.tag, px0, py - g.V(64, 70), { size: 15, s: g.pop(0.4), back: 1 });
@@ -729,11 +783,11 @@
 
   V.report = {
     name: 'Report card', hint: 'A sheet whose rows fill in one by one, then a stamp slams down on line 2. Works for grades, scores, reviews or any verdict.',
-    fields: [F('title', 'Title', 'text', 'REPORT CARD'), F('rows', 'Rows, as NAME:MARK', 'text', 'MATH:F, SCIENCE:F, ENGLISH:F, HISTORY:F'), F('stamp', 'Stamp text', 'text', "DOESN'T CARE"), F('person', 'Show the character beside it', 'bool', true)],
+    fields: [F('title', 'Title', 'text', 'REPORT CARD'), F('rows', 'Rows, as NAME:MARK', 'text', 'MATH:F, SCIENCE:F, ENGLISH:F, HISTORY:F'), F('stamp', 'Stamp text', 'text', "DOESN'T CARE"), F('person', 'Show the character beside it', 'bool', true), F('reaction', 'How the character takes it', 'select', 'sad', { options: ['sad', 'happy'] })],
     draw(g) {
       const P = g.P, t = g.t, c = g.ctx, GY = g.GY, rows = pairs(P.rows, 5), n = rows.length, w = g.V(520, 600), h = g.V(600, 690), cx = g.V(1080, 990), sl = g.pop(0, 0.5), cy = GY - 46 - h / 2 + (1 - sl) * 280;
       const tS = g.hasL2 ? g.T2 + 0.15 : Math.max(1.6, g.d * 0.55), span = Math.max(0.6, tS - 0.9), sp = ramp(t, tS, 0.2), hit = t >= tS + 0.2 ? Math.exp(-(t - tS - 0.2) * 8) : 0; if (hit > 0.03) g.shake(13 * hit);
-      if (P.person) { const px = g.V(600, 566), ph = g.V(270, 205) * (1 - 0.04 * g.in(tS + 0.2, 0.3)); g.halo(px, GY - ph * 0.5, ph, 0.14); g.person(px, ph, { col: g.ac, gl: 1, a: g.in(0, 0.3), lean: 0.05 * g.in(tS + 0.2, 0.3) }); }
+      if (P.person) { const px = g.V(600, 566), ph = g.V(270, 205) * (1 - 0.04 * g.in(tS + 0.2, 0.3)); g.halo(px, GY - ph * 0.5, ph, 0.14); const good = P.reaction === 'happy', aft = t >= tS + 0.2; g.person(px, ph, { col: g.ac, gl: 1, a: g.in(0, 0.3), lean: good ? 0 : 0.05 * g.in(tS + 0.2, 0.3), arms: 1, mood: aft ? (good ? 'happy' : 'sad') : 'worried', act: aft && good ? 'cheer' : '', st: aft ? t - tS - 0.2 : t, look: [0.8, -0.2] }); }
       g.halo(cx, cy, w * 0.9, 0.1 * clamp(sl), g.fg); c.save(); c.translate(cx, cy); c.rotate(-0.025); c.globalAlpha *= clamp(sl * 2);
       c.fillStyle = g.bg; c.strokeStyle = g.fg; c.lineWidth = 4.5; g.rr(-w / 2, -h / 2, w, h, 12); c.fill(); c.stroke();
       g.text(P.title, 0, -h / 2 + 60, { size: g.V(30, 34), wt: 800, ls: 0.14 }); c.lineWidth = 3; c.beginPath(); c.moveTo(-w / 2 + 40, -h / 2 + 102); c.lineTo(w / 2 - 40, -h / 2 + 102); c.stroke();
@@ -813,7 +867,7 @@
       c.globalAlpha = fa * a0; c.lineWidth = 7; c.beginPath(); c.moveTo(an[0][0] - 26, an[0][1] + up); c.lineTo(an[2][0] + 26, an[2][1] + up); c.stroke(); c.lineWidth = 5; c.beginPath(); c.moveTo(hx - sway * 300, barY - 28 + up); c.lineTo(hx - sway * 300, barY + up); c.stroke(); c.restore();
       g.tag(P.tag, hx - sway * 300, barY - 58 + up, { size: 21, s: g.pop(0.25), a: fa, back: 1, strike: cut ? eo(clamp(cp * 3)) : 0 });
       if (cut) an.forEach((p, k) => g.spray(lerp(p[0], at[k][0], 0.5), lerp(p[1], at[k][1], 0.5), 6, (t - ts) / 0.4, { r: 90, len: 18, col: k === 1 ? g.ac : g.fg, seed: k * 4 }));
-      g.halo(px, GY - h * 0.5, h * 1.05, (0.1 + 0.12 * cp) * a0); g.person(px, h, { col: g.ac, y: by, lean: sway, gl: 1, a: a0, pt: g.in(tw, 0.4) });
+      g.halo(px, GY - h * 0.5, h * 1.05, (0.1 + 0.12 * cp) * a0); g.person(px, h, { col: g.ac, y: by, lean: sway, gl: 1, a: a0, pt: g.in(tw, 0.4), arms: 1, mood: !cut ? 'worried' : t >= tw ? 'happy' : 'shock', st: cut ? (t >= tw ? t - tw : t - ts) : t, look: t >= tw ? [0.8, -0.6] : [0, -0.8] });
       const bx = hx + g.V(480, 410), byy = GY - h - g.V(70, 130), r = g.V(128, 120), bs = g.pop(tw, 0.45);
       [[0.3, 11], [0.56, 18]].forEach((q, k) => { const s = g.pop(tw - 0.2 + k * 0.1, 0.3); if (s > 0) { c.save(); c.strokeStyle = g.fg; c.lineWidth = 3.5; c.beginPath(); c.arc(lerp(px + h * 0.2, bx - r * 0.7, q[0]), lerp(GY - h - 10, byy + r * 0.6, q[0]), q[1] * s, 0, TAU); c.stroke(); c.restore(); } });
       if (bs > 0) {
@@ -833,9 +887,9 @@
       g.trace([[bx - bw / 2, by - bh / 2], [bx + bw / 2, by - bh / 2], [bx + bw / 2, by + bh / 2], [bx - bw / 2, by + bh / 2], [bx - bw / 2, by - bh / 2]], eo(ramp(t, 0, 0.7)), { lw: 4.5 });
       g.text(P.board, bx - bw / 2 + 36, by - bh / 2 + 48, { size: 22, wt: 700, align: 'left', a: g.in(0.5) });
       [0, 1, 2].forEach(k => { const pts = []; for (let q = 0; q <= 12; q++) pts.push([bx - bw / 2 + 40 + (q / 12) * (bw - 80) * (k === 2 ? 0.6 : 1), by - bh / 2 + 110 + k * 54 + Math.sin(q * 1.9 + k * 2) * 7]); g.trace(pts, ramp(t, 0.6 + k * 0.45, 0.8), { lw: 3, a: 0.7 }); });
-      g.person(tx, th, { a: a0, pt: 0.8 + 0.2 * Math.sin(t * 3.4), lean: 0.012 * Math.sin(t * 3.4) });
+      g.person(tx, th, { a: a0, pt: 0.8 + 0.2 * Math.sin(t * 3.4), lean: 0.012 * Math.sin(t * 3.4), talk: true, arms: 1, mood: 'angry', hat: 'grad' });
       [0, 1, 2].forEach(k => { const ph = mod(t * 1.3 + k / 3, 1); c.save(); c.strokeStyle = g.fg; c.lineWidth = 3; c.lineCap = 'round'; c.globalAlpha = Math.sin(ph * Math.PI) * 0.6 * a0; c.beginPath(); c.arc(tx + th * 0.16, GY - th * 0.82, 30 + ph * 46, -0.75, -0.05); c.stroke(); c.restore(); });
-      const lean = 0.1 + 0.012 * Math.sin(t * 1.5); g.halo(sx, GY - sh * 0.5, sh, 0.14 * a0); g.person(sx, sh, { col: g.ac, a: a0, lean, y: GY - 6 });
+      const lean = 0.1 + 0.012 * Math.sin(t * 1.5); g.halo(sx, GY - sh * 0.5, sh, 0.14 * a0); g.person(sx, sh, { col: g.ac, a: a0, lean, y: GY - 6, mood: 'sleep', dir: 1 });
       c.save(); c.globalAlpha *= a0; c.fillStyle = g.bg; c.strokeStyle = g.fg; c.lineWidth = 4; g.rr(sx - 150, GY - 132, 320, 18, 5); c.fill(); c.stroke(); c.beginPath(); c.moveTo(sx - 128, GY - 114); c.lineTo(sx - 128, GY - 3); c.moveTo(sx + 148, GY - 114); c.lineTo(sx + 148, GY - 3); c.stroke(); c.restore();
       if (P.zzz) for (let k = 0; k < 3; k++) { const ph = mod(t * 0.45 + k / 3, 1); g.text('Z', sx + 96 + ph * 66, GY - sh - 6 - ph * 120, { size: 20 + ph * 24, wt: 800, ls: 0, a: Math.sin(ph * Math.PI) * 0.9 * a0 }); }
       const ly = GY - sh - g.V(190, 200), ls = g.pop(TL, 0.4); if (ls > 0) { if (t < TL + 0.5) g.shake(6 * Math.exp(-(t - TL) * 9));
@@ -863,9 +917,9 @@
     for (let i = a0; i < a1; i++) { const s = mid(P(i - 1), P(i)), e = mid(P(i), P(i + 1)), q = P(i); for (let k = 0; k <= 6; k++) { const u = k / 6; out.push([(1 - u) * (1 - u) * s[0] + 2 * (1 - u) * u * q[0] + u * u * e[0], (1 - u) * (1 - u) * s[1] + 2 * (1 - u) * u * q[1] + u * u * e[1]]); } }
     if (close) out.push(out[0]); else out.push(pts[n - 1]); return out;
   };
-  function stageOf(g) { const top = g.V(250, 150), xl = g.V(360, 450), xr = g.V(1560, 1470), H = g.GY - top; return { U: H / 100, W: xr - xl, H, X: x => xl + (x / 100) * (xr - xl), Y: y => top + (y / 100) * H }; }
+  function stageOf(g) { const top = g.V(250, 150), xl = g.V(360, 450), xr = g.V(1560, 1470), H = g.GY - top; return { U: H / 100, W: xr - xl, H, xl, xr, X: x => xl + (x / 100) * (xr - xl), Y: y => top + (y / 100) * H }; }
   function drawItems(g, items, st, inGroup, depth) {
-    const c = g.ctx, U = st.U, PX = (x, y) => (inGroup ? [num(x, 0) * U, num(y, 0) * U] : [st.X(num(x, 50)), st.Y(num(y, 50))]), list = [];
+    const c = g.ctx, stg = st, U = st.U, PX = (x, y) => (inGroup ? [num(x, 0) * U, num(y, 0) * U] : [st.X(num(x, 50)), st.Y(num(y, 50))]), list = [];
     (Array.isArray(items) ? items : []).slice(0, 60).forEach(e => { // "repeat" makes a row of copies
       if (!e || typeof e !== 'object') return; const rp = e.repeat, d0 = inGroup || /^path$/i.test(e.is || '') ? 0 : 50;
       if (rp && typeof rp === 'object' && rp.n > 1) for (let k = 0; k < Math.min(30, rp.n | 0); k++) list.push(Object.assign({}, e, { repeat: null, x: num(e.x, d0) + k * num(rp.dx, 0), y: num(e.y, d0) + k * num(rp.dy, 0), at: when(g, e.at, 0) + k * num(rp.stagger, 0) }));
@@ -875,7 +929,7 @@
       const kind = String(e.is || e.type || '').toLowerCase(), at = clamp(when(g, e.at, 0), 0, Math.max(0, g.d - 0.2)), out = when(g, e.out, 1e9), lt = g.t - at; if (lt < 0 || g.t > out + 0.3) return;
       if (kind === 'shake') { g.shake(num(e.amount, 10) * Math.exp(-lt * 7)); return; }
       const isPath = kind === 'path' || kind === 'blob' && Array.isArray(e.pts); let x = num(e.x, inGroup || isPath ? 0 : 50), y = num(e.y, inGroup || isPath ? 0 : 50), s = num(e.scale, 1), r = num(e.rot, 0), a = num(e.alpha, 1);
-      (Array.isArray(e.move) ? e.move : []).slice(0, 12).forEach(k => { if (!k) return; const p = (EASE[k.ease] || eio)(clamp((g.t - when(g, k.at, 0)) / Math.max(0.05, num(k.dur, 0.6)))); if (p <= 0) return; x = lerp(x, num(k.x, x), p); y = lerp(y, num(k.y, y), p); s = lerp(s, num(k.scale, s), p); r = lerp(r, num(k.rot, r), p); a = lerp(a, num(k.alpha, a), p); });
+      let going = 0; (Array.isArray(e.move) ? e.move : []).slice(0, 12).forEach(k => { if (!k) return; const p = (EASE[k.ease] || eio)(clamp((g.t - when(g, k.at, 0)) / Math.max(0.05, num(k.dur, 0.6)))); if (p <= 0) return; if (p < 1 && Math.abs(num(k.x, x) - x) > 1) going = num(k.x, x) > x ? 1 : -1; x = lerp(x, num(k.x, x), p); y = lerp(y, num(k.y, y), p); s = lerp(s, num(k.scale, s), p); r = lerp(r, num(k.rot, r), p); a = lerp(a, num(k.alpha, a), p); });
       const strokey = /^(line|arrow|path|box|circle|ring|blob|dots)$/.test(kind), ent = String(e.in || (strokey ? 'draw' : /^(icon|coin|tag|star|chest|bubble|burst)$/.test(kind) ? 'pop' : kind === 'bar' ? 'grow' : kind === 'stamp' || kind === 'sparks' || kind === 'group' ? 'none' : 'fade'));
       const ip = clamp(lt / Math.max(0.05, num(e.inDur, ent === 'draw' ? 0.7 : 0.45))); let dp = 1, px, py, pts = null;
       if (isPath) { pts = (Array.isArray(e.pts) ? e.pts : []).filter(q => Array.isArray(q)).slice(0, 80).map(q => PX(q[0], q[1])); if (pts.length < 2) return; let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; pts.forEach(q => { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); }); const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; pts = pts.map(q => [q[0] - cx, q[1] - cy]); px = cx + (inGroup ? x * U : (x / 100) * st.W); py = cy + (inGroup ? y * U : (y / 100) * st.H); }
@@ -895,12 +949,18 @@
       if (/glow/.test(fx)) g.halo(0, 0, 18 * U, 0.2 + 0.4 * Math.exp(-lt * 3), colr(g, e.fxColor, g.ac));
       c.rotate((r * Math.PI) / 180); c.scale(s, s);
       switch (kind) {
-        case 'person': { const h = num(e.h, 30) * U, dir = e.dir === 'left' || e.dir === -1 ? -1 : 1, act = String(e.act || ''), pc = col || g.ac; let yy = 0, lean = num(e.lean, 0), pt = e.point === true ? 1 : num(e.point, 0);
-          if (act === 'jump' || act === 'cheer') yy = -Math.abs(Math.sin(lt * 5.5)) * h * 0.16; else if (act === 'walk') { yy = -Math.abs(Math.sin(lt * 9)) * h * 0.03; lean = 0.04 * dir; } else if (act === 'nod') lean = 0.02 * Math.sin(lt * 5); else if (act === 'slump') lean = 0.1 * dir; else if (act === 'wave') pt = 0.75 + 0.25 * Math.sin(lt * 9); else if (act === 'point') pt = eo(clamp(lt / 0.4));
+        case 'person': { let cur = e, st0 = at; (Array.isArray(e.then) ? e.then : []).slice(0, 8).forEach(k => { if (!k || typeof k !== 'object') return; const ka = when(g, k.at, 1e9); if (g.t >= ka) { cur = Object.assign({}, cur, k); st0 = ka; } });
+          const h = num(e.h, 30) * U, walkNow = going && !inGroup && e.walk !== false, dir = walkNow ? going : cur.dir === 'left' || cur.dir === -1 ? -1 : 1, act = walkNow ? 'walk' : String(cur.act || ''), mood = String(cur.mood || ''), pc = col || g.ac, st = walkNow ? g.t : g.t - st0, says = cur.says ? String(cur.says).toUpperCase() : '', sayT = g.t - (cur === e ? when(g, e.saysAt, at + 0.3) : st0 + 0.1), talking = act === 'talk' || (!!says && sayT > 0 && sayT < 0.4 + says.length * 0.075);
+          let look = null; if (Array.isArray(cur.look)) { const q = PX(cur.look[0], cur.look[1]), dx = q[0] - px, dy = q[1] - (py - h * 0.8), dd = Math.hypot(dx, dy) || 1; look = [dx / dd, dy / dd]; } else if (cur.look) look = { left: [-0.8, 0], right: [0.8, 0], up: [0, -0.9], down: [0, 0.9], camera: [0, 0] }[cur.look] || null;
           if (e.glow !== false) g.halo(0, -h * 0.5, h * 0.95, 0.14, pc);
-          if (act === 'dig') g.worker(0, h, { y: 0, col: pc, dir, swing: mod(lt, 0.62) / 0.62, beam: e.beam === false ? 0 : 0.8 });
-          else g.person(0, h, { y: yy, col: pc, gl: e.glasses == null ? pc === g.ac : !!e.glasses, dir, pt, lean });
-          if (act === 'cheer') for (let k = 0; k < 4; k++) g.sparkle(Math.cos(k * 1.7 + g.t) * h * 0.55, -h * 0.9 + Math.sin(k * 2.1 + g.t * 2) * h * 0.25, h * 0.05, 0.8);
+          if (act === 'dig') g.worker(0, h, { y: 0, col: pc, dir, swing: mod(st, 0.62) / 0.62, beam: e.beam === false ? 0 : 0.8, mood: mood || 'angry' });
+          else g.person(0, h, { y: 0, col: pc, gl: e.glasses == null ? false : !!e.glasses, dir, act: talking && !act ? 'talk' : act, mood, st, talk: talking, arms: e.arms !== false, lean: num(cur.lean, 0), hat: e.hat, hair: e.hair, look, feet: e.feet !== false });
+          if (act === 'cheer') for (let k = 0; k < 4; k++) g.sparkle(Math.cos(k * 1.7 + g.t) * h * 0.6, -h * 0.95 + Math.sin(k * 2.1 + g.t * 2) * h * 0.25, h * 0.05, 0.8);
+          if (e.name) g.text(String(e.name), 0, 2.6 * U, { size: 1.7 * U, a: 0.8 });
+          const sayEnd = 2.6 + says.length * 0.1; if (says && sayT > 0 && sayT < sayEnd + 0.25) { c.save(); c.globalAlpha *= 1 - clamp((sayT - sayEnd) / 0.25); const sz = num(e.saysSize, 3.4) * U, side = cur.saysSide === 'left' ? -1 : cur.saysSide === 'right' ? 1 : dir; g.font(700, sz, 0.08); const tw = c.measureText(says).width, bw2 = tw + sz * 2, bh2 = sz * 2.5, bs = back(clamp(sayT / 0.3)), bx0 = side * (h * 0.3 + bw2 * 0.42), bx = inGroup ? bx0 : clamp(px + bx0 * s, stg.xl + bw2 / 2 + 12, stg.xr - bw2 / 2 - 12) / 1 - px, hb = e.hat ? 1.2 : e.hair ? 1.14 : 1.08, byy = -h * hb - bh2 / 2, shown = says.slice(0, Math.ceil(sayT / 0.03));
+            c.save(); c.translate(side * h * 0.2, -h * (hb - 0.1)); c.scale(bs, bs); c.translate(bx - side * h * 0.2, byy + h * (hb - 0.1)); c.fillStyle = g.bg; c.strokeStyle = g.fg; c.lineWidth = Math.max(2.5, 0.4 * U); c.lineJoin = 'round'; g.rr(-bw2 / 2, -bh2 / 2, bw2, bh2, bh2 * 0.42); c.fill(); c.stroke();
+            const tx0 = clamp(side * h * 0.2 - bx, -bw2 * 0.36, bw2 * 0.36); c.beginPath(); c.moveTo(tx0 - sz * 0.5, bh2 / 2 - 2); c.lineTo(tx0 - side * sz * 0.5, bh2 / 2 + sz * 0.9); c.lineTo(tx0 + sz * 0.5, bh2 / 2 - 2); c.fill(); c.stroke(); g.font(700, sz, 0.08); c.fillStyle = g.fg; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText(shown, -tw / 2, 1); c.restore(); c.restore(); }
+          const em = cur.emote ? String(cur.emote).slice(0, 3) : ''; if (em && st >= 0) { const zz = /^z+$/i.test(em), ex0 = -dir * h * 0.3, ey0 = -h * 1.12; if (zz) for (let k = 0; k < 3; k++) { const ph = mod(g.t * 0.5 + k / 3, 1); g.text('Z', ex0 - dir * ph * h * 0.25, ey0 - ph * h * 0.4, { size: h * (0.09 + 0.07 * ph), a: Math.sin(ph * Math.PI), col: g.fg, wt: 800, ls: 0 }); } else { const ps = back(clamp(st / 0.3)); c.save(); c.translate(ex0, ey0 + Math.sin(g.t * 5) * h * 0.02); c.scale(ps, ps); c.rotate(-dir * 0.14); g.text(em.toUpperCase(), 0, 0, { size: h * 0.3, col: pc === g.ac ? g.fg : g.ac, wt: 900, ls: 0 }); c.restore(); } }
           break; }
         case 'crowd': { const n = clamp(num(e.n, 3) | 0, 1, 9), h = num(e.h, 22) * U; for (let k = 0; k < n; k++) g.person((k - (n - 1) / 2) * h * 0.5, h, { y: 0, col: col || g.fg, ol: k > 0 }); break; }
         case 'icon': g.icon(String(e.name || 'star'), 0, 0, size(18), col || g.fg, Math.max(3, num(e.width, 0.6) * U)); break;
@@ -1025,7 +1085,7 @@
     const L = layer.getContext('2d'); L.setTransform(1, 0, 0, 1, 0, 0); L.clearRect(0, 0, W, H);
     let z = 1 + 0.035 * (lt / sc.dur); (sc.lines || []).forEach(l => { const dt = lt - (+l.at || 0); if (l.text && dt >= 0 && (+l.at > 0.05 || i > 0)) z += 0.02 * Math.exp(-dt * 9); }); /* small punch when a line lands */
     L.setTransform(px * sv * z, 0, 0, px * sv * z, px * (tx + 960 * sv * (1 - z)), px * (ty + 1031 * sv * (1 - z)));
-    const g = new G(L, proj, sc, lt, vert), vis = V[sc.visual]; if (vis) { try { vis.draw(g); } catch (e) { if (root.console) console.error(sc.visual, e); } }
+    const g = new G(L, proj, sc, lt, vert), vis = V[sc.visual]; if (vis) { try { vis.draw(g); if (sc.visual !== 'custom' && Array.isArray(sc.p && sc.p.cast)) drawItems(g, sc.p.cast, stageOf(g), false, 0); } catch (e) { if (root.console) console.error(sc.visual, e); } }
     if (g.shk > 0.2) { off += Math.sin(t * 97) * g.shk; offY += Math.cos(t * 83) * g.shk * 0.8; } // camera kick from a hit
     off += (i % 2 ? -1 : 1) * 16 * (lt / sc.dur - 0.5); // slow sideways drift so no frame sits still
     const blit = (a, dx, dy, s) => { ctx.globalAlpha = Math.min(1, a); if (!s || s === 1) ctx.drawImage(layer, dx * px, (dy || 0) * px); else ctx.drawImage(layer, (W - W * s) / 2 + dx * px, (H - H * s) / 2 + (dy || 0) * px, W * s, H * s); };
@@ -1067,6 +1127,7 @@
   // What the voice should say, one entry per scene: the small line and the main lines read as one sentence.
   function script(proj) { return proj.scenes.map(s => [s.kicker].concat(s.lines.map(l => l.text)).map(x => String(x || '').replace(/\*/g, '').replace(/…$/, '').trim()).filter(Boolean).join(' ')); }
   // The retention rules a computer can check. voiceDur is optional (seconds of voiceover).
+  const PEOPLE = ['crowd', 'hero', 'spotlight', 'row', 'inspect', 'grid', 'tracker', 'versus', 'clock', 'tags', 'quit', 'counter', 'luck', 'cta', 'steps', 'ring', 'timeline', 'tunnel', 'report', 'strings', 'class'];
   function check(proj, voiceDur) {
     const S = proj.scenes, D = duration(proj), out = [], add = (ok, msg, fix) => out.push({ ok: !!ok, msg, fix });
     const which = fn => S.map((s, i) => (fn(s, i) ? i + 1 : 0)).filter(Boolean).join(', '), f = S[0];
@@ -1080,6 +1141,8 @@
     const n = {}; S.forEach(s => (n[s.visual] = (n[s.visual] || 0) + 1)); const over = Object.keys(n).filter(k => n[k] > 2 && k !== 'tunnel' && k !== 'custom').map(k => V[k].name).join(', '); add(!over, 'No scene type used more than twice', 'Used three times or more: ' + over + '.');
     add(D / S.length <= 4.3, 'A new picture at least every 4 seconds on average', 'Scenes average ' + (D / S.length).toFixed(1) + ' seconds.');
     add(S.some(s => ['counter', 'bars', 'ring', 'compare', 'hook', 'grid', 'tracker', 'tunnel', 'house', 'report'].indexOf(s.visual) >= 0 || (s.visual === 'custom' && (s.p.items || []).some(e => e && /^(number|bar|ring|dots)$/.test(e.is || '')))), 'At least one scene built on a number', 'Add a Big statement, Bar chart, Percent ring, A versus B or Digging scene.');
+    const hasChar = L => (Array.isArray(L) ? L : []).some(e => e && (/^(person|crowd)$/.test(e.is || '') || hasChar(e.items))), people = s => (s.visual === 'custom' ? hasChar(s.p.items) : PEOPLE.indexOf(s.visual) >= 0 || hasChar(s.p.cast));
+    w = S.filter(people).length; add(w >= Math.ceil(S.length * 0.6), 'A character is on screen in most scenes', 'Only ' + w + ' of ' + S.length + ' scenes show a character. Add a person to the picture, or a "cast" list to a ready-made scene.');
     add(S[S.length - 1].visual === 'cta', 'Ends on a follow card', 'Add a Follow button scene at the end.');
     if (voiceDur) add(Math.abs(D - voiceDur) <= 1.2, 'Video length matches the voiceover', 'The video is ' + D.toFixed(1) + ' seconds and the voice is ' + (+voiceDur).toFixed(1) + '. Fit the scenes to the voice.');
     return out;
@@ -1134,6 +1197,6 @@
     return proj;
   }
   /* The custom animation language in a form that can be pasted into a prompt. CUSTOM-ANIMATION.md is the longer guide. */
-  const CUSTOM_SPEC = "Custom animation (\"visual\":\"custom\"): p.items is a list of parts, drawn in order (later parts on top). Use it to draw a picture made for this exact line.\nStage: x and y run from 0 to 100, left to right and top to bottom. y 100 is the ground and y 0 is just under the captions. The stage is a little wider than it is tall. Sizes are in units where 100 units = the stage height (a person is about 30 tall).\nEvery part: {\"is\": kind, \"x\": 50, \"y\": 50, \"at\": when it appears, \"in\": entrance, \"out\": when it leaves, \"loop\": idle motion, \"move\": [{\"at\": when, \"x\": 60, \"y\": 40, \"scale\": 1.2, \"rot\": 15, \"alpha\": 1, \"dur\": 0.6}], \"fx\": \"sparks,shake,ring,glow\", \"color\": \"accent\" or \"fg\" or \"mute\" or \"bg\"}. Only \"is\" is required.\nTimes (\"at\", \"out\", \"strike\", \"start\", \"open\"): \"line1\" or \"line2\" (the moment that caption line starts), optionally \"line1+0.4\"; or a share of the scene such as \"30%\"; or plain seconds. Prefer line anchors and percentages, because scene lengths are set afterwards.\nEntrances (\"in\"): pop, fade, draw (the line draws itself), grow, left, right, up, down, drop, none. Idle motion (\"loop\"): bob, float, pulse, spin, swing, shake, blink.\nKinds and their extra fields:\n- person: h, act (point, wave, jump, cheer, walk, nod, slump, dig), dir (\"left\"), color (accent = the main character, fg = other people). Stands with the feet at x,y.\n- crowd: n, h\n- icon: name (an icon name from the list), size\n- coin: size, symbol, spin (true)\n- text: text, size (about 3 to 6), w (widest it may be), color\n- tag: text, size, style (outline, solid, accent), strike (the time it gets crossed out)\n- number: from, to, prefix, suffix, decimals, size (about 12 to 22), over (seconds it counts for), start\n- box: w, h, r (corner), fill, dash. circle: r, fill, dash. ring: r, percent\n- bar: w, h, value (text above), label (text below). It grows up from x,y\n- dots: cols, rows, gap, r, on (how many light up)\n- line and arrow: to [x, y], or len with angle (degrees, 0 = right, -90 = up); bend (-0.3 to 0.3), dash, flow (moving dashes), center (true makes it turn around its middle)\n- path: pts [[x,y],...] as stage positions, smooth, close, fill, dash, flow. blob: r, seed, squash (a rock or cloud outline)\n- bubble: w, h, text, tail (\"left\", \"right\" or \"none\")\n- stamp: text, size. star: size. glow: r. sparks: n, r. burst: symbol. chest: size, open (time). shake: amount (a camera kick at \"at\")\n- group: items (parts placed in units relative to the group's x,y), so the whole group moves, turns, pulses or slides in as one object\n- any part can take \"repeat\": {\"n\": 5, \"dx\": 6, \"dy\": 0, \"stagger\": 0.08} to make a row of copies\nRules for custom scenes: 6 to 16 parts. Build one clear picture of the thing the line talks about out of simple shapes, and make it DO something on \"line1\": move, grow, break, count up or get crossed out. Words inside the picture are labels of 1 to 4 words. Keep everything between x 4 and 96 and between y 8 and 98. Use \"accent\" only for the thing the viewer should look at.\nExample (a seesaw tipping to the heavy side): {\"visual\":\"custom\",\"kicker\":\"\",\"lines\":[{\"text\":\"Debt always *outweighs* savings.\"}],\"p\":{\"items\":[{\"is\":\"path\",\"pts\":[[44,98],[50,80],[56,98]],\"close\":true},{\"is\":\"group\",\"x\":50,\"y\":79,\"move\":[{\"at\":\"line1\",\"rot\":14,\"dur\":0.7}],\"items\":[{\"is\":\"line\",\"x\":-40,\"y\":0,\"to\":[40,0],\"width\":0.7},{\"is\":\"coin\",\"x\":-32,\"y\":-6,\"size\":10},{\"is\":\"box\",\"x\":32,\"y\":-8,\"w\":14,\"h\":14,\"fill\":\"accent\"},{\"is\":\"text\",\"x\":32,\"y\":-8,\"text\":\"DEBT\",\"size\":3,\"color\":\"bg\"}]},{\"is\":\"tag\",\"text\":\"SAVINGS\",\"x\":22,\"y\":52,\"at\":0.4},{\"is\":\"number\",\"x\":76,\"y\":40,\"from\":0,\"to\":24,\"suffix\":\"%\",\"size\":14,\"at\":\"line1\",\"label\":\"INTEREST\"}]}}";
+  const CUSTOM_SPEC = "Custom animation (\"visual\":\"custom\"): p.items is a list of parts, drawn in order (later parts on top). Use it to draw a picture made for this exact line.\nStage: x and y run from 0 to 100, left to right and top to bottom. y 100 is the ground and y 0 is just under the captions. The stage is a little wider than it is tall. Sizes are in units where 100 units = the stage height (a person is about 30 tall).\nEvery part: {\"is\": kind, \"x\": 50, \"y\": 50, \"at\": when it appears, \"in\": entrance, \"out\": when it leaves, \"loop\": idle motion, \"move\": [{\"at\": when, \"x\": 60, \"y\": 40, \"scale\": 1.2, \"rot\": 15, \"alpha\": 1, \"dur\": 0.6}], \"fx\": \"sparks,shake,ring,glow\", \"color\": \"accent\" or \"fg\" or \"mute\" or \"bg\"}. Only \"is\" is required.\nTimes (\"at\", \"out\", \"strike\", \"start\", \"open\"): \"line1\" or \"line2\" (the moment that caption line starts), optionally \"line1+0.4\"; or a share of the scene such as \"30%\"; or plain seconds. Prefer line anchors and percentages, because scene lengths are set afterwards.\nEntrances (\"in\"): pop, fade, draw (the line draws itself), grow, left, right, up, down, drop, none. Idle motion (\"loop\"): bob, float, pulse, spin, swing, shake, blink.\nKinds and their extra fields:\n- person: a character with a face. h, dir (\"left\"), color (accent = the main character, fg = other people), mood (happy, sad, shock, angry, think, worried, smug, sleep), act (point, wave, cheer, jump, walk, run, talk, think, shrug, hips, facepalm, hold, nod, no, slump, dig), says (a speech bubble of 1 to 4 words; the mouth moves while it types), saysSide (\"left\" or \"right\"), emote (\"!\", \"?\", \"$\", \"zzz\" above the head), look ([x, y] on the stage to look at, or \"left\", \"right\", \"up\", \"down\"), hat (helmet, cap, crown, grad), hair (tuft, bun, long), glasses (true), name (a small label under the feet). \"then\": [{\"at\": \"line1\", \"mood\": \"shock\", \"act\": \"\", \"says\": \"WAIT, WHAT?\", \"emote\": \"!\"}] changes the character at that moment, so it reacts to what happens. A person that has a \"move\" walks there by itself. Stands with the feet at x,y; keep x between 12 and 88.\n- crowd: n, h\n- icon: name (an icon name from the list), size\n- coin: size, symbol, spin (true)\n- text: text, size (about 3 to 6), w (widest it may be), color\n- tag: text, size, style (outline, solid, accent), strike (the time it gets crossed out)\n- number: from, to, prefix, suffix, decimals, size (about 12 to 22), over (seconds it counts for), start\n- box: w, h, r (corner), fill, dash. circle: r, fill, dash. ring: r, percent\n- bar: w, h, value (text above), label (text below). It grows up from x,y\n- dots: cols, rows, gap, r, on (how many light up)\n- line and arrow: to [x, y], or len with angle (degrees, 0 = right, -90 = up); bend (-0.3 to 0.3), dash, flow (moving dashes), center (true makes it turn around its middle)\n- path: pts [[x,y],...] as stage positions, smooth, close, fill, dash, flow. blob: r, seed, squash (a rock or cloud outline)\n- bubble: w, h, text, tail (\"left\", \"right\" or \"none\")\n- stamp: text, size. star: size. glow: r. sparks: n, r. burst: symbol. chest: size, open (time). shake: amount (a camera kick at \"at\")\n- group: items (parts placed in units relative to the group's x,y), so the whole group moves, turns, pulses or slides in as one object\n- any part can take \"repeat\": {\"n\": 5, \"dx\": 6, \"dy\": 0, \"stagger\": 0.08} to make a row of copies\nCharacters tell the story: pick one main character for the whole video (same color accent, same hat or hair in every scene) and put it in nearly every custom scene, next to the thing the line talks about. It looks at that thing, and it reacts on \"line1\" with a \"then\" step (think to shock, worried to happy, and so on). Other people are color fg. At most one speech bubble at a time, 1 to 4 words, and it adds a feeling or a reaction instead of repeating the caption. Leave about 12 units of free space above a head for the bubble. A ready-made scene can take characters too: put person parts in \"p\":{\"cast\":[...]}, standing in a free corner.\nRules for custom scenes: 6 to 16 parts. Build one clear picture of the thing the line talks about out of simple shapes, and make it DO something on \"line1\": move, grow, break, count up or get crossed out. Words inside the picture are labels of 1 to 4 words. Keep everything between x 4 and 96 and between y 8 and 98. Use \"accent\" only for the thing the viewer should look at.\nExample (a seesaw tipping to the heavy side): {\"visual\":\"custom\",\"kicker\":\"\",\"lines\":[{\"text\":\"Debt always *outweighs* savings.\"}],\"p\":{\"items\":[{\"is\":\"path\",\"pts\":[[44,98],[50,80],[56,98]],\"close\":true},{\"is\":\"group\",\"x\":50,\"y\":79,\"move\":[{\"at\":\"line1\",\"rot\":14,\"dur\":0.7}],\"items\":[{\"is\":\"line\",\"x\":-40,\"y\":0,\"to\":[40,0],\"width\":0.7},{\"is\":\"coin\",\"x\":-32,\"y\":-6,\"size\":10},{\"is\":\"box\",\"x\":32,\"y\":-8,\"w\":14,\"h\":14,\"fill\":\"accent\"},{\"is\":\"text\",\"x\":32,\"y\":-8,\"text\":\"DEBT\",\"size\":3,\"color\":\"bg\"}]},{\"is\":\"person\",\"x\":14,\"y\":98,\"h\":24,\"mood\":\"happy\",\"look\":[50,70],\"then\":[{\"at\":\"line1+0.3\",\"mood\":\"shock\",\"says\":\"MY SAVINGS!\"}]},{\"is\":\"tag\",\"text\":\"SAVINGS\",\"x\":22,\"y\":52,\"at\":0.4},{\"is\":\"number\",\"x\":76,\"y\":40,\"from\":0,\"to\":24,\"suffix\":\"%\",\"size\":14,\"at\":\"line1\",\"label\":\"INTEREST\"}]}}";
   root.PSP = { CUSTOM_SPEC, render, duration, startOf, sceneAt, VISUALS: V, ICONS, FONTS, STYLES, applyStyle, defaults, normalize, check, script, retime, autotime, analyseAudio, fitVoice };
 })(typeof window !== 'undefined' ? window : globalThis);

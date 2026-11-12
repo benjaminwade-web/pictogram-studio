@@ -127,7 +127,8 @@
     "title": "WHAT MADE HIM RICH",
     "rows": "SKILL:A, PATIENCE:A+, YEARS IN:75",
     "stamp": "TIME DID IT",
-    "person": true
+    "person": true,
+    "reaction": "happy"
    }
   },
   {

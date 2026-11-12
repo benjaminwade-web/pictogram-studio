@@ -3,7 +3,7 @@ Idea: Why airplane windows are round instead of square
 Style: Blueprint. Shape: 9:16. Length: 33.0 seconds, 8 scenes, 78 spoken words.
 
 ## Retention check
-11 of 11 pass.
+12 of 12 pass.
 
 ## Files
 - `why-plane-windows-are-round_9x16.mp4`: the video (silent).
