@@ -47,7 +47,10 @@ character, place and prop in our engine is our own art, drawn in code.
 | Depth of field and foreground silhouettes | `look.dof = true` |
 | Stripe wipe | `transition: 'stripes'` |
 | Chapter ribbon | scene `section: "The deal"` (shown when `look.ribbon` is on) |
-| Places | the 23 painted places, auto-matched to the words (see CUSTOM-ANIMATION.md, Scenery) |
+| Period places | `look.era = 'past'`: modern places swap to old-world ones (city, street, market to `town`; home to `tavern`; office, bank, classroom to `study`; courtroom, stage to `hall`; factory to `village`), plus `port` (sailing ships) and `camp` (army tents) |
+| Plain puppet faces | dot eyes only; brows and a mouth appear only when the mood or talking needs them |
+| Bigger people, lower floor | `look.peopleScale` (1.3) and, in tall videos, `look.lower` (120) |
+| Light captions | `look.capCard = false`, `look.capHalo = true` (words with a soft paper edge, no card) |
 
 ## Recipe for a new topic
 

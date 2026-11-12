@@ -54,8 +54,8 @@
       "y": 86,
       "h": 43,
       "color": "#5b7f4a",
-      "outfit": "shirt",
-      "hat": "cap",
+      "outfit": "tunic",
+      "hat": "wrap",
       "look": [
        42,
        62
@@ -127,7 +127,7 @@
       "h": 43,
       "color": "#7a5a3a",
       "outfit": "tunic",
-      "hat": "cap",
+      "hat": "wrap",
       "act": "hold",
       "mood": "worried",
       "look": [
@@ -189,8 +189,8 @@
       "y": 84,
       "h": 41,
       "color": "#5b7f4a",
-      "outfit": "shirt",
-      "hat": "cap",
+      "outfit": "tunic",
+      "hat": "wrap",
       "act": "cheer",
       "mood": "happy"
      },
@@ -211,7 +211,7 @@
       "y": 100,
       "h": 46,
       "color": "#3d5a80",
-      "outfit": "suit",
+      "outfit": "coat",
       "hair": "side",
       "dir": "left",
       "act": "point",
@@ -276,7 +276,7 @@
       "y": 100,
       "h": 46,
       "color": "#3d5a80",
-      "outfit": "suit",
+      "outfit": "coat",
       "hair": "side",
       "dir": "left",
       "act": "hold",
@@ -376,7 +376,7 @@
       "y": 100,
       "h": 38,
       "color": "#5b7f4a",
-      "outfit": "shirt",
+      "outfit": "tunic",
       "act": "walk",
       "move": [
        {
@@ -486,7 +486,7 @@
       "y": 98,
       "h": 41,
       "color": "#3d5a80",
-      "outfit": "suit",
+      "outfit": "coat",
       "hair": "side",
       "dir": "left",
       "act": "facepalm",
@@ -517,7 +517,7 @@
       "is": "person",
       "x": 50,
       "y": 82,
-      "h": 41,
+      "h": 32,
       "color": "#2b201a",
       "outfit": "robe",
       "hat": "wrap",
@@ -531,7 +531,7 @@
       "y": 100,
       "h": 43,
       "color": "#5b7f4a",
-      "outfit": "shirt",
+      "outfit": "tunic",
       "act": "walk",
       "dir": "left",
       "move": [
@@ -563,12 +563,12 @@
      {
       "is": "number",
       "x": 50,
-      "y": 36,
+      "y": 31,
       "from": 100,
       "to": 3.5,
       "decimals": 1,
       "suffix": "%",
-      "size": 13,
+      "size": 11,
       "at": "line1+0.5",
       "over": 1.2,
       "color": "accent"
@@ -595,7 +595,7 @@
       "y": 100,
       "h": 46,
       "color": "#3d5a80",
-      "outfit": "suit",
+      "outfit": "coat",
       "hair": "bun",
       "glasses": true,
       "act": "no",
@@ -618,14 +618,14 @@
      {
       "is": "stamp",
       "text": "NOT TRUE",
-      "x": 62,
-      "y": 44,
-      "size": 7,
+      "x": 64,
+      "y": 33,
+      "size": 6,
       "at": "line1+1"
      },
      {
       "is": "person",
-      "x": 88,
+      "x": 90,
       "y": 96,
       "h": 38,
       "color": "accent",
@@ -655,7 +655,7 @@
       "y": 100,
       "h": 41,
       "color": "#5b7f4a",
-      "outfit": "shirt",
+      "outfit": "tunic",
       "mood": "happy",
       "act": "wave"
      },
@@ -701,7 +701,7 @@
       "is": "tag",
       "text": "FEWER THAN 6",
       "x": 50,
-      "y": 46,
+      "y": 32,
       "style": "accent",
       "at": "line1+0.6"
      }

@@ -115,6 +115,7 @@ A scene can stand somewhere instead of on a bare background. Scenery is drawn in
 - With `look.dof` on, a person part with a smaller `y` stands further back: smaller and hazier, so a scene reads as one deep space. Main character near y 100, others at y 70 to 95.
 - `look.dof` also blurs far layers and puts soft dark shapes (grass, a column, a plant) at the frame edges. `look.horizon` sets how high the painted horizon sits (Cut paper uses 230).
 - Give each scene a `"section"` (chapter name). With `look.ribbon` a small ribbon in the corner shows "Part 2 · The crash", and the `stripes` transition wipes only when the chapter changes (plain cuts inside a chapter).
+- Period places (used by Cut paper through `look.era: 'past'`): `town` (gabled houses, a spire), `village`, `port` (sailing ships), `camp` (army tents, a fire), `tavern`, `hall` (arched windows, banners), `study` (books, candle, globe). Modern places swap to these automatically.
 - Numbers get a paper card behind them in painted places. Full rules: `CUT-PAPER-STYLE.md`. Worked example: `projects/tulip-mania-cutpaper.json`.
 
 ## Real photos
