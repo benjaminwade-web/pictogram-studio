@@ -109,6 +109,11 @@ A scene can stand somewhere instead of on a bare background. Scenery is drawn in
 - Two ways to draw them, set by the style: soft shapes in the style's own colours (all styles), or full colour painted places with light, shade and a paper texture (the **Storybook** style, or Look > Backgrounds > Painted). In painted mode the captions sit on a paper card so they stay readable, every scene gets a place (not only scenes with people), and everything in front of the place (people, cards, numbers, drawings) casts a soft cut-paper shadow onto it, so the picture reads as one world.
 - Places have life of their own: in painted mode people walk past in the distance (city, street, market, office, bank, factory), birds cross outdoor skies, and in tall videos things close to the camera (a desk with a steaming cup, crates, a bench, rocks, bushes, footlights, a velvet rope) fill the band under the ground and slide past faster than the rest. `"fore": false` or `"life": false` on a scenery object turns these off.
 
+## Moments that follow the voice
+
+- Any time (`at`, `out`, `strike`, `start`, `saysAt`, a `then` step, a `move` step) can be `"word:guilders"` or `"word:collapsed+0.2"`: the moment the voice says that word. Use it for the hit of each scene (a number counting up, a stamp, a reaction).
+- `node make.js projects/<slug>.json --tts` voices the script with ElevenLabs and keeps the time of every word: scenes cut as their first word starts, caption words appear as they are spoken, the camera gives a small hit on the highlighted word, and every `word:` moment lands on the real speech. Voice per style: Cut paper, Storybook and Magazine use George (storyteller), Newsroom uses Daniel, the rest Brian; set `"voice": "bill"` in a project or `--tts bill` to choose. Without a voice, `word:` moments fall a little after the line starts.
+
 ## Cut paper: depth and chapters
 
 - `look.people: 'doll'` draws every person as a paper puppet. Hats for history: `tophat`, `tricorn`, `plume` (crested soldier helmet), `laurel`, `wrap` (turban), besides `helmet`, `cap`, `crown`, `grad`.

@@ -1,5 +1,6 @@
 // One command from a project file to a finished package.
-//   node make.js <project.json> [--voice voice.mp3] [--out videos] [--wps 2.9] [--keep-timing] [--no-video] [--w 1080]
+//   node make.js <project.json> [--voice voice.mp3 [--words words.json]] [--tts [george|brian|bill|daniel|<voice id>] [--speed 1.05]] [--out videos] [--wps 2.9] [--keep-timing] [--no-video] [--w 1080]
+// --tts voices the script with ElevenLabs (key from the environment) and times every scene, caption word and "word:..." moment to the real speech.
 // Writes videos/<slug>/ with: the MP4, a check sheet (one still per scene), voiceover.txt, post.txt, sources.md, the project file and package.md.
 // Extra fields this reads from the project (all optional): idea, audience, hooks[], caption, hashtags[], sources[{claim, source, url}], notes.
 const fs = require('fs'), path = require('path'), { execFileSync, spawnSync } = require('child_process');
@@ -9,8 +10,33 @@ if (!args[0] || !fs.existsSync(args[0])) { console.error('usage: node make.js <p
 const raw = JSON.parse(fs.readFileSync(args[0], 'utf8')), proj = PSP.normalize(JSON.parse(JSON.stringify(raw)));
 const slug = (opt('name') || proj.title || 'video').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'video';
 const dir = path.join(opt('out') || path.join(__dirname, 'videos'), slug); fs.mkdirSync(dir, { recursive: true });
-const voice = opt('voice'); let voiceDur = 0, fitNote = '';
-if (voice) { // fit the scenes to the real voice
+let voice = opt('voice'), wordsFile = opt('words'), voiceDur = 0, fitNote = '';
+const VOICES = { brian: 'nPczCjzI2devNBz1zQrb', george: 'JBFqnCBsd6RMkjVDRZzb', bill: 'pqHfZKP75CvOlQylNhV4', daniel: 'onwK4e9ZLuTAKqWW03F9', adam: 'pNInz6obpgDQGcFmaJgB' };
+const STYLE_VOICE = { cutpaper: 'george', storybook: 'george', magazine: 'george', newsroom: 'daniel' }; // a storyteller for history, a presenter for news
+if (has('tts')) { // voice the script with ElevenLabs, with the time of every character
+  const nm = (opt('tts') && !/^--/.test(opt('tts')) ? opt('tts') : '') || proj.voice || STYLE_VOICE[proj.style] || 'brian', id = VOICES[String(nm).toLowerCase()] || nm;
+  const body = JSON.stringify({ text: PSP.script(proj).join('\n\n'), model_id: 'eleven_multilingual_v2', voice_settings: { stability: 0.45, similarity_boost: 0.75, style: 0.25, speed: +(opt('speed') || 1.05) } });
+  const key = process.env.ELEVENLABS_API_KEY ? ['-H', 'xi-api-key: ' + process.env.ELEVENLABS_API_KEY] : []; // otherwise the network adds the key
+  const r = JSON.parse(String(execFileSync('curl', ['-sS', '-X', 'POST', `https://api.elevenlabs.io/v1/text-to-speech/${id}/with-timestamps?output_format=mp3_44100_128`, '-H', 'Content-Type: application/json', ...key, '--data-binary', '@-'], { input: body, maxBuffer: 1 << 28 })) || '{}');
+  if (!r.audio_base64) { console.error('VOICE FAILED: ' + JSON.stringify(r.detail || r).slice(0, 300)); process.exit(1); }
+  fs.writeFileSync(path.join(dir, 'voice.mp3'), Buffer.from(r.audio_base64, 'base64')); voice = path.join(dir, 'voice.mp3');
+  const al = r.alignment || r.normalized_alignment, W = []; let cur = null;
+  al.characters.forEach((ch, i) => { if (/\s/.test(ch)) { if (cur) W.push(cur); cur = null; return; } if (!cur) cur = { w: '', s: al.character_start_times_seconds[i] }; cur.w += ch; cur.e = al.character_end_times_seconds[i]; }); if (cur) W.push(cur);
+  wordsFile = path.join(dir, 'voice-words.json'); fs.writeFileSync(wordsFile, JSON.stringify({ voice: nm, words: W }, null, 0));
+}
+function fitWords(W, total) { // every scene starts as its first word is spoken; captions and "word:" moments follow the real speech
+  const tok = s => String(s || '').replace(/\*/g, '').trim().split(/\s+/).filter(Boolean); let k = 0; const S = proj.scenes;
+  S.forEach(sc => { const gs = []; if (sc.kicker) gs.push({ kind: 'k', n: tok(sc.kicker).length }); sc.lines.forEach((l, j) => l.text && gs.push({ kind: j, n: tok(l.text).length })); sc._g = gs.map(g => { const ws = W.slice(k, k + g.n); k += g.n; return Object.assign(g, { ws }); }); });
+  const starts = S.map(sc => { const g = sc._g.find(q => q.ws.length); return g ? g.ws[0].s : null; });
+  S.forEach((sc, i) => { sc._st = i === 0 ? 0 : Math.max(S[i - 1]._st + 0.8, (starts[i] != null ? starts[i] : S[i - 1]._st + 2) - 0.12); });
+  S.forEach((sc, i) => { const st = sc._st, nx = i < S.length - 1 ? S[i + 1]._st : total + 0.7, all = []; sc.dur = +(nx - st).toFixed(2);
+    sc._g.forEach(g => { g.ws.forEach(w => all.push({ w: w.w, t: +(w.s - st).toFixed(3) })); if (!g.ws.length) return; const a0 = Math.max(0, g.ws[0].s - st - 0.04);
+      if (g.kind === 'k') sc.kickerAt = +a0.toFixed(2); else { const l = sc.lines[g.kind]; l.at = i === 0 && g.kind === 0 && a0 < 0.5 ? 0 : +a0.toFixed(2); l.wt = g.ws.map(w => +Math.max(0, w.s - st - l.at).toFixed(3)); } });
+    sc.words = all; delete sc._g; delete sc._st; });
+  return k === W.length ? 'every word matched' : `${k} of ${W.length} spoken words matched the captions`;
+}
+if (voice && wordsFile) { const W = JSON.parse(fs.readFileSync(wordsFile, 'utf8')).words; voiceDur = +execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', voice]).toString().trim(); fitNote = `Timed to the voice word by word (${voiceDur.toFixed(1)} s, ${fitWords(W, voiceDur)}).`; }
+else if (voice) { // fit the scenes to the real voice
   const pcm = execFileSync('ffmpeg', ['-v', 'error', '-i', voice, '-f', 'f32le', '-ac', '1', '-ar', '16000', '-'], { maxBuffer: 1 << 30 });
   const f = new Float32Array(pcm.buffer, pcm.byteOffset, Math.floor(pcm.length / 4)); voiceDur = f.length / 16000;
   const an = PSP.analyseAudio([f], 16000, f.length), snapped = PSP.fitVoice(proj, an, voiceDur);
