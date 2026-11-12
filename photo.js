@@ -22,7 +22,7 @@ const save = (p, b, meta) => { const pr = JSON.parse(fs.readFileSync(file, 'utf8
   if (!page.imageinfo) throw new Error('Not found on Commons: ' + title);
   const ii = page.imageinfo[0], m = ii.extmetadata || {}, lic = strip(m.LicenseShortName && m.LicenseShortName.value), who = strip(m.Artist && m.Artist.value) || 'unknown author';
   if (!/^(CC0|CC BY|Public domain|PD|GFDL)/i.test(lic)) console.log('WARNING: check this licence before publishing:', lic);
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'photo-')), a = path.join(tmp, 'in'), b = path.join(tmp, 'out.jpg'); get(ii.thumburl || ii.url, a);
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'photo-')), a = path.join(tmp, 'in'), b = path.join(tmp, 'out.jpg'); get(String(ii.thumburl || ii.url).replace('//thumb.wikimedia.org/', '//upload.wikimedia.org/'), a); // thumb.wikimedia.org is not on the network allowlist
   execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', a, '-vf', `scale='min(${W},iw)':-2`, '-q:v', '4', b]);
   const meta = { title: strip(page.title), who, lic, url: ii.descriptionurl };
   fs.mkdirSync(cacheDir, { recursive: true }); fs.copyFileSync(b, cb); fs.writeFileSync(cj, JSON.stringify(meta));

@@ -388,6 +388,7 @@ details[open] > summary { margin-bottom: 10px; }
       if (act === 'slump' || mood === 'sleep') { lean += 0.045 * dir; headDy += h * 0.012; tilt = 0.2 * dir; }
       if (mood === 'sad') { headDy += h * 0.006; tilt += 0.06 * dir; }
       if (mood === 'think') tilt -= 0.07 * dir;
+      if (!moving && act !== 'jump' && act !== 'cheer' && o.idle !== false) { lean += Math.sin(t * 0.9 + sd * 5) * 0.007; tilt += Math.sin(t * 0.7 + sd * 3) * 0.03 + (talk ? Math.sin(t * 3.1) * 0.04 : 0); } // weight shifts and small head moves while standing
       if (mood === 'shock' && st < 0.35) hop += Math.sin((st / 0.35) * Math.PI) * h * 0.025;
       if (act === 'shrug') { shUp = 0.02 + 0.004 * Math.sin(t * 3); tilt += 0.08 * dir; }
       if (mood === 'worried') lean += 0.004 * Math.sin(t * 31);
@@ -1096,7 +1097,7 @@ details[open] > summary { margin-bottom: 10px; }
       [['left', -1], ['right', 1]].forEach(([k, sg], i) => {
         const x = 960 + sg * off, a = g.in(0.1 + i * 0.25, 0.35), isW = P.winner === k, dim = 1 - 0.6 * win * (P.winner !== 'none' && !isW ? 1 : 0), col = isW && win > 0.5 ? g.ac : g.fg;
         if (isW) g.halo(x, cy, pw * 0.85, 0.3 * win);
-        c.save(); c.globalAlpha *= a * dim; c.strokeStyle = col; c.lineWidth = isW ? 4 + 3 * win : 4; g.rr(x - pw / 2, cy - ph / 2 + (1 - a) * 40, pw, ph, 18); c.stroke(); c.restore();
+        c.save(); c.globalAlpha *= a * dim; c.strokeStyle = col; c.lineWidth = isW ? 4 + 3 * win : 4; g.rr(x - pw / 2, cy - ph / 2 + (1 - a) * 40, pw, ph, 18); if (g.paint) { c.save(); c.globalAlpha = Math.min(1, c.globalAlpha * 1.6); c.fillStyle = 'rgba(248,240,222,0.95)'; c.fill(); c.restore(); } c.stroke(); c.restore();
         g.text(P[k], x, cy - ph / 2 + 74, { size: g.V(34, 28), wt: 700, ls: 0.12, a: a * dim, col });
         const v = (+P[k + 'Value'] || 0) * eo(ramp(t, 0.4 + i * 0.25, 0.9)), dec = Math.min(3, (String(P[k + 'Value']).split('.')[1] || '').length);
         c.save(); g.font(800, g.V(98, 78), 0); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = col; c.globalAlpha = a * dim; c.fillText((P.prefix || '') + (dec ? v.toFixed(dec) : fmt(v)) + (P.suffix || ''), x, cy + 22); c.restore();
@@ -1542,7 +1543,35 @@ details[open] > summary { margin-bottom: 10px; }
         for (let k = 0; k < 110; k++) { const x = hash(k + 1) * (x1 - x0) + x0 - drift * 20, y = top + hash(k + 7) * (GY - top), r = 1 + hash(k + 3) * 2.2; c.fillStyle = paint ? 'rgba(255,250,235,' + (0.3 + 0.6 * Math.abs(Math.sin(t * (0.6 + hash(k)) + k))) + ')' : rgba(fg, 0.2 + 0.6 * Math.abs(Math.sin(t * (0.6 + hash(k)) + k))); c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill(); }
         layer(0.3, 0, () => { const gr = c.createRadialGradient(1500, GY + 900, 200, 1500, GY + 900, 1250); gr.addColorStop(0, paint ? 'rgba(130,140,220,0.5)' : rgba(ac, 0.28)); gr.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = gr; c.beginPath(); c.arc(1500, GY + 900, 1050, 0, TAU); c.fill(); E('red', g.V(300, 520), g.V(560, 640), 70, 70, paint ? 0.9 : 1); E('dark', g.V(320, 540), g.V(550, 630), 60, 60, 0.25); }); break;
     }
+    if (o.life !== false) { // life behind the action: people passing by in the distance, birds
+      const walkers = paint ? ({ city: 4, street: 5, market: 5, night: 3, office: 2, bank: 2, factory: 2, lab: 1, ancient: 3, farm: 1, runway: 1, courtroom: 0 }[kind] || 0) : 0;
+      for (let k = 0; k < walkers; k++) { const dir = hash(k + 3) > 0.5 ? 1 : -1, sp = 45 + hash(k + 5) * 55, wx = mod(hash(k + 1) * 2600 + t * sp * dir, 2600) - 340 - drift * 40; g.person(wx, indoor ? 200 : 165, { scale: 1, y: GY - (indoor ? 36 : 64), col: pal[k % 2 ? 'mid' : 'near'] || pal.trim, a: 0.85, act: 'walk', dir, st: t * (sp / 60) + k, seed: 40 + k * 7, shadow: false, idle: false }); }
+      if (/^(sky|hills|farm|castle|ancient|desert|forest|runway|sea)$/.test(kind)) { c.save(); c.strokeStyle = C('dark', paint ? 0.55 : 1.4); c.lineWidth = 4; c.lineCap = 'round'; for (let k = 0; k < 4; k++) { const bx = mod(hash(k + 11) * 2600 + t * (55 + k * 14), 2600) - 340, by = g.V(300, 120) + hash(k + 13) * 220 + Math.sin(t * 1.5 + k) * 12, fl = Math.sin(t * 9 + k * 2) * 11, w = 22 - k * 2; c.beginPath(); c.moveTo(bx - w, by - fl); c.quadraticCurveTo(bx - w * 0.4, by - 6, bx, by); c.quadraticCurveTo(bx + w * 0.4, by - 6, bx + w, by - fl); c.stroke(); } c.restore(); }
+    }
     if (paint && !indoor) { c.save(); c.fillStyle = 'rgba(255,240,210,0.10)'; c.fillRect(x0, GY - 260, x1 - x0, 260); c.restore(); } // haze near the horizon
+    // foreground: things close to the camera in the band under the ground (seen in tall videos), moving faster than everything else
+    const FGK = { office: 'desk', classroom: 'desk', lab: 'desk', bank: 'rope', courtroom: 'rail', stage: 'lights', home: 'sofa', city: 'bench', street: 'bench', night: 'bench', market: 'crates', factory: 'crates', mine: 'rocks', desert: 'rocks', ancient: 'ruins', castle: 'rocks', farm: 'bales', forest: 'bush', hills: 'bush', sea: 'posts', runway: 'cones', sky: 'bush', space: 'rocks' }, fk = o.fore === false ? '' : FGK[kind];
+    if (fk && g.vert && paint) layer(1.9, 0, () => { const Y = GY + 300, L0 = 470, R0 = 1450, rnd = q => hash(q * 7.3 + kind.length);
+      const crate = (x, y, w) => { R('trim', x, y - w, w, w); shade(x, y - w, w, w, 1); c.strokeStyle = paint ? 'rgba(20,12,6,0.3)' : C('dark'); c.lineWidth = 6; c.strokeRect(x + 8, y - w + 8, w - 16, w - 16); c.beginPath(); c.moveTo(x + 8, y - w + 8); c.lineTo(x + w - 8, y - 8); c.stroke(); };
+      const rock = (x, y, r) => { c.fillStyle = C('near'); c.beginPath(); for (let q = 0; q < 9; q++) { const an = Math.PI + (q / 8) * Math.PI, rr = r * (0.8 + 0.3 * rnd(q + x)); c.lineTo(x + Math.cos(an) * rr * 1.3, y + Math.sin(an) * rr); } c.closePath(); c.fill(); shade(x - r * 1.3, y - r, r * 2.6, r, 1); };
+      const bush = (x, y, r) => { [[-0.6, 0.1, 0.7], [0.5, 0.15, 0.65], [0, -0.25, 0.8]].forEach(([dx, dy, k]) => E(kind === 'farm' ? 'leaf' : 'near', x + dx * r, y + dy * r, r * k, r * k * 0.85)); };
+      switch (fk) {
+        case 'desk': R('trim', 330, Y - 40, 1260, 40); R('trim', 360, Y, 1200, 600, 0.92); shade(360, Y, 1200, 600, 1); R('cream', 620, Y - 60, 180, 24, 0.95); R('cream', 640, Y - 78, 170, 22); R('red', 1180, Y - 120, 70, 84); c.strokeStyle = C('red'); c.lineWidth = 10; c.beginPath(); c.arc(1260, Y - 80, 24, -1.2, 1.2); c.stroke();
+          for (let q = 0; q < 3; q++) { c.save(); c.globalAlpha *= 0.35 * (1 - mod(t * 0.4 + q / 3, 1)); E('cream', 1215 + Math.sin(t * 2 + q) * 10, Y - 140 - mod(t * 0.4 + q / 3, 1) * 120, 14, 22); c.restore(); } break;
+        case 'rope': [L0 + 20, R0 - 20].forEach(x => { R('metal', x - 10, Y - 200, 20, 260); E('light', x, Y - 206, 24, 24); }); c.strokeStyle = C('red'); c.lineWidth = 16; c.beginPath(); c.moveTo(L0 + 20, Y - 180); c.quadraticCurveTo(960, Y - 60 + Math.sin(t * 1.4) * 8, R0 - 20, Y - 180); c.stroke(); break;
+        case 'rail': R('trim', 300, Y - 160, 1320, 30); for (let x = 320; x < 1620; x += 70) R('trim', x, Y - 130, 22, 300); R('dark', 300, Y + 160, 1320, 40, 0.8); break;
+        case 'lights': R('dark', 300, Y - 40, 1320, 400); for (let k = 0; k < 9; k++) { const lx = 420 + k * 135; E('light', lx, Y - 40, 34, 16); glowAt(lx, Y - 60, 160, 0.55 + 0.15 * Math.sin(t * 3 + k)); } break;
+        case 'sofa': R('red', 380, Y - 80, 1160, 180, 0.95); E('red', 380, Y + 30, 90, 130); E('red', 1540, Y + 30, 90, 130); shade(380, Y - 80, 1160, 180, 1); R('cream', 760, Y - 60, 140, 90, 0.9); break;
+        case 'bench': R('trim', L0 - 40, Y - 120, 380, 28); R('trim', L0 - 40, Y - 70, 380, 28); R('dark', L0 - 10, Y - 42, 18, 110); R('dark', L0 + 300, Y - 42, 18, 110); R('red', R0 - 120, Y - 150, 70, 150); E('red', R0 - 85, Y - 150, 35, 22); R('red', R0 - 140, Y - 110, 110, 22); shade(R0 - 120, Y - 150, 70, 150, 1); break;
+        case 'crates': crate(L0 - 60, Y + 40, 220); crate(L0 + 150, Y + 40, 150); crate(L0 + 40, Y - 180, 140); crate(R0 - 190, Y + 40, 200); if (kind === 'market') for (let q = 0; q < 7; q++) E(['red', 'light', 'leaf'][q % 3], R0 - 160 + q * 26, Y - 170 - (q % 2) * 16, 22, 20); break;
+        case 'rocks': rock(L0 + 40, Y + 40, 120); rock(L0 + 230, Y + 60, 70); rock(R0 - 80, Y + 50, 140); if (kind === 'mine') { R('metal', 960 - 160, Y - 110, 320, 130); R('dark', 960 - 140, Y + 20, 60, 60); R('dark', 960 + 80, Y + 20, 60, 60); for (let q = 0; q < 6; q++) E('light', 960 - 110 + q * 44, Y - 120, 26, 18, 0.9); } break;
+        case 'ruins': R('cream', L0 - 20, Y - 260, 110, 300); shade(L0 - 20, Y - 260, 110, 300, 1); R('cream', R0 - 260, Y - 60, 260, 100); shade(R0 - 260, Y - 60, 260, 100, 1); rock(960 + 120, Y + 60, 60); break;
+        case 'bales': [[L0 + 60, 120], [L0 + 250, 90], [R0 - 120, 130]].forEach(([x, r]) => { E('light', x, Y + 20, r, r * 0.9); c.strokeStyle = paint ? 'rgba(120,80,20,0.4)' : C('dark'); c.lineWidth = 5; c.beginPath(); c.arc(x, Y + 20, r * 0.6, 0, TAU); c.stroke(); }); break;
+        case 'bush': bush(L0 + 60, Y + 30, 150); bush(R0 - 60, Y + 50, 170); break;
+        case 'posts': [L0 + 40, R0 - 60].forEach(x => { R('trim', x - 40, Y - 280, 80, 420); shade(x - 40, Y - 280, 80, 420, 1); }); c.strokeStyle = C('cream', 1); c.lineWidth = 12; c.beginPath(); c.moveTo(L0 + 40, Y - 220); c.quadraticCurveTo(960, Y - 80 + Math.sin(t * 1.2) * 10, R0 - 60, Y - 220); c.stroke(); break;
+        case 'cones': [L0 + 60, L0 + 230, R0 - 80].forEach((x, q) => { Poly('red', [[x - 50, Y + 40], [x, Y - 120 + q * 20], [x + 50, Y + 40]]); R('cream', x - 30, Y - 50 + q * 10, 60, 18); }); break;
+      } });
+
   }
   function stageOf(g) { const top = g.V(250, 150), xl = g.V(360, 450), xr = g.V(1560, 1470), H = g.GY - top; return { U: H / 100, W: xr - xl, H, xl, xr, X: x => xl + (x / 100) * (xr - xl), Y: y => top + (y / 100) * H }; }
   function drawItems(g, items, st, inGroup, depth) {
@@ -1590,7 +1619,7 @@ details[open] > summary { margin-bottom: 10px; }
           const em = cur.emote ? String(cur.emote).slice(0, 3) : ''; if (em && st >= 0) { const zz = /^z+$/i.test(em), ex0 = -dir * h * 0.2, ey0 = -h * 1.1; if (zz) for (let k = 0; k < 3; k++) { const ph = mod(g.t * 0.5 + k / 3, 1); g.text('Z', ex0 - dir * ph * h * 0.25, ey0 - ph * h * 0.4, { size: h * (0.09 + 0.07 * ph), a: Math.sin(ph * Math.PI), col: g.fg, wt: 800, ls: 0 }); } else { const ps = back(clamp(st / 0.3)); c.save(); c.translate(ex0, ey0 + Math.sin(g.t * 5) * h * 0.02); c.scale(ps, ps); c.rotate(-dir * 0.14); g.text(em.toUpperCase(), 0, 0, { size: h * 0.3, col: pc === g.ac ? g.fg : g.ac, wt: 900, ls: 0 }); c.restore(); } }
           break; }
         case 'photo': case 'image': drawPhoto(g, e, num(e.w, 40) * U, col); break;
-        case 'scenery': c.restore(); c.save(); c.globalAlpha *= clamp(a); drawScenery(g, e.kind || e.name, e); break;
+        case 'scenery': if (g.skipScenery) break; c.restore(); c.save(); c.globalAlpha *= clamp(a); drawScenery(g, e.kind || e.name, e); break;
         case 'crowd': { const n = clamp(num(e.n, 3) | 0, 1, 9), h = num(e.h, 22) * U; for (let k = 0; k < n; k++) g.person((k - (n - 1) / 2) * h * 0.5, h, { y: 0, col: col || g.fg, ol: k > 0 }); break; }
         case 'icon': g.icon(String(e.name || 'star'), 0, 0, size(18), col || g.fg, Math.max(3, num(e.width, 0.6) * U)); break;
         case 'coin': g.coin(0, 0, size(12) / 2, e.symbol == null ? '$' : String(e.symbol), e.spin ? g.t * 2.4 * (e.spin === true ? 1 : +e.spin || 1) : 0, 1); break;
@@ -1713,11 +1742,13 @@ details[open] > summary { margin-bottom: 10px; }
     if (i > 0 && lt < TI) { const k = kindAt(i - 1); if (k !== 'cut') { const p = lt / TI; alpha = eo(p); move(k, p, true); } }
     if (!last && lt > sc.dur - TO) { const k = kindAt(i); if (k !== 'cut') { const p = (lt - (sc.dur - TO)) / TO; alpha = 1 - p; move(k, p, false); } }
     const L = layer.getContext('2d'); L.setTransform(1, 0, 0, 1, 0, 0); L.clearRect(0, 0, W, H);
-    let z = 1 + 0.035 * (lt / sc.dur); (sc.lines || []).forEach(l => { const dt = lt - (+l.at || 0); if (l.text && dt >= 0 && (+l.at > 0.05 || i > 0)) z += 0.02 * Math.exp(-dt * 9); }); /* small punch when a line lands */
+    let z = 1 + (look.scenery === 'painted' ? 0.07 : 0.035) * (lt / sc.dur); (sc.lines || []).forEach(l => { const dt = lt - (+l.at || 0); if (l.text && dt >= 0 && (+l.at > 0.05 || i > 0)) z += 0.02 * Math.exp(-dt * 9); }); /* small punch when a line lands */
     L.setTransform(px * sv * z, 0, 0, px * sv * z, px * (tx + 960 * sv * (1 - z)), px * (ty + 1031 * sv * (1 - z)));
-    const g = new G(L, proj, sc, lt, vert), vis = V[sc.visual]; if (vis) { try { const scn = sc.p && sc.p.scenery, hasScn = sc.visual === 'custom' && (sc.p.items || []).some(e => e && /^scenery$/i.test(e.is || '')); if (scn) drawScenery(g, typeof scn === 'object' ? scn.kind : scn, typeof scn === 'object' ? scn : null); else if (!hasScn && scn !== 'none') { const k = autoScenery(proj, sc, PEOPLE.indexOf(sc.visual) >= 0 || hasPerson(sc.p && (sc.visual === 'custom' ? sc.p.items : sc.p.cast))); if (k) drawScenery(g, k, null); } vis.draw(g); if (sc.visual !== 'custom' && Array.isArray(sc.p && sc.p.cast)) drawItems(g, sc.p.cast, stageOf(g), false, 0); } catch (e) { if (root.console) console.error(sc.visual, e); } }
+    const cut = look.scenery === 'painted'; let Lc = L; if (cut) { if (!render._c) render._c = doc.createElement('canvas'); const cc = render._c; if (cc.width !== W || cc.height !== H) { cc.width = W; cc.height = H; } Lc = cc.getContext('2d'); Lc.setTransform(1, 0, 0, 1, 0, 0); Lc.clearRect(0, 0, W, H); Lc.setTransform(L.getTransform()); }
+    const g = new G(Lc, proj, sc, lt, vert), gs = cut ? new G(L, proj, sc, lt, vert) : g, vis = V[sc.visual]; g.skipScenery = cut; if (vis) { try { if (cut && sc.visual === 'custom' && Array.isArray(sc.p.items)) sc.p.items.filter(e => e && /^scenery$/i.test(e.is || '')).slice(0, 1).forEach(e => drawScenery(gs, e.kind || e.name, e)); const scn = sc.p && sc.p.scenery, painted = look.scenery === 'painted', hasScn = sc.visual === 'custom' && (sc.p.items || []).some(e => e && /^scenery$/i.test(e.is || '')); if (scn) drawScenery(gs, typeof scn === 'object' ? scn.kind : scn, typeof scn === 'object' ? scn : null); else if (!hasScn && scn !== 'none') { const k = autoScenery(proj, sc, painted || PEOPLE.indexOf(sc.visual) >= 0 || hasPerson(sc.p && (sc.visual === 'custom' ? sc.p.items : sc.p.cast))); if (k) drawScenery(gs, k, null); } vis.draw(g); if (sc.visual !== 'custom' && Array.isArray(sc.p && sc.p.cast)) drawItems(g, sc.p.cast, stageOf(g), false, 0); } catch (e) { if (root.console) console.error(sc.visual, e); } }
+    if (cut) { L.save(); L.setTransform(1, 0, 0, 1, 0, 0); L.shadowColor = 'rgba(45,28,12,0.34)'; L.shadowBlur = 12 * px; L.shadowOffsetX = 5 * px; L.shadowOffsetY = 8 * px; L.drawImage(render._c, 0, 0); L.restore(); } // graphics and people sit in the place like cut paper, with a soft shadow on what is behind them
     if (g.shk > 0.2) { off += Math.sin(t * 97) * g.shk; offY += Math.cos(t * 83) * g.shk * 0.8; } // camera kick from a hit
-    off += (i % 2 ? -1 : 1) * 16 * (lt / sc.dur - 0.5); // slow sideways drift so no frame sits still
+    off += (i % 2 ? -1 : 1) * (look.scenery === 'painted' ? 34 : 16) * (lt / sc.dur - 0.5); // slow sideways drift so no frame sits still
     const blit = (a, dx, dy, s) => { ctx.globalAlpha = Math.min(1, a); if (!s || s === 1) ctx.drawImage(layer, dx * px, (dy || 0) * px); else ctx.drawImage(layer, (W - W * s) / 2 + dx * px, (H - H * s) / 2 + (dy || 0) * px, W * s, H * s); };
     // glow first (underneath), then the sharp layer on top so solid shapes keep their exact color
     ctx.globalCompositeOperation = 'lighter';
