@@ -23,6 +23,7 @@ Short animated explainer videos (TikTok, Reels, Shorts) made from a small JSON p
 node make.js projects/my-video.json            # the whole package: checks, check sheet, MP4, script, caption, sources
 node make.js projects/my-video.json --voice voice.mp3   # same, fitted to a voiceover
 node build.js                                  # rebuild the editor page after any change
+node photo.js projects/my-video.json comet "File:Name.jpg"   # add a freely licensed Commons photo (stored in the project, credit added)
 node render.js general out/general.mp4         # render a starter by name
 node render.js projects/my-video.json out/my-video.mp4 --audio voice.mp3
 node render.js general out/x.mp4 --style newsroom --from 0 --to 5

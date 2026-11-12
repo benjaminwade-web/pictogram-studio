@@ -43,7 +43,8 @@
         "icon": "chart",
         "mark": "",
         "verdict": "STOCK GENIUS",
-        "strike": true
+        "strike": true,
+        "scenery": "office"
       }
     },
     {
@@ -72,7 +73,8 @@
             ],
             "emote": "$"
           }
-        ]
+        ],
+        "scenery": "city"
       }
     },
     {
@@ -85,7 +87,8 @@
       ],
       "p": {
         "items": "streak:STAYED INVESTED, log:LET IT COMPOUND, clock:WAITED DECADES",
-        "ticks": true
+        "ticks": true,
+        "scenery": "office"
       }
     },
     {
@@ -135,7 +138,8 @@
               }
             ]
           }
-        ]
+        ],
+        "scenery": "city"
       }
     },
     {
@@ -154,7 +158,8 @@
         "rows": "SKILL:A, PATIENCE:A+, YEARS IN:75",
         "stamp": "TIME DID IT",
         "person": true,
-        "reaction": "happy"
+        "reaction": "happy",
+        "scenery": "office"
       }
     },
     {
@@ -191,7 +196,8 @@
       "p": {
         "button": "+ FOLLOW",
         "buttonDone": "FOLLOWING",
-        "foot": "KEEP DIGGING"
+        "foot": "KEEP DIGGING",
+        "scenery": "city"
       }
     }
   ],

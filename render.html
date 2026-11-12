@@ -6,6 +6,7 @@
 let proj, ctx;
 async function setup(p, w, style) { proj = PSP.normalize(typeof p === 'string' ? JSON.parse(JSON.stringify(PSP_PRESETS[p])) : p); if (style) PSP.applyStyle(proj, style); const c = document.getElementById('c');
   const v = proj.aspect === '9:16'; c.width = v ? Math.round(w * 9 / 16) : w; c.height = v ? w : Math.round(w * 9 / 16); ctx = c.getContext('2d');
+  try { await PSP.preload(proj); } catch (e) {}
   try { await Promise.all(['400', '600', '700', '800'].map(x => document.fonts.load(x + ' 30px ' + PSP.FONTS[proj.font].split(',')[0]))); } catch (e) {}
   return { w: c.width, h: c.height, dur: PSP.duration(proj) }; }
 function frame(t, q) { PSP.render(ctx, proj, t); return ctx.canvas.toDataURL('image/jpeg', q || 0.93).slice(23); }

@@ -75,73 +75,7 @@ Why this style: explainer studios find that characters with adult proportions (7
 | `mood` | `happy`, `sad`, `shock`, `angry`, `think`, `worried`, `smug`, `sleep`. Changes the eyes, brows and mouth. |
 | `act` | `point`, `wave`, `cheer`, `jump`, `walk`, `run`, `talk`, `think`, `shrug`, `hips`, `cross` (arms folded), `facepalm`, `hold`, `nod`, `no`, `slump`, `dig`. |
 | `says` | A speech bubble of 1 to 4 words. It types itself on and the mouth moves. `saysSide` (`left` / `right`) picks the side, `saysAt` the moment, `saysSize` the text size. The bubble leaves by itself after a few seconds. |
-| `emote` | `!`, `?`, `# Custom animation
-
-A scene with `"visual": "custom"` is a picture made for one line of one video. Its `p.items` is a list of parts. Each part says what it is, where it stands, when it arrives and how it moves. Parts are drawn in order, so later parts sit on top.
-
-`projects/why-plane-windows-are-round.json` is a full video made only of custom scenes. Read it before writing your own.
-
-## The stage
-
-- `x` and `y` run from 0 to 100, left to right and top to bottom. `y: 100` is the ground line. `y: 0` is just under the captions.
-- Sizes (`h`, `w`, `r`, `size`, `len`, `width`) are in units. 100 units is the stage height. A person is about 30 tall.
-- In the tall 9:16 shape the stage is about 116 units wide, so one step of `x` is about 1.16 units. In the wide shape the same layout is used in the middle of the frame.
-- Inside a `group`, the children's `x` and `y` are in units, measured from the group's own position.
-- Keep everything between x 4 and 96, y 8 and 98.
-
-## What every part can have
-
-| Field | Meaning |
-|---|---|
-| `is` | The kind of part (the list is below). The only required field. |
-| `x`, `y` | Where it stands. |
-| `at` | When it appears. Default 0. |
-| `in` | How it appears: `pop`, `fade`, `draw`, `grow`, `left`, `right`, `up`, `down`, `drop`, `none`. `inDur` sets how long that takes. |
-| `out` | When it fades away. |
-| `loop` | Idle motion: `bob`, `float`, `pulse`, `spin`, `swing`, `shake`, `blink`. `speed` makes it faster or slower. |
-| `move` | A list of steps: `{ "at": "line1", "x": 60, "y": 40, "scale": 1.2, "rot": 15, "alpha": 1, "dur": 0.6, "ease": "out" }`. Each step starts at `at` and takes `dur` seconds to reach the values it names. |
-| `fx` | Extras when it appears: `sparks`, `shake`, `ring`, `glow` (several with commas). |
-| `color` | `accent`, `fg`, `mute`, `bg`, or a hex color. Use `accent` only for the thing the viewer should look at. |
-| `scale`, `rot`, `alpha` | Starting size, angle in degrees and opacity. |
-| `repeat` | `{ "n": 5, "dx": 6, "dy": 0, "stagger": 0.08 }` makes a row of copies. |
-
-## Times
-
-Scene lengths are set from the word count after you write the scene, so anchor times to the words:
-
-- `"line1"`, `"line2"`: the moment that caption line starts. `"line1+0.4"` and `"line2-0.2"` work too.
-- `"30%"`: a share of the scene. `"end-0.8"`: counted back from the end.
-- A plain number is seconds from the start of the scene. Use these only for the first second.
-
-## Kinds of part
-
-| Kind | Extra fields |
-|---|---|
-| `person` | A character with a face. See "Characters" below. Feet at x,y. Accent = the main character, `fg` = other people. |
-| `crowd` | `n`, `h` |
-| `icon` | `name` (chest, coin, diamond, bar, friends, bulb, star, dice, pin, house, bank, bag, doc, chart, heart, phone, rocket, book, globe, trophy, flame, bolt, target, magnifier), `size` |
-| `coin` | `size`, `symbol`, `spin` |
-| `text` | `text`, `size` (3 to 6), `w` (widest it may be), `align`, `caps: false` |
-| `tag` | `text`, `size`, `style` (`outline`, `solid`, `accent`), `strike` (time it is crossed out) |
-| `number` | `from`, `to`, `prefix`, `suffix`, `decimals`, `size` (12 to 22), `over` (seconds it counts), `start`, `label` |
-| `box` | `w`, `h`, `r`, `fill`, `stroke`, `dash` |
-| `circle` | `r`, `fill`, `stroke`, `dash` |
-| `ring` | `r`, `percent`, `show: false` hides the number |
-| `bar` | `w`, `h`, `value` (text above), `label` (text below), `fill`. Grows up from x,y. |
-| `dots` | `cols`, `rows`, `gap`, `r`, `on` (how many light up), `over`, `start` |
-| `line`, `arrow` | `to: [x, y]`, or `len` and `angle` (0 = right, -90 = up). `bend` (-0.3 to 0.3), `dash`, `flow` (moving dashes), `center: true` to turn around its middle |
-| `path` | `pts: [[x, y], ...]` as stage positions, `smooth`, `close`, `fill`, `dash`, `flow`. Here `x` and `y` are an offset. |
-| `blob` | `r`, `seed`, `squash`, `points`: a rock or cloud outline |
-| `bubble` | `w`, `h`, `text`, `tail` (`left`, `right`, `none`) |
-| `stamp` | `text`, `size`. Slams down and kicks the camera. |
-| `star`, `glow` | `size` / `r`, `strength` |
-| `sparks` | `n`, `r`, `len`, `gravity`: a one-off burst at `at` |
-| `burst` | `symbol`: a coin with rays |
-| `chest` | `size`, `open` (time) |
-| `shake` | `amount`: a camera kick at `at` |
-| `group` | `items`: parts that move, turn, pulse or slide in together |
-
- or `zzz` above the head. |
+| `emote` | `!`, `?`, `$` or `zzz` above the head. |
 | `look` | `[x, y]` on the stage to look at, or `left`, `right`, `up`, `down`, `camera`. |
 | `hat`, `hair`, `glasses`, `beard` | `helmet`, `cap`, `crown`, `grad`; `short`, `side`, `long`, `bun`, `curly`, `spiky`, `bald`; `true`; `true`. |
 | `outfit`, `skin`, `hairCol` | `shirt`, `tee`, `suit`, `coat`, `dress`; 1 (light) to 6 (dark) or a colour; a colour such as `#7a4e2d`. |
@@ -164,6 +98,32 @@ Casting rules:
 
 `projects/why-plane-windows-are-round.json` is the worked example: one engineer with a helmet and glasses walks in, shows off the plane, worries, spots the corners and fixes them.
 
+## Scenery
+
+A scene can stand somewhere instead of on a bare background. Scenery is drawn in soft layers that drift at different speeds (far layers slower and blurred), with a floor that fades toward the viewer under the ground line, so the picture has depth and the empty band under the ground in the tall shape is filled.
+
+- Kinds: `city`, `office`, `sky`, `hills`, `runway`, `space`. Hills and runway also get a low sun.
+- In a custom scene, make it the first part: `{"is": "scenery", "kind": "city"}`.
+- In any ready-made scene, add `"scenery": "office"` to its `p`.
+- Pick one that fits the line, and change it when the story moves (office for the planning, city for the result). Leave the first scene or a big number scene plain when the text needs all the attention.
+
+## Real photos
+
+A real photo, cut out like a polaroid or a sticker, makes a story feel true (the real plane, the real building, the real person). Photos come from Wikimedia Commons, which is free to use with a credit.
+
+1. Find the file on commons.wikimedia.org and check its licence (CC0, CC BY, CC BY-SA or public domain).
+2. Run `node photo.js projects/<slug>.json <key> "File:Name of the photo.jpg"`. It downloads and shrinks the photo, stores it inside the project as `assets.<key>`, and adds the photo credit to `sources`. Photos are kept in `photo-cache/`, so running it again does not download again (Commons blocks repeat downloads for a while).
+3. Use it in a custom scene: `{"is": "photo", "src": "<key>", "x": 60, "y": 40, "w": 50, "frame": "polaroid", "caption": "BOAC Comet 1, 1953", "rot": -3, "at": 0.3, "in": "drop"}`.
+
+| Field | What it does |
+|---|---|
+| `w`, `h` | Size in units. Give one and the other follows the photo. |
+| `frame` | `polaroid` (white border, caption, a strip of tape), `sticker` (white cut-out edge), `round`, `none`. |
+| `tint` | `none`, `mono` (black and white), `duo` (two tones in the style's colours, so it matches the look). |
+| `zoom` | The photo slowly pushes in (a Ken Burns move). `false` stops it. `panX`, `panY` drift it sideways. |
+
+The credit must stay in `sources` and in the package's sources list. Only use photos of people when the story is about them, and keep the mood respectful.
+
 ## How to design a custom scene
 
 1. Name the one thing the line is about, and draw that thing out of simple shapes. A plane is a rounded box, two closed paths and a row of small boxes.
@@ -171,6 +131,7 @@ Casting rules:
 3. Use 6 to 16 parts. Labels inside the picture are 1 to 4 words.
 4. Give the first scene `"in": "none"` on its main shapes, so the first frame is not empty.
 5. Carry a shape from one scene to the next when the story continues (the same window, first cracked, then round).
-6. Render the check sheet and look at every scene before the full video.
+6. Give most scenes a `scenery` part that fits the place, and use a real photo where the viewer should see the real thing.
+7. Render the check sheet and look at every scene before the full video.
 
 Authoring tip: for pictures that need computed positions (lines that bend around a shape, parts on a circle), write a short script that builds the JSON, as long as the saved project file is plain data.
