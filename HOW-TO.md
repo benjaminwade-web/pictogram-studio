@@ -38,9 +38,11 @@ Your work is remembered in the browser. The voice file is not, so add it again i
 - **Ready-made scenes (29).** Big statement, Numbered steps, A versus B, Percent ring, Timeline, Bar chart, Growth curve, Big counting number, Follow button, Digging toward the goal, Late at night, Report card, Proof cards, What most people think, Forced or wanted, Teacher and student, and the story scenes with figures (crowds, pedestals, spotlight, tracking table and so on).
 - **Camera and texture.** Between scenes the camera drops, whips sideways or punches through. Hits shake the frame. Captions arrive word by word and the key words pop. People cast a soft shadow and are shaded on the side away from the light. Stones or dust drift behind the scene and a light film grain sits on top.
 
-## The eight styles
+- **Cut paper.** Paper puppet people in period costume, deep painted places, stripe wipes between chapters. See `CUT-PAPER-STYLE.md`.
 
-Neon terminal, Whiteboard, Blueprint, Newsroom, Arcade CRT, Magazine, Storybook, Sticker pop. `STYLE-NOTES.md` says what each one suits.
+## The nine styles
+
+Neon terminal, Whiteboard, Blueprint, Newsroom, Arcade CRT, Magazine, Storybook, Cut paper, Sticker pop. `STYLE-NOTES.md` says what each one suits.
 
 ## The retention check
 

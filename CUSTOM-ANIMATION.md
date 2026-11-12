@@ -78,7 +78,7 @@ Why this style: explainer studios find that characters with adult proportions (7
 | `emote` | `!`, `?`, `$` or `zzz` above the head. |
 | `look` | `[x, y]` on the stage to look at, or `left`, `right`, `up`, `down`, `camera`. |
 | `hat`, `hair`, `glasses`, `beard` | `helmet`, `cap`, `crown`, `grad`; `short`, `side`, `long`, `bun`, `curly`, `spiky`, `bald`; `true`; `true`. |
-| `outfit`, `skin`, `hairCol` | `shirt`, `tee`, `suit`, `coat`, `dress`; 1 (light) to 6 (dark) or a colour; a colour such as `#7a4e2d`. |
+| `outfit`, `skin`, `hairCol` | `shirt`, `tee`, `suit`, `coat`, `dress`, and for history `tunic`, `toga`, `robe`, `armor`, `uniform` (drawn fully by the paper puppets of the Cut paper style; realistic people wear the nearest modern piece); 1 (light) to 6 (dark) or a colour; a colour such as `#7a4e2d`. |
 | project `hero` | `"hero": {"outfit": "suit", "hair": "side", "skin": 2, "beard": true}` at the top level of the project fixes how the main character (colour accent) looks in every scene, ready-made scenes included. Without it the main character still looks the same all video, picked from the title. |
 | `extra` | `true` on an accent-coloured person who is not the main character, so it gets its own look. |
 | `name` | A small label under the feet. |
@@ -108,6 +108,14 @@ A scene can stand somewhere instead of on a bare background. Scenery is drawn in
 - In a custom scene, make it the first part: `{"is": "scenery", "kind": "city"}`. In any ready-made scene, add `"scenery": "office"` to its `p`.
 - Two ways to draw them, set by the style: soft shapes in the style's own colours (all styles), or full colour painted places with light, shade and a paper texture (the **Storybook** style, or Look > Backgrounds > Painted). In painted mode the captions sit on a paper card so they stay readable, every scene gets a place (not only scenes with people), and everything in front of the place (people, cards, numbers, drawings) casts a soft cut-paper shadow onto it, so the picture reads as one world.
 - Places have life of their own: in painted mode people walk past in the distance (city, street, market, office, bank, factory), birds cross outdoor skies, and in tall videos things close to the camera (a desk with a steaming cup, crates, a bench, rocks, bushes, footlights, a velvet rope) fill the band under the ground and slide past faster than the rest. `"fore": false` or `"life": false` on a scenery object turns these off.
+
+## Cut paper: depth and chapters
+
+- `look.people: 'doll'` draws every person as a paper puppet. Hats for history: `tophat`, `tricorn`, `plume` (crested soldier helmet), `laurel`, `wrap` (turban), besides `helmet`, `cap`, `crown`, `grad`.
+- With `look.dof` on, a person part with a smaller `y` stands further back: smaller and hazier, so a scene reads as one deep space. Main character near y 100, others at y 70 to 95.
+- `look.dof` also blurs far layers and puts soft dark shapes (grass, a column, a plant) at the frame edges. `look.horizon` sets how high the painted horizon sits (Cut paper uses 230).
+- Give each scene a `"section"` (chapter name). With `look.ribbon` a small ribbon in the corner shows "Part 2 · The crash", and the `stripes` transition wipes only when the chapter changes (plain cuts inside a chapter).
+- Numbers get a paper card behind them in painted places. Full rules: `CUT-PAPER-STYLE.md`. Worked example: `projects/tulip-mania-cutpaper.json`.
 
 ## Real photos
 

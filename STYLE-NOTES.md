@@ -1,6 +1,6 @@
 # Style notes
 
-## The eight styles and when to use each
+## The nine styles and when to use each
 
 A style changes the colors, font, background texture, how figures are drawn, how captions are highlighted and how scenes change. The words and scenes stay the same, so one script can be tried in any look. `out/style-reel_9x16.mp4` shows all seven.
 
@@ -13,6 +13,7 @@ A style changes the colors, font, background texture, how figures are drawn, how
 | Arcade CRT | Purple with scan lines and strong cyan glow | Gaming, internet culture, playful rankings |
 | Magazine | Warm dark paper, serif type, orange underlines, soft fades | History, psychology, calmer story-driven pieces |
 | Storybook | Full-colour painted places (office, mine, courtroom, market, temple...) on a paper texture, serif captions on a paper card, outlined people | History, company origin stories, stories about people and places. Inspired by how educational history cartoons put every line in a fitting illustrated place. |
+| Cut paper | Paper puppet people (big round heads, dot eyes, period costumes and hats) standing in deep painted places with a high horizon; far people smaller and hazier, blurred shapes in front of the lens, stripe wipes between chapters, a chapter ribbon in the corner | History, "how it really happened" stories, anything with a cast of people from another time. Built from the techniques in `CUT-PAPER-STYLE.md` (studied from history explainer videos, with all-original art). |
 | Sticker pop | Bright yellow, flat blue and black, boxed highlights, hard cuts | Self-improvement, lifestyle, anything aimed at a wide audience |
 
 Tips: keep one style per series so people recognise it, and change style between series so the feed does not look like one template. Light styles (Whiteboard, Sticker pop) stand out in a feed that is mostly dark video.

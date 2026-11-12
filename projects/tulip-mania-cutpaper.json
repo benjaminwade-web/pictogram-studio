@@ -1,0 +1,820 @@
+{
+ "title": "The tulip crash that never ruined anyone",
+ "idea": "Tulip mania 1637: the famous bubble was real, but the ruin was mostly a legend",
+ "audience": "General audience, people 18 to 40 who are curious about money",
+ "aspect": "9:16",
+ "style": "cutpaper",
+ "progress": false,
+ "hero": {
+  "outfit": "coat",
+  "hair": "curly",
+  "hairCol": "#4a3022",
+  "skin": 1,
+  "beard": true
+ },
+ "scenes": [
+  {
+   "visual": "custom",
+   "dur": 3.6,
+   "section": "The craze",
+   "kicker": "",
+   "lines": [
+    {
+     "text": "In 1637, one *tulip bulb* sold for 10,000 guilders.",
+     "at": 0
+    }
+   ],
+   "p": {
+    "scenery": "market",
+    "items": [
+     {
+      "is": "person",
+      "x": 72,
+      "y": 80,
+      "h": 43,
+      "color": "#3d5a80",
+      "outfit": "dress",
+      "hair": "bun",
+      "look": [
+       42,
+       62
+      ],
+      "mood": "think",
+      "then": [
+       {
+        "at": "line1+0.8",
+        "mood": "shock",
+        "emote": "!"
+       }
+      ]
+     },
+     {
+      "is": "person",
+      "x": 86,
+      "y": 86,
+      "h": 43,
+      "color": "#5b7f4a",
+      "outfit": "shirt",
+      "hat": "cap",
+      "look": [
+       42,
+       62
+      ],
+      "then": [
+       {
+        "at": "line1+1",
+        "mood": "shock"
+       }
+      ]
+     },
+     {
+      "is": "person",
+      "x": 30,
+      "y": 100,
+      "h": 46,
+      "color": "accent",
+      "hat": "tophat",
+      "act": "hold",
+      "mood": "smug",
+      "look": [
+       44,
+       62
+      ]
+     },
+     {
+      "is": "icon",
+      "name": "flower",
+      "x": 47,
+      "y": 58,
+      "size": 11,
+      "color": "accent",
+      "at": 0.2,
+      "loop": "bob",
+      "fx": "glow"
+     },
+     {
+      "is": "number",
+      "x": 58,
+      "y": 42,
+      "from": 0,
+      "to": 10000,
+      "suffix": "",
+      "size": 12,
+      "at": "line1+0.4",
+      "over": 1.2,
+      "label": "GUILDERS"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.4,
+   "section": "The craze",
+   "lines": [
+    {
+     "text": "A skilled worker earned about *300* a year.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "street",
+    "items": [
+     {
+      "is": "person",
+      "x": 20,
+      "y": 100,
+      "h": 43,
+      "color": "#7a5a3a",
+      "outfit": "tunic",
+      "hat": "cap",
+      "act": "hold",
+      "mood": "worried",
+      "look": [
+       70,
+       50
+      ]
+     },
+     {
+      "is": "bar",
+      "x": 44,
+      "y": 96,
+      "w": 12,
+      "h": 3,
+      "value": "300",
+      "label": "A YEAR'S PAY",
+      "at": "line1+0.3"
+     },
+     {
+      "is": "bar",
+      "x": 64,
+      "y": 96,
+      "w": 12,
+      "h": 50,
+      "value": "10,000",
+      "label": "ONE BULB",
+      "color": "accent",
+      "at": "line1+0.8"
+     },
+     {
+      "is": "person",
+      "x": 88,
+      "y": 100,
+      "h": 41,
+      "color": "accent",
+      "hat": "tophat",
+      "dir": "left",
+      "mood": "smug",
+      "act": "hips"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.6,
+   "section": "The craze",
+   "lines": [
+    {
+     "text": "Traders bid in *taverns* for bulbs still underground.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "home",
+    "items": [
+     {
+      "is": "person",
+      "x": 76,
+      "y": 84,
+      "h": 41,
+      "color": "#5b7f4a",
+      "outfit": "shirt",
+      "hat": "cap",
+      "act": "cheer",
+      "mood": "happy"
+     },
+     {
+      "is": "person",
+      "x": 26,
+      "y": 100,
+      "h": 46,
+      "color": "accent",
+      "hat": "tophat",
+      "act": "talk",
+      "says": "I'LL PAY MORE!",
+      "saysAt": "line1+0.4"
+     },
+     {
+      "is": "person",
+      "x": 60,
+      "y": 100,
+      "h": 46,
+      "color": "#3d5a80",
+      "outfit": "suit",
+      "hair": "side",
+      "dir": "left",
+      "act": "point",
+      "mood": "angry",
+      "then": [
+       {
+        "at": "line1+2",
+        "act": "cross",
+        "mood": "smug"
+       }
+      ]
+     },
+     {
+      "is": "box",
+      "x": 43,
+      "y": 93,
+      "w": 18,
+      "h": 5,
+      "fill": "#6b4a2b",
+      "r": 1,
+      "in": "fade"
+     },
+     {
+      "is": "icon",
+      "name": "flower",
+      "x": 43,
+      "y": 86,
+      "size": 6,
+      "color": "accent",
+      "at": 0.3,
+      "loop": "pulse"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.6,
+   "kicker": "They called it the wind trade",
+   "lines": [
+    {
+     "text": "No flowers changed hands. Only *paper* promises.",
+     "at": 0.2
+    }
+   ],
+   "p": {
+    "scenery": "home",
+    "items": [
+     {
+      "is": "person",
+      "x": 22,
+      "y": 100,
+      "h": 46,
+      "color": "accent",
+      "hat": "tophat",
+      "act": "hold",
+      "mood": "smug"
+     },
+     {
+      "is": "person",
+      "x": 78,
+      "y": 100,
+      "h": 46,
+      "color": "#3d5a80",
+      "outfit": "suit",
+      "hair": "side",
+      "dir": "left",
+      "act": "hold",
+      "mood": "happy"
+     },
+     {
+      "is": "icon",
+      "name": "doc",
+      "x": 34,
+      "y": 70,
+      "size": 11,
+      "at": "line1",
+      "move": [
+       {
+        "at": "line1+0.4",
+        "x": 66,
+        "y": 66,
+        "dur": 0.9
+       }
+      ]
+     },
+     {
+      "is": "icon",
+      "name": "doc",
+      "x": 66,
+      "y": 60,
+      "size": 11,
+      "at": "line1+1.2",
+      "move": [
+       {
+        "at": "line1+1.4",
+        "x": 34,
+        "y": 62,
+        "dur": 0.9
+       }
+      ]
+     },
+     {
+      "is": "icon",
+      "name": "flower",
+      "x": 50,
+      "y": 50,
+      "size": 11,
+      "color": "accent",
+      "at": 0.2
+     },
+     {
+      "is": "tag",
+      "text": "NO BULBS",
+      "x": 50,
+      "y": 36,
+      "style": "accent",
+      "at": "line1+0.2",
+      "strike": "line1+2",
+      "size": 4.5
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.8,
+   "section": "The crash",
+   "lines": [
+    {
+     "text": "February 1637: an auction in Haarlem found *no buyers*.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "market",
+    "items": [
+     {
+      "is": "box",
+      "x": 50,
+      "y": 92,
+      "w": 18,
+      "h": 12,
+      "fill": "fg",
+      "r": 0.5
+     },
+     {
+      "is": "person",
+      "x": 50,
+      "y": 86,
+      "h": 41,
+      "color": "#7a5a8a",
+      "outfit": "robe",
+      "beard": true,
+      "act": "wave",
+      "says": "ANYONE?",
+      "saysAt": "line1+0.8"
+     },
+     {
+      "is": "person",
+      "x": 30,
+      "y": 100,
+      "h": 38,
+      "color": "#5b7f4a",
+      "outfit": "shirt",
+      "act": "walk",
+      "move": [
+       {
+        "at": "line1+0.6",
+        "x": 6,
+        "dur": 2.5
+       }
+      ]
+     },
+     {
+      "is": "person",
+      "x": 70,
+      "y": 98,
+      "h": 38,
+      "color": "#3d5a80",
+      "outfit": "dress",
+      "hair": "long",
+      "act": "walk",
+      "move": [
+       {
+        "at": "line1+0.8",
+        "x": 94,
+        "dur": 2.5
+       }
+      ]
+     },
+     {
+      "is": "person",
+      "x": 86,
+      "y": 84,
+      "h": 41,
+      "color": "accent",
+      "hat": "tophat",
+      "mood": "worried",
+      "look": [
+       50,
+       60
+      ],
+      "then": [
+       {
+        "at": "line1+1.6",
+        "mood": "shock"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.2,
+   "section": "The crash",
+   "lines": [
+    {
+     "text": "Within days, tulip prices *collapsed*.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "market",
+    "items": [
+     {
+      "is": "arrow",
+      "x": 22,
+      "y": 40,
+      "to": [
+       78,
+       80
+      ],
+      "width": 1.6,
+      "color": "accent",
+      "at": "line1+0.2",
+      "bend": 0.15
+     },
+     {
+      "is": "icon",
+      "name": "flower",
+      "x": 30,
+      "y": 48,
+      "size": 9,
+      "color": "accent",
+      "at": 0,
+      "move": [
+       {
+        "at": "line1+0.4",
+        "rot": 70,
+        "y": 74,
+        "x": 66,
+        "alpha": 0.5,
+        "dur": 1.4
+       }
+      ]
+     },
+     {
+      "is": "person",
+      "x": 26,
+      "y": 100,
+      "h": 46,
+      "color": "accent",
+      "hat": "tophat",
+      "mood": "sad",
+      "act": "slump"
+     },
+     {
+      "is": "person",
+      "x": 80,
+      "y": 98,
+      "h": 41,
+      "color": "#3d5a80",
+      "outfit": "suit",
+      "hair": "side",
+      "dir": "left",
+      "act": "facepalm",
+      "mood": "worried"
+     },
+     {
+      "is": "shake",
+      "at": "line1+0.6",
+      "amount": 10
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.8,
+   "section": "The crash",
+   "lines": [
+    {
+     "text": "Haarlem let buyers walk away for *3.5 percent* of the price.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "courtroom",
+    "items": [
+     {
+      "is": "person",
+      "x": 50,
+      "y": 82,
+      "h": 41,
+      "color": "#2b201a",
+      "outfit": "robe",
+      "hat": "wrap",
+      "beard": true,
+      "act": "point",
+      "mood": "think"
+     },
+     {
+      "is": "person",
+      "x": 26,
+      "y": 100,
+      "h": 43,
+      "color": "#5b7f4a",
+      "outfit": "shirt",
+      "act": "walk",
+      "dir": "left",
+      "move": [
+       {
+        "at": "line1+1.2",
+        "x": 10,
+        "dur": 1.6
+       }
+      ],
+      "then": [
+       {
+        "at": "line1+0.6",
+        "mood": "happy",
+        "emote": "$"
+       }
+      ]
+     },
+     {
+      "is": "person",
+      "x": 78,
+      "y": 100,
+      "h": 46,
+      "color": "accent",
+      "hat": "tophat",
+      "dir": "left",
+      "act": "shrug",
+      "mood": "angry"
+     },
+     {
+      "is": "number",
+      "x": 50,
+      "y": 36,
+      "from": 100,
+      "to": 3.5,
+      "decimals": 1,
+      "suffix": "%",
+      "size": 13,
+      "at": "line1+0.5",
+      "over": 1.2,
+      "color": "accent"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.4,
+   "section": "The truth",
+   "lines": [
+    {
+     "text": "But a whole country ruined? Historians say *no*.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "classroom",
+    "items": [
+     {
+      "is": "person",
+      "x": 34,
+      "y": 100,
+      "h": 46,
+      "color": "#3d5a80",
+      "outfit": "suit",
+      "hair": "bun",
+      "glasses": true,
+      "act": "no",
+      "mood": "smug",
+      "then": [
+       {
+        "at": "line1+1.2",
+        "act": "cross"
+       }
+      ]
+     },
+     {
+      "is": "icon",
+      "name": "book",
+      "x": 70,
+      "y": 62,
+      "size": 13,
+      "at": 0.3
+     },
+     {
+      "is": "stamp",
+      "text": "NOT TRUE",
+      "x": 62,
+      "y": 44,
+      "size": 7,
+      "at": "line1+1"
+     },
+     {
+      "is": "person",
+      "x": 88,
+      "y": 96,
+      "h": 38,
+      "color": "accent",
+      "hat": "tophat",
+      "dir": "left",
+      "mood": "shock"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.6,
+   "section": "The truth",
+   "lines": [
+    {
+     "text": "Only a *handful* of traders hit real trouble.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "street",
+    "items": [
+     {
+      "is": "person",
+      "x": 20,
+      "y": 100,
+      "h": 41,
+      "color": "#5b7f4a",
+      "outfit": "shirt",
+      "mood": "happy",
+      "act": "wave"
+     },
+     {
+      "is": "person",
+      "x": 40,
+      "y": 92,
+      "h": 38,
+      "color": "#3d5a80",
+      "outfit": "dress",
+      "hair": "long",
+      "mood": "happy"
+     },
+     {
+      "is": "person",
+      "x": 60,
+      "y": 96,
+      "h": 41,
+      "color": "#7a5a8a",
+      "outfit": "robe",
+      "beard": true,
+      "mood": "happy",
+      "act": "nod"
+     },
+     {
+      "is": "person",
+      "x": 82,
+      "y": 100,
+      "h": 43,
+      "color": "accent",
+      "hat": "tophat",
+      "mood": "sad",
+      "act": "slump",
+      "then": [
+       {
+        "at": "line1+1.6",
+        "mood": "happy",
+        "act": "shrug"
+       }
+      ]
+     },
+     {
+      "is": "tag",
+      "text": "FEWER THAN 6",
+      "x": 50,
+      "y": 46,
+      "style": "accent",
+      "at": "line1+0.6"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "custom",
+   "dur": 3.8,
+   "section": "The truth",
+   "lines": [
+    {
+     "text": "The ruin story came from *satire*, retold in an 1841 book.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "scenery": "home",
+    "items": [
+     {
+      "is": "person",
+      "x": 32,
+      "y": 100,
+      "h": 46,
+      "color": "#2b201a",
+      "outfit": "coat",
+      "hair": "side",
+      "glasses": true,
+      "act": "talk",
+      "mood": "smug"
+     },
+     {
+      "is": "icon",
+      "name": "book",
+      "x": 68,
+      "y": 72,
+      "size": 14,
+      "at": "line1+0.4",
+      "fx": "glow"
+     },
+     {
+      "is": "tag",
+      "text": "1841",
+      "x": 66,
+      "y": 54,
+      "at": "line1+1",
+      "size": 5
+     },
+     {
+      "is": "bubble",
+      "x": 70,
+      "y": 40,
+      "w": 36,
+      "h": 12,
+      "text": "THEY ATE BULBS!",
+      "at": "line1+1.6",
+      "tail": "left"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3.4,
+   "lines": [
+    {
+     "text": "The real bubble was the *story*.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "MONEY HISTORY",
+    "hat": "tophat",
+    "scenery": "market"
+   }
+  }
+ ],
+ "hooks": [
+  "In 1637, one *tulip bulb* sold for 10,000 guilders.",
+  "The most famous crash in history *barely happened*.",
+  "Your teacher's tulip story is *mostly wrong*."
+ ],
+ "caption": "In 1637 one tulip bulb sold for 10,000 guilders. Then the market froze. But the famous ruin of a whole country? Mostly a legend.",
+ "hashtags": [
+  "tulipmania",
+  "history",
+  "bubble",
+  "money",
+  "investing"
+ ],
+ "sources": [
+  {
+   "claim": "Semper Augustus sold for 10,000 guilders at its height; skilled labourers earned about 150 to 350 guilders a year",
+   "source": "Wikipedia, Tulip mania (citing Goldgar 2007 and Mackay 1841)",
+   "url": "https://en.wikipedia.org/wiki/Tulip_mania"
+  },
+  {
+   "claim": "Trading met in taverns, as forward contracts for bulbs still in the ground; the Dutch called it windhandel (wind trade)",
+   "source": "Wikipedia, Tulip mania",
+   "url": "https://en.wikipedia.org/wiki/Tulip_mania"
+  },
+  {
+   "claim": "Collapse began in early February 1637 when a Haarlem auction found no buyers; Haarlem later let buyers cancel contracts for 3.5 percent of the price",
+   "source": "Wikipedia, Tulip mania",
+   "url": "https://en.wikipedia.org/wiki/Tulip_mania"
+  },
+  {
+   "claim": "Anne Goldgar found fewer than half a dozen notable participants in financial trouble; Mackay's 1841 account relied on satirical pamphlets",
+   "source": "Anne Goldgar, Tulipmania: Money, Honor, and Knowledge in the Dutch Golden Age (2007), via Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Tulip_mania"
+  }
+ ],
+ "notes": "The speech bubble THEY ATE BULBS! points to an old story in the satire (a sailor eating a bulb) and is shown as part of the legend, not as fact. The bars in scene 2 are to scale (300 vs 10,000) only roughly."
+}
