@@ -1,6 +1,6 @@
 # Pictogram Studio
 
-Short animated explainer videos (TikTok, Reels, Shorts) made from a small JSON project: simple pictogram scenes, bold captions, seven switchable styles, and checks for viewer retention.
+Short animated explainer videos (TikTok, Reels, Shorts) made from a small JSON project: custom animation drawn for each idea, ready-made pictogram scenes, bold captions, seven switchable styles, and checks for viewer retention.
 
 ## What is in here
 
@@ -12,6 +12,7 @@ Short animated explainer videos (TikTok, Reels, Shorts) made from a small JSON p
 | `build.js` | Joins the three files above into `studio.artifact.html` (published page) and `Pictogram Studio.html` (double-click copy). |
 | `make.js` | One command from a project file to a full package in `videos/<name>/`: timing, checks, check sheet, MP4, voiceover script, caption, sources. With `--voice` it fits the scenes to a voice file. |
 | `PIPELINE.md` | The rules for turning a one-line idea into a project file and a package. |
+| `CUSTOM-ANIMATION.md` | The stage language behind `"visual": "custom"`: parts, places, times, movement. |
 | `render.js`, `render.html` | Renders an MP4 with headless Chromium and ffmpeg. |
 | `projects/` | One JSON file per video. This is where finished and in-progress videos live. |
 | `HOW-TO.md`, `PROMPT.md`, `STYLE-NOTES.md` | Plain-language guides. |
@@ -33,6 +34,7 @@ Rendering needs Node, Playwright (Chromium) and ffmpeg. Run the commands from th
 ## How to change things
 
 - **New style:** add one entry to `STYLES` in `engine.js` (colors, font, transition and a `look`).
+- **New kind of custom part:** add a `case` to `drawItems` in `engine.js`, then a row in `CUSTOM-ANIMATION.md` and a line in `CUSTOM_SPEC` (the short version that goes into the drafting request).
 - **New scene type:** add `V.<id> = { name, hint, fields: [...], draw(g) {...} }` in `engine.js`. The editor form and the drafting request are built from `fields`, so nothing else needs to change.
 - **New starter:** add an object to `presets.js` and an `<option>` in `editor.src.html`.
 - **New video:** save its project text as `projects/<name>.json`.

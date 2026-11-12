@@ -17,7 +17,7 @@ const args = process.argv.slice(2), opt = k => { const i = args.indexOf('--' + k
   }
   const ffArgs = ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-'];
   if (opt('audio')) ffArgs.push('-i', opt('audio'), '-map', '0:v', '-map', '1:a', '-c:a', 'aac', '-shortest');
-  ffArgs.push('-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '17', '-preset', 'medium', '-movflags', '+faststart', out);
+  ffArgs.push('-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-maxrate', '6M', '-bufsize', '12M', '-preset', 'medium', '-movflags', '+faststart', out);
   const ff = spawn('ffmpeg', ffArgs, { stdio: ['pipe', 'inherit', 'inherit'] }); const F0 = Math.round(+(opt('from') || 0) * FPS), N = Math.round(Math.min(info.dur, +(opt('to') || 1e9)) * FPS), t0 = Date.now();
   for (let f = F0; f < N; f++) {
     const buf = Buffer.from(await page.evaluate(t => frame(t), f / FPS), 'base64'); if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));

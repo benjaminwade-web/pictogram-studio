@@ -18,13 +18,24 @@ h1 { font: 700 22px/1.1 var(--display); letter-spacing: -0.01em; margin: 0; }
 h1 small { display: block; font: 500 12px/1.3 var(--body); color: var(--mute); letter-spacing: 0; margin-top: 5px; }
 header.top .grow { flex: 1 1 220px; min-width: 0; }
 .cols { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 16px; align-items: start; }
-@media (max-width: 980px) { .cols { grid-template-columns: minmax(0, 1fr); } .cols > .stack { display: contents; } #cardDraft { order: 1; } #cardScene { order: 2; } #cardVoice { order: 3; } #cardLook { order: 4; } #cardCheck { order: 5; } #cardExport { order: 6; } }
+@media (min-width: 981px) { .stack.left { position: sticky; top: 12px; } }
+@media (max-width: 980px) { .cols { grid-template-columns: minmax(0, 1fr); } canvas#cv.vert { max-height: 56vh; } }
+.card.step h2 { display: flex; align-items: center; gap: 10px; font: 700 17px/1.1 var(--display); letter-spacing: 0; text-transform: none; color: var(--fg); }
+.card.step h2 em { margin-left: auto; font: 600 12px/1 var(--body); font-style: normal; color: var(--mute); }
+.num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font: 800 14px/1 var(--body); flex: 0 0 auto; }
+button.big { font-size: 15px; padding: 13px 20px; }
+#postbox { margin-top: 14px; }
+details { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 2px; }
+details > summary { cursor: pointer; font: 600 13px/1.2 var(--body); color: var(--mute); padding: 10px 0 4px; list-style-position: inside; }
+details > summary:hover, details[open] > summary { color: var(--fg); }
+details[open] > summary { margin-bottom: 8px; }
+.fields > details { margin-top: 2px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; min-width: 0; }
 .card h2 { font: 600 13px/1 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); margin: 0 0 12px; }
 .stack { display: grid; gap: 16px; min-width: 0; }
 .monitor { background: #000; border: 1px solid var(--line); border-radius: var(--r); display: grid; place-items: center; overflow: hidden; }
 canvas#cv { display: block; max-width: 100%; height: auto; }
-canvas#cv.vert { max-height: 76vh; width: auto; }
+canvas#cv.vert { max-height: 66vh; width: auto; }
 .transport { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .transport input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
 .time { font: 600 12px/1 var(--body); font-variant-numeric: tabular-nums; color: var(--mute); white-space: nowrap; }
@@ -81,18 +92,11 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
 
 <div class="wrap">
   <header class="top">
-    <h1>Pictogram Studio<small>Short animated explainers in seven styles. Start from a topic or a format, add your voice, then record.</small></h1>
-    <label class="f grow">Project name<input type="text" id="title" autocomplete="off"></label>
-    <label class="f" style="flex:0 1 250px">Start from<select id="preset">
-      <option value="">Choose a starter…</option>
-      <optgroup label="Formats"><option value="list">Top 3 list</option><option value="myth">Myth vs fact</option><option value="how">How it works</option><option value="versus">This vs that</option><option value="news">News in 30 seconds (fill in the blanks)</option></optgroup>
-      <optgroup label="Samples"><option value="general">One percent better (story)</option><option value="finance">The patient investor (finance)</option><option value="example">Pirate token (example recreation)</option></optgroup>
-      <option value="blank">Blank project</option>
-    </select></label>
+    <h1>Pictogram Studio<small>Type an idea, get an animated explainer. Five steps, top to bottom.</small></h1>
   </header>
 
   <div class="cols">
-    <div class="stack">
+    <div class="stack left">
       <section class="card" aria-label="Preview">
         <div class="monitor"><canvas id="cv" width="1280" height="720" aria-label="Video preview"></canvas></div>
         <div class="transport">
@@ -101,87 +105,111 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
           <span class="time" id="time">0:00.0 / 0:00.0</span>
         </div>
         <div class="strip" id="strip" role="list" aria-label="Scenes"></div>
-        <div class="row">
-          <button id="add">Add scene</button><button id="dup">Duplicate</button><button id="left" aria-label="Move scene earlier">Move earlier</button><button id="right" aria-label="Move scene later">Move later</button><button id="del" class="danger">Delete</button>
-        </div>
-      </section>
-
-      <section class="card" id="cardVoice">
-        <h2>Voiceover</h2>
-        <div class="row">
-          <button id="voadd">Add a voice file</button><input type="file" id="vofile" accept="audio/*,.mp3,.wav,.m4a,.ogg" hidden>
-          <button id="copyvo">Copy the voiceover script</button><button id="vofit" disabled>Fit scenes to the voice</button><button id="vostretch" disabled>Stretch evenly</button><button id="tap">Tap out the timing</button><button id="tapcancel" hidden>Cancel</button><button id="vorm" hidden>Remove voice</button>
-        </div>
-        <p class="status" id="vstatus" role="status" aria-live="polite"></p>
-        <p class="hint"><b>Copy the voiceover script</b> gives you the exact words to paste into ElevenLabs. Add the MP3 it makes (or any recording). It plays with the preview and is recorded into the video. <b>Fit scenes to the voice</b> moves each scene change to the nearest pause in the speech. If a cut lands in the wrong place, use <b>Tap out the timing</b>: listen and tap each time the next scene should begin. The voice file is not saved with the project, so add it again after reloading.</p>
-      </section>
-
-      <section class="card" id="cardCheck">
-        <h2 id="checkHead">Retention check</h2>
-        <ul class="checks" id="checks"></ul>
-        <p class="hint" style="margin-top:10px">These are the checks a computer can make. It cannot tell you whether the hook is interesting. Your retention graph does that.</p>
-      </section>
-
-      <section class="card" id="cardExport">
-        <h2>Export</h2>
-        <div class="row">
-          <button id="rec" class="primary">Record video</button><button id="png">Save this frame (PNG)</button><button id="savejson">Save project file</button><button id="copyjson">Copy project text</button>
-        </div>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
-        <p class="hint">Recording plays the video once in real time, so keep this tab open and visible until it finishes. For a sharper MP4, copy the project text and ask Claude to render it.</p>
-        <hr>
-        <label class="f" style="margin-top:10px">Load a project (paste project text, or the scenes a Claude chat wrote for you)<textarea id="paste" spellcheck="false" placeholder='{"title": "...", "scenes": [...]}'></textarea></label>
-        <div class="row" style="margin-top:8px"><button id="loadjson">Load pasted project</button></div>
+        <p class="hint">Click a scene to change its words in step 2.</p>
       </section>
     </div>
 
     <div class="stack">
-      <section class="card" id="cardDraft">
-        <h2>Start from an idea</h2>
+      <section class="card step" id="cardDraft">
+        <h2><span class="num">1</span>Your idea</h2>
         <div class="fields">
-          <label class="f">Your video idea. One line is enough. Add facts or a full script if you have them.<textarea id="topic" class="prose" placeholder="Example: Why the year 2100 will not have a February 29"></textarea></label>
-          <div class="half">
-            <label class="f">Format<select id="fmt"></select></label>
-            <label class="f">Length<select id="len"><option value="20">About 20 seconds</option><option value="30" selected>About 30 seconds</option><option value="40">About 40 seconds</option></select></label>
-          </div>
-          <label class="f">Who is it for? (optional)<input type="text" id="aud" autocomplete="off" placeholder="Students, new investors, gamers…"></label>
-          <label class="f check"><input type="checkbox" id="autostyle" checked>Let Claude pick the style to suit the idea</label>
-          <div class="row"><button id="draft" class="primary">Draft the scenes</button><button id="stopdraft" hidden>Stop</button><button id="hooks">Suggest better hooks</button><button id="copyreq">Copy as a request for Claude</button><button id="undo" hidden>Undo the draft</button></div>
+          <label class="f">What is the video about? One line is enough.<textarea id="topic" class="prose" placeholder="Example: Why the year 2100 will not have a February 29"></textarea></label>
+          <div class="row"><button id="draft" class="primary big">Make my video</button><button id="stopdraft" hidden>Stop</button><button id="undo" hidden>Undo</button></div>
           <p class="status" id="dstatus" role="status" aria-live="polite"></p>
           <div class="hooks" id="hooklist" aria-label="Hook suggestions"></div>
-          <div id="postbox" hidden><label class="f">Caption and hashtags for the post<textarea id="posttext" class="prose" style="min-height:70px"></textarea></label><div class="row" style="margin-top:8px"><button id="copypost">Copy caption</button></div></div>
-          <p class="hint">Claude picks the format, writes the hook, the scenes, the caption and the timing, using your own Claude usage. It replaces the current scenes. Inside this page Claude cannot look anything up, so it only uses well-known facts and what you paste in. For an idea that needs research and sources, give the idea to Claude in the project chat instead and you get the finished video back.</p>
+          <details id="ideaMore"><summary>More options</summary>
+            <div class="fields">
+              <div class="half">
+                <label class="f">Format<select id="fmt"></select></label>
+                <label class="f">Length<select id="len"><option value="20">About 20 seconds</option><option value="30" selected>About 30 seconds</option><option value="40">About 40 seconds</option></select></label>
+              </div>
+              <label class="f">Who is it for?<input type="text" id="aud" autocomplete="off" placeholder="Students, new investors, gamers…"></label>
+              <label class="f check"><input type="checkbox" id="autostyle" checked>Let Claude pick the style to suit the idea</label>
+              <div class="row"><button id="hooks">Suggest better first lines</button><button id="copyreq">Copy as a request for Claude</button></div>
+              <label class="f">Or start from a ready-made example<select id="preset">
+                <option value="">Choose one…</option>
+                <optgroup label="Formats"><option value="list">Top 3 list</option><option value="myth">Myth vs fact</option><option value="how">How it works</option><option value="versus">This vs that</option><option value="news">News in 30 seconds (fill in the blanks)</option></optgroup>
+                <optgroup label="Samples"><option value="windows">Why plane windows are round (custom animation)</option><option value="dig">Buffett dug for fifty years (digging story)</option><option value="general">One percent better (story)</option><option value="finance">The patient investor (finance)</option></optgroup>
+                <option value="blank">Blank project</option>
+              </select></label>
+              <p class="hint">Claude writes the first line, the scenes, the caption and the timing, using your own Claude usage, and replaces the scenes you have now. Inside this page Claude cannot look anything up. For an idea that needs research and sources, give the idea to Claude in the project chat and you get the finished video back.</p>
+            </div>
+          </details>
         </div>
       </section>
-      <section class="card" id="cardScene">
-        <h2 id="sceneHead">Scene 1</h2>
+
+      <section class="card step" id="cardScene">
+        <h2><span class="num">2</span>Fix the words<em id="sceneHead">Scene 1</em></h2>
         <div class="fields" id="form"></div>
+        <details id="sceneMore"><summary>Picture, timing and order of this scene</summary>
+          <div class="fields" id="formMore"></div>
+          <div class="row" style="margin-top:11px"><button id="add">Add a scene after this</button><button id="dup">Duplicate</button><button id="left" aria-label="Move scene earlier">Move earlier</button><button id="right" aria-label="Move scene later">Move later</button><button id="del" class="danger">Delete</button></div>
+        </details>
       </section>
-      <section class="card" id="cardLook">
-        <h2>Style</h2>
+
+      <section class="card step" id="cardLook">
+        <h2><span class="num">3</span>Pick a look</h2>
         <div class="fields">
           <div class="styles" id="styles" aria-label="Styles"></div>
-          <p class="hint">A style sets everything below in one click. Change any setting afterwards to make it your own.</p>
-          <hr>
-          <div class="colors">
-            <label class="f"><input type="color" id="cAccent">Accent</label>
-            <label class="f"><input type="color" id="cFg">Figures and text</label>
-            <label class="f"><input type="color" id="cBg">Background</label>
-          </div>
-          <div class="swatches" id="swatches" aria-label="Accent presets"></div>
-          <div class="half">
-            <label class="f">Shape<select id="aspect"><option value="16:9">Wide 16:9</option><option value="9:16">Tall 9:16 (TikTok)</option></select></label>
-            <label class="f">Font<select id="font"></select></label>
-            <label class="f">Between scenes<select id="transition"><option value="whip">Whip pan</option><option value="fade">Fade</option><option value="cut">Hard cut</option></select></label>
-            <label class="f">Background<select id="pattern"><option value="dots">Dotted grid</option><option value="grid">Line grid</option><option value="scanlines">Scan lines</option><option value="paper">Paper grain</option><option value="none">Plain</option></select></label>
-            <label class="f">Characters<select id="figure"><option value="solid">Solid</option><option value="outline">Outline</option></select></label>
-            <label class="f">Highlighted words<select id="cap"><option value="color">Accent color</option><option value="box">Accent box</option><option value="underline">Underline</option></select></label>
-            <label class="f">Ground line<select id="ground"><option value="dashed">Dashed</option><option value="solid">Solid</option><option value="none">None</option></select></label>
-            <label class="f">Glow<input type="range" id="glow" min="0" max="1.3" step="0.05"></label>
-          </div>
-          <label class="f check"><input type="checkbox" id="caps">Captions in capitals</label>
-          <label class="f check"><input type="checkbox" id="progress">Progress bar across the top</label>
+          <label class="f" style="max-width:260px">Shape<select id="aspect"><option value="9:16">Tall (TikTok, Reels, Shorts)</option><option value="16:9">Wide (YouTube)</option></select></label>
+          <details id="lookMore"><summary>Fine-tune the look</summary>
+            <div class="fields">
+              <div class="colors">
+                <label class="f"><input type="color" id="cAccent">Accent</label>
+                <label class="f"><input type="color" id="cFg">Figures and text</label>
+                <label class="f"><input type="color" id="cBg">Background</label>
+              </div>
+              <div class="swatches" id="swatches" aria-label="Accent presets"></div>
+              <div class="half">
+                <label class="f">Font<select id="font"></select></label>
+                <label class="f">Camera move between scenes<select id="transition"><option value="auto">Mixed (drop, whip, punch)</option><option value="zoom">Punch through</option><option value="drop">Drop down</option><option value="whip">Whip sideways</option><option value="fade">Fade</option><option value="cut">Hard cut</option></select></label>
+                <label class="f">Captions appear<select id="capanim"><option value="words">Word by word</option><option value="line">A line at a time</option></select></label>
+                <label class="f">Floating in the background<select id="ambient"><option value="pebbles">Drifting stones</option><option value="dust">Dust</option><option value="none">Nothing</option></select></label>
+                <label class="f">Background<select id="pattern"><option value="dots">Dotted grid</option><option value="grid">Line grid</option><option value="scanlines">Scan lines</option><option value="paper">Paper grain</option><option value="none">Plain</option></select></label>
+                <label class="f">Characters<select id="figure"><option value="solid">Solid</option><option value="outline">Outline</option></select></label>
+                <label class="f">Highlighted words<select id="cap"><option value="color">Accent color</option><option value="box">Accent box</option><option value="underline">Underline</option></select></label>
+                <label class="f">Ground line<select id="ground"><option value="dashed">Dashed</option><option value="solid">Solid</option><option value="none">None</option></select></label>
+                <label class="f">Glow<input type="range" id="glow" min="0" max="1.3" step="0.05"></label>
+                <label class="f">Film grain<input type="range" id="grain" min="0" max="1" step="0.05"></label>
+              </div>
+              <label class="f check"><input type="checkbox" id="caps">Captions in capitals</label>
+              <label class="f check"><input type="checkbox" id="progress">Progress bar across the top</label>
+            </div>
+          </details>
         </div>
+      </section>
+
+      <section class="card step" id="cardVoice">
+        <h2><span class="num">4</span>Add your voice</h2>
+        <div class="row">
+          <button id="copyvo">Copy the script</button><button id="voadd">Add my voice file</button><input type="file" id="vofile" accept="audio/*,.mp3,.wav,.m4a,.ogg" hidden><button id="vorm" hidden>Remove voice</button>
+        </div>
+        <p class="status" id="vstatus" role="status" aria-live="polite"></p>
+        <p class="hint">Copy the script, paste it into ElevenLabs, then add the MP3 it gives you. The scenes move to match your voice by themselves. Skip this step for a silent video.</p>
+        <details id="voiceMore"><summary>Fix the timing by hand</summary>
+          <div class="row"><button id="vofit" disabled>Fit scenes to the voice again</button><button id="vostretch" disabled>Stretch evenly</button><button id="tap">Tap out the timing</button><button id="tapcancel" hidden>Cancel</button></div>
+          <p class="hint" style="margin-top:8px">If a scene changes at the wrong moment, press <b>Tap out the timing</b>, listen, and tap the button or the space bar each time the next scene should begin.</p>
+        </details>
+      </section>
+
+      <section class="card step" id="cardExport">
+        <h2><span class="num">5</span>Download</h2>
+        <div class="row"><button id="rec" class="primary big">Record the video</button></div>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <p class="hint">Recording plays the video once from start to finish, so keep this tab open until it is done. For the sharpest file, ask Claude in the project chat to render it.</p>
+        <div id="postbox" hidden><label class="f">Caption and hashtags for the post<textarea id="posttext" class="prose" style="min-height:70px"></textarea></label><div class="row" style="margin-top:8px"><button id="copypost">Copy caption</button></div></div>
+        <details id="cardCheck"><summary id="checkHead">Retention check</summary>
+          <ul class="checks" id="checks"></ul>
+          <p class="hint" style="margin-top:10px">These are the checks a computer can make. It cannot tell you whether the first line is interesting. Your retention graph does that.</p>
+        </details>
+        <details id="projMore"><summary>Project file and single frames</summary>
+          <div class="fields">
+            <label class="f">Project name<input type="text" id="title" autocomplete="off"></label>
+            <div class="row"><button id="png">Save this frame (PNG)</button><button id="savejson">Save project file</button><button id="copyjson">Copy project text</button></div>
+            <label class="f">Load a project (paste project text, or the scenes a Claude chat wrote for you)<textarea id="paste" spellcheck="false" placeholder='{"title": "...", "scenes": [...]}'></textarea></label>
+            <div class="row"><button id="loadjson">Load pasted project</button></div>
+          </div>
+        </details>
       </section>
     </div>
   </div>
@@ -204,7 +232,7 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
   const actx = () => AC || (AC = new (window.AudioContext || window.webkitAudioContext)());
 
   function blank() { return { title: 'New project', aspect: '9:16', style: 'neon', scenes: [{ visual: 'hero', dur: 4, kicker: 'Small setup line…', lines: [{ text: 'Your main line with a *key word.*', at: 1.2 }, { text: '', at: 2.4 }] }] }; }
-  function initial() { try { const s = localStorage.getItem('psp-project'); if (s) { const p = PSP.normalize(JSON.parse(s)); if (p.scenes.length) return p; } } catch (e) {} return PSP.normalize(clone(PSP_PRESETS.general)); }
+  function initial() { try { const s = localStorage.getItem('psp-project'); if (s) { const p = PSP.normalize(JSON.parse(s)); if (p.scenes.length) return p; } } catch (e) {} return PSP.normalize(clone(PSP_PRESETS.windows || PSP_PRESETS.general)); }
   function persist() { try { localStorage.setItem('psp-project', JSON.stringify(proj)); } catch (e) {} }
   const dur = () => PSP.duration(proj), fmtT = s => Math.floor(s / 60) + ':' + (s % 60).toFixed(1).padStart(4, '0');
   function status(msg, warn) { const el = $('#status'); el.textContent = msg || ''; el.classList.toggle('warn', !!warn); }
@@ -237,37 +265,40 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
     playIdx = -1;
   }
   function buildForm() {
-    const sc = proj.scenes[sel], vis = V[sc.visual]; $('#sceneHead').textContent = 'Scene ' + (sel + 1) + ' of ' + proj.scenes.length;
+    const sc = proj.scenes[sel], vis = V[sc.visual]; $('#sceneHead').textContent = 'Scene ' + (sel + 1) + ' of ' + proj.scenes.length + ': ' + vis.name;
     const icons = ['none'].concat(PSP.ICONS);
     const field = f => {
       const id = 'p-' + f.key, v = sc.p[f.key];
       if (f.type === 'bool') return `<label class="f check"><input type="checkbox" id="${id}" data-k="p.${f.key}"${v ? ' checked' : ''}>${esc(f.label)}</label>`;
       if (f.type === 'icon' || f.type === 'select') { const opts = f.type === 'icon' ? icons : f.options; return `<label class="f">${esc(f.label)}<select id="${id}" data-k="p.${f.key}">${opts.map(o => `<option${o === v ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select></label>`; }
+      if (f.type === 'json') return `<label class="f">${esc(f.label)}<textarea id="${id}" data-k="p.${f.key}" spellcheck="false" style="min-height:170px">${esc('[\n' + (Array.isArray(v) ? v : []).map(x => ' ' + JSON.stringify(x)).join(',\n') + '\n]')}</textarea></label>`;
       return `<label class="f">${esc(f.label)}<input type="${f.type === 'num' ? 'number' : 'text'}" id="${id}" data-k="p.${f.key}" value="${esc(v)}"${f.type === 'num' ? ' step="any"' : ''} autocomplete="off"></label>`;
     };
-    const short = vis.fields.filter(f => f.type !== 'text' && f.type !== 'bool'), long = vis.fields.filter(f => f.type === 'text'), bools = vis.fields.filter(f => f.type === 'bool');
-    $('#form').innerHTML = `
-      <div class="two"><label class="f">Scene type<select id="s-visual" data-k="visual">${Object.keys(V).map(k => `<option value="${k}"${k === sc.visual ? ' selected' : ''}>${esc(V[k].name)}</option>`).join('')}</select></label>
+    const short = vis.fields.filter(f => f.type !== 'text' && f.type !== 'bool' && f.type !== 'json'), long = vis.fields.filter(f => f.type === 'text' || f.type === 'json'), bools = vis.fields.filter(f => f.type === 'bool');
+    $('#formMore').innerHTML = `
+      <div class="two"><label class="f">Picture<select id="s-visual" data-k="visual">${Object.keys(V).map(k => `<option value="${k}"${k === sc.visual ? ' selected' : ''}>${esc(V[k].name)}</option>`).join('')}</select></label>
       <label class="f">Length (s)<input type="number" id="s-dur" data-k="dur" min="0.8" max="30" step="0.1" value="${sc.dur}"></label></div>
-      <p class="hint">${esc(vis.hint)}</p><hr>
-      <label class="f">Small line above<input type="text" id="s-kicker" data-k="kicker" value="${esc(sc.kicker)}" autocomplete="off"></label>
-      <div class="two"><label class="f">Main line<input type="text" id="s-l0" data-k="l0" value="${esc(sc.lines[0].text)}" autocomplete="off"></label>
-      <label class="f">Appears at (s)<input type="number" id="s-a0" data-k="a0" min="0" step="0.1" value="${sc.lines[0].at}"></label></div>
-      <div class="two"><label class="f">Second main line (optional)<input type="text" id="s-l1" data-k="l1" value="${esc(sc.lines[1] ? sc.lines[1].text : '')}" autocomplete="off"></label>
-      <label class="f">Appears at (s)<input type="number" id="s-a1" data-k="a1" min="0" step="0.1" value="${sc.lines[1] ? sc.lines[1].at : ''}"></label></div>
-      <p class="hint">Put <b>*stars*</b> around the words you want highlighted. The style decides whether text is shown in capitals.</p><hr>
+      <p class="hint">${esc(vis.hint)}</p>
+      <div class="half"><label class="f">Main line appears at (s)<input type="number" id="s-a0" data-k="a0" min="0" step="0.1" value="${sc.lines[0].at}"></label>
+      <label class="f">Second line appears at (s)<input type="number" id="s-a1" data-k="a1" min="0" step="0.1" value="${sc.lines[1] ? sc.lines[1].at : ''}"></label></div><hr>
       ${long.map(field).join('')}${short.length ? `<div class="half">${short.map(field).join('')}</div>` : ''}${bools.map(field).join('')}`;
+    $('#form').innerHTML = `
+      <label class="f">Main line<input type="text" id="s-l0" data-k="l0" value="${esc(sc.lines[0].text)}" autocomplete="off"></label>
+      <label class="f">Second line (optional)<input type="text" id="s-l1" data-k="l1" value="${esc(sc.lines[1] ? sc.lines[1].text : '')}" autocomplete="off"></label>
+      <label class="f">Small line above (optional)<input type="text" id="s-kicker" data-k="kicker" value="${esc(sc.kicker)}" autocomplete="off"></label>
+      <p class="hint">Put <b>*stars*</b> around the words you want highlighted.</p>`;
+    
   }
   function syncLook() {
     $('#title').value = proj.title; $('#cAccent').value = proj.colors.accent; $('#cFg').value = proj.colors.fg; $('#cBg').value = proj.colors.bg; $('#aspect').value = proj.aspect; $('#font').value = proj.font;
-    $('#transition').value = proj.transition; const lk = proj.look; $('#pattern').value = lk.pattern; $('#figure').value = lk.figure; $('#cap').value = lk.cap; $('#ground').value = lk.ground; $('#glow').value = lk.glow; $('#caps').checked = lk.caps !== false; $('#progress').checked = !!proj.progress;
+    $('#transition').value = proj.transition; const lk = proj.look; $('#pattern').value = lk.pattern; $('#figure').value = lk.figure; $('#cap').value = lk.cap; $('#ground').value = lk.ground; $('#glow').value = lk.glow; $('#caps').checked = lk.caps !== false; $('#ambient').value = lk.ambient || 'none'; $('#grain').value = lk.grain || 0; $('#capanim').value = lk.capAnim === 'line' ? 'line' : 'words'; $('#progress').checked = !!proj.progress;
     document.querySelectorAll('.stylecard').forEach(b => b.classList.toggle('on', b.dataset.s === proj.style));
     const dark = parseInt(proj.colors.accent.slice(1, 3), 16) * 0.3 + parseInt(proj.colors.accent.slice(3, 5), 16) * 0.59 + parseInt(proj.colors.accent.slice(5, 7), 16) * 0.11 < 120; document.documentElement.style.setProperty('--accent', dark ? '#4dff88' : proj.colors.accent);
   }
   function setProject(p, keepSel) { proj = PSP.normalize(p); if (!proj.scenes.length) proj = PSP.normalize(blank()); sel = keepSel ? Math.min(sel, proj.scenes.length - 1) : 0; sizeCanvas(); syncLook(); buildStrip(); buildForm(); buildChecks(); persist(); loadFonts(); peek(); if (typeof syncPost === 'function') syncPost(); }
   function changed(rebuild) { persist(); if (rebuild) { buildStrip(); buildForm(); } buildChecks(); if (!playing) peek(); }
 
-  $('#form').addEventListener('input', e => {
+  $('#cardScene').addEventListener('input', e => {
     const k = e.target.dataset.k; if (!k) return; const sc = proj.scenes[sel], el = e.target, num = () => (el.value === '' ? 0 : +el.value);
     if (k === 'visual') { sc.visual = el.value; sc.p = PSP.defaults(sc.visual); return changed(true); }
     if (k === 'dur') { if (!(+el.value >= 0.8)) return; sc.dur = Math.min(30, +el.value); }
@@ -275,7 +306,7 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
     else if (k === 'l0') sc.lines[0].text = el.value; else if (k === 'a0') sc.lines[0].at = num();
     else if (k === 'l1') { if (!sc.lines[1]) sc.lines[1] = { text: '', at: Math.min(sc.dur - 0.8, sc.lines[0].at + 1.3) }; sc.lines[1].text = el.value; const a1 = $('#s-a1'); if (a1 && a1.value === '') a1.value = sc.lines[1].at.toFixed(1); }
     else if (k === 'a1') { if (!sc.lines[1]) sc.lines[1] = { text: '', at: 0 }; sc.lines[1].at = num(); }
-    else if (k.startsWith('p.')) { const f = V[sc.visual].fields.find(x => x.key === k.slice(2)); sc.p[f.key] = f.type === 'bool' ? el.checked : f.type === 'num' ? num() : el.value; }
+    else if (k.startsWith('p.')) { const f = V[sc.visual].fields.find(x => x.key === k.slice(2)); if (f.type === 'json') { let q = null; try { q = JSON.parse(el.value); } catch (err) {} el.style.borderColor = Array.isArray(q) ? '' : 'var(--warn)'; if (!Array.isArray(q)) return; sc.p[f.key] = q; } else sc.p[f.key] = f.type === 'bool' ? el.checked : f.type === 'num' ? num() : el.value; }
     persist(); if (k === 'dur' || k === 'l0' || k === 'l1' || k === 'kicker') buildStrip();
     buildChecks(); if (!playing) peek();
   });
@@ -299,7 +330,7 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
   look('cAccent', el => (proj.colors.accent = el.value)); look('cFg', el => (proj.colors.fg = el.value)); look('cBg', el => (proj.colors.bg = el.value));
   look('aspect', el => (proj.aspect = el.value)); look('font', el => (proj.font = el.value)); look('transition', el => (proj.transition = el.value));
   look('pattern', el => (proj.look.pattern = el.value)); look('figure', el => (proj.look.figure = el.value)); look('cap', el => (proj.look.cap = el.value)); look('ground', el => (proj.look.ground = el.value));
-  look('glow', el => (proj.look.glow = +el.value)); look('caps', el => (proj.look.caps = el.checked)); look('progress', el => (proj.progress = el.checked));
+  look('glow', el => (proj.look.glow = +el.value)); look('grain', el => (proj.look.grain = +el.value)); look('ambient', el => (proj.look.ambient = el.value)); look('capanim', el => (proj.look.capAnim = el.value)); look('caps', el => (proj.look.caps = el.checked)); look('progress', el => (proj.progress = el.checked));
   $('#font').innerHTML = Object.keys(PSP.FONTS).map(f => `<option>${f}</option>`).join('');
   $('#styles').innerHTML = Object.keys(PSP.STYLES).map(id => { const st = PSP.STYLES[id]; return `<button class="stylecard" data-s="${id}" style="background:${st.colors.bg};color:${st.colors.fg}"><i><b style="background:${st.colors.accent}"></b><b style="background:${st.colors.fg}"></b></i><span>${esc(st.name)}</span></button>`; }).join('');
   $('#styles').onclick = e => { const b = e.target.closest('.stylecard'); if (!b) return; PSP.applyStyle(proj, b.dataset.s); syncLook(); persist(); loadFonts(); if (!playing) peek(); status('Style set to ' + PSP.STYLES[proj.style].name + '.'); };
@@ -325,7 +356,7 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
   function fullCanvas() { const c = document.createElement('canvas'), v = proj.aspect === '9:16'; c.width = v ? 1080 : 1920; c.height = v ? 1920 : 1080; return c; }
   $('#png').onclick = () => { setPlaying(false); const c = fullCanvas(); PSP.render(c.getContext('2d'), proj, t); c.toBlob(b => { draw(); b ? save(b, slug() + '_' + t.toFixed(1) + 's.png') : status('Could not create the image.', true); }, 'image/png'); };
   $('#savejson').onclick = () => save(JSON.stringify(proj, null, 1), slug() + '.json');
-  $('#copyjson').onclick = () => { const s = JSON.stringify(proj), ta = $('#paste'); const fall = () => { ta.value = s; ta.focus(); ta.select(); status('Copying is blocked here. The project text is in the box below, selected. Press Ctrl+C.', true); };
+  $('#copyjson').onclick = () => { const s = JSON.stringify(proj), ta = $('#paste'); const fall = () => { $('#projMore').open = true; ta.value = s; ta.focus(); ta.select(); status('Copying is blocked here. The project text is in the box below, selected. Press Ctrl+C.', true); };
     navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(s).then(() => status('Project text copied. Paste it to Claude to get an MP4, or keep it as a backup.'), fall) : fall(); };
   $('#loadjson').onclick = () => { try { const p = parseLoose($('#paste').value); if (!p || !Array.isArray(p.scenes)) throw 0; if (!adopt(p, !p.style && !p.colors)) throw 0; $('#paste').value = ''; status('Loaded "' + proj.title + '" with ' + proj.scenes.length + ' scenes.'); } catch (e) { status('That text is not a project. Paste the full text that "Copy project text" or a Claude chat gave you, starting with { and ending with }.', true); } };
   $('#rec').onclick = () => {
@@ -335,7 +366,7 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
     setPlaying(false); recording = true; const rc = fullCanvas(), rx = rc.getContext('2d'), total = dur(), chunks = []; PSP.render(rx, proj, 0);
     const stream = rc.captureStream(30); let dest = null; if (vo) { try { dest = actx().createMediaStreamDestination(); stream.addTrack(dest.stream.getAudioTracks()[0]); } catch (e) { dest = null; } }
     const mr = new MediaRecorder(stream, { mimeType: pick[0], videoBitsPerSecond: 14e6 }); mr.ondataavailable = e => e.data && e.data.size && chunks.push(e.data);
-    const done = () => { recording = false; voStop(); $('#rec').disabled = false; $('#rec').textContent = 'Record video'; t = 0; draw(); };
+    const done = () => { recording = false; voStop(); $('#rec').disabled = false; $('#rec').textContent = 'Record the video'; t = 0; draw(); };
     mr.onstop = () => { done(); const blob = new Blob(chunks, { type: pick[0].split(';')[0] }); blob.size ? save(blob, slug() + '.' + pick[1]) : status('The recording came out empty. Keep this tab visible while it records.', true); };
     mr.onerror = () => { done(); status('Recording failed. Copy the project text and ask Claude to render the MP4.', true); };
     $('#rec').disabled = true; mr.start(500); if (vo) voStart(0, dest); const t0 = performance.now();
@@ -356,7 +387,7 @@ textarea.prose { font: 500 14px/1.45 var(--body); min-height: 118px; }
   };
   $('#fmt').innerHTML = Object.keys(FORMATS).map(k => `<option value="${k}">${esc(FORMATS[k][0])}</option>`).join('');
   function dstatus(msg, warn) { const el = $('#dstatus'); el.textContent = msg || ''; el.classList.toggle('warn', !!warn); }
-  const sceneSpec = () => Object.keys(V).map(k => `- "${k}" (${V[k].name}): ${V[k].hint} Fields in p: ` + V[k].fields.map(f => `${f.key} (${f.type === 'num' ? 'number' : f.type === 'bool' ? 'true or false' : f.type === 'icon' ? 'icon name' : f.type === 'select' ? f.options.join(' or ') : 'text'}, for example ${JSON.stringify(f.def)})`).join('; ')).join('\n');
+  const sceneSpec = () => Object.keys(V).filter(k => k !== 'custom').map(k => `- "${k}" (${V[k].name}): ${V[k].hint} Fields in p: ` + V[k].fields.map(f => `${f.key} (${f.type === 'num' ? 'number' : f.type === 'bool' ? 'true or false' : f.type === 'icon' ? 'icon name' : f.type === 'select' ? f.options.join(' or ') : 'text'}, for example ${JSON.stringify(f.def)})`).join('; ')).join('\n');
   function buildRequest() {
     const len = +$('#len').value || 30;
     return `You are writing the scene list for a short animated explainer video (TikTok, Reels, Shorts) made with a tool called Pictogram Studio. The tool draws simple pictogram scenes with captions from a JSON project.
@@ -374,8 +405,9 @@ Rules for retention
 - Scene 1 must be "hook": 2 to 3 seconds, its main line at 0, and it must open a question that the last scenes answer.
 - Then 5 to 8 more scenes. The whole video is read aloud in about ${len} seconds, so write about ${Math.round(len * 2.6)} spoken words in total, and no more than 14 words in any one scene (kicker plus lines). Timing is set from the word count afterwards, so "dur" and "at" only need to be rough.
 - One idea per scene. Each line is 12 words or fewer, in plain spoken English, with no hashtags and no emoji.
-- Never use the same scene type twice in a row, and never use one type more than twice.
-- Include at least one scene built on a number (counter, bars, ring or compare).
+- At least three of the middle scenes must be "custom" scenes: pictures you build for this exact topic, as described under Custom animation below. Use a ready-made scene type only where its picture is exactly what the line says.
+- Never use the same ready-made scene type twice in a row, and never use one more than twice. Custom scenes are exempt because each one is a different picture.
+- Include at least one scene built on a number (counter, bars, ring, compare, or a custom scene with a number, bar, ring or dots part).
 - The last scene must be "cta" with a follow line that fits the topic.
 - Labels inside p (tags, labels, items) are 1 to 4 words each, in capitals.
 - Pick the scene type whose picture matches what the line says. Change the labels and icons so nothing from the examples is left over.
@@ -396,6 +428,8 @@ Scene types
 ${sceneSpec()}
 Icon names: none, ${PSP.ICONS.join(', ')}
 
+${PSP.CUSTOM_SPEC}
+
 Material:
 """
 ${$('#topic').value.trim()}
@@ -403,7 +437,7 @@ ${$('#topic').value.trim()}
   }
   let sampleP = null, draftCtl = null, undoProj = null;
   const getSample = () => sampleP || (sampleP = window.claude && window.claude.use ? window.claude.use('sample').catch(() => null) : Promise.resolve(null));
-  const noSample = 'Drafting inside this page is not available in this view. Press "Copy as a request for Claude", paste it into a Claude chat, then paste the answer into "Load a project" at the bottom.';
+  const noSample = 'Drafting inside this page is not available in this view. Press "Copy as a request for Claude", paste it into a Claude chat, then paste the answer into "Load a project" under step 5.';
   const sayErr = c => ({ not_granted: 'Claude was not allowed for this page, so nothing was drafted. You can use "Copy as a request for Claude" instead.', rate_limited: 'Too many requests at once. Wait a minute and try again.', queue_overflow: 'Too many requests at once. Wait a minute and try again.', cancelled: 'Stopped. Nothing was changed.', invalid_json: 'The draft came back in a form this page could not read. Try again, or give it less material.', prompt_too_large: 'That is too much text. Trim the material and try again.', refused: 'Claude declined to draft this one. Try rewording the topic.', session_expired: 'Your Claude session expired. Reload the page and try again.' }[c] || 'Drafting did not work this time. Try again, or use "Copy as a request for Claude".');
   function parseLoose(text) { // accept plain JSON, JSON in a code fence, or JSON with a sentence around it
     let s = String(text || '').trim(); const f = s.match(/```(?:json)?\s*([\s\S]*?)```/); if (f) s = f[1].trim();
@@ -418,7 +452,7 @@ ${$('#topic').value.trim()}
     if (keepLook) PSP.autotime(n); else n.scenes.forEach(s => s.lines.forEach(l => (l.at = Math.max(0, Math.min(l.at, s.dur - 0.6)))));
     undoProj = clone(proj); $('#undo').hidden = false; setPlaying(false); setProject(n); return true;
   }
-  getSample().then(s => { if (!s) { $('#draft').hidden = true; $('#hooks').hidden = true; $('#copyreq').classList.add('primary'); dstatus(noSample); } });
+  getSample().then(s => { if (!s) { $('#draft').hidden = true; $('#hooks').hidden = true; $('#copyreq').classList.add('primary'); $('#ideaMore').open = true; dstatus(noSample); } });
   const needTopic = () => { if ($('#topic').value.trim().length >= 8) return true; dstatus('Type or paste what the video is about first.', true); $('#topic').focus(); return false; };
   const busy = on => { $('#draft').disabled = on; $('#hooks').disabled = on; $('#stopdraft').hidden = !on; };
   $('#stopdraft').onclick = () => draftCtl && draftCtl.abort();
@@ -427,7 +461,7 @@ ${$('#topic').value.trim()}
     draftCtl = new AbortController(); busy(true); $('#hooklist').innerHTML = ''; dstatus('Thinking… this usually takes 20 to 60 seconds.');
     try {
       const obj = await sample.json(buildRequest(), { cache: false, signal: draftCtl.signal, onText: ({ text }) => dstatus('Writing the scenes… ' + (text.match(/"visual"/g) || []).length + ' so far.') });
-      if (adopt(obj, $('#autostyle').checked ? 'style' : true)) { const bad = PSP.check(proj).filter(c => !c.ok).length; dstatus('Drafted "' + proj.title + '" with ' + proj.scenes.length + ' scenes in the ' + PSP.STYLES[proj.style].name + ' style. ' + (bad ? bad + ' retention check' + (bad > 1 ? 's need' : ' needs') + ' a look. ' : 'It passes the retention check. ') + 'Read every line and check the numbers. Next: copy the voiceover script.', bad > 0); }
+      if (adopt(obj, $('#autostyle').checked ? 'style' : true)) { const bad = PSP.check(proj).filter(c => !c.ok).length; dstatus('Drafted "' + proj.title + '" with ' + proj.scenes.length + ' scenes in the ' + PSP.STYLES[proj.style].name + ' style. ' + (bad ? bad + ' retention check' + (bad > 1 ? 's need' : ' needs') + ' a look. ' : 'It passes the retention check. ') + 'Press Play, then read every line and check the numbers in step 2.', bad > 0); }
       else dstatus(sayErr('invalid_json'), true);
     } catch (e) { dstatus(sayErr(e && e.code), true); } finally { busy(false); }
   };
@@ -444,11 +478,11 @@ ${$('#topic').value.trim()}
   $('#hooklist').onclick = e => { const b = e.target.closest('button'); if (!b) return; setPlaying(false); proj.scenes[0].lines[0].text = b.dataset.h; sel = 0; changed(true); dstatus('Hook changed. Play it from the start to check it reads well.'); };
   $('#copyreq').onclick = () => {
     if (!needTopic()) return; const s = buildRequest(), ta = $('#paste');
-    const fall = () => { ta.value = s; ta.focus(); ta.select(); dstatus('Copying is blocked here. The request is in the box at the bottom, selected. Press Ctrl+C, then clear the box before pasting the answer.', true); };
-    navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(s).then(() => dstatus('Request copied. Paste it into a Claude chat, then paste the answer into "Load a project" at the bottom.'), fall) : fall();
+    const fall = () => { $('#projMore').open = true; ta.value = s; ta.focus(); ta.select(); dstatus('Copying is blocked here. The request is in the box at the bottom, selected. Press Ctrl+C, then clear the box before pasting the answer.', true); };
+    navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(s).then(() => dstatus('Request copied. Paste it into a Claude chat, then paste the answer into "Load a project" under step 5.'), fall) : fall();
   };
   function syncPost() { const has = !!(proj.caption || (proj.hashtags && proj.hashtags.length)); $('#postbox').hidden = !has; if (has) $('#posttext').value = [proj.caption || '', (proj.hashtags || []).map(h => '#' + String(h).replace(/^#/, '').replace(/\s+/g, '')).join(' ')].filter(Boolean).join('\n'); }
-  const copyText = (s, ok, say) => { const ta = $('#paste'), fall = () => { ta.value = s; ta.focus(); ta.select(); say('Copying is blocked here. The text is in the box at the bottom, selected. Press Ctrl+C.', true); }; navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(s).then(() => say(ok), fall) : fall(); };
+  const copyText = (s, ok, say) => { const ta = $('#paste'), fall = () => { $('#projMore').open = true; ta.value = s; ta.focus(); ta.select(); say('Copying is blocked here. The text is in the box at the bottom, selected. Press Ctrl+C.', true); }; navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(s).then(() => say(ok), fall) : fall(); };
   $('#copypost').onclick = () => copyText($('#posttext').value, 'Caption copied.', dstatus);
   $('#posttext').oninput = e => { const parts = e.target.value.split('\n'); proj.caption = parts[0]; persist(); };
   $('#undo').onclick = () => { if (!undoProj) return; const p = undoProj; undoProj = null; $('#undo').hidden = true; setPlaying(false); setProject(p); dstatus('Went back to the scenes you had before.'); };
@@ -461,19 +495,19 @@ ${$('#topic').value.trim()}
     const s = a.createBufferSource(); s.buffer = vo.buf; s.connect(a.destination); if (dest) s.connect(dest); s.start(0, Math.max(0, at)); voSrc = s;
   }
   function analyse(buf) { const chs = []; for (let c = 0; c < buf.numberOfChannels; c++) chs.push(buf.getChannelData(c)); return PSP.analyseAudio(chs, buf.sampleRate, buf.length); }
-  function voUI() { const on = !!vo; $('#vofit').disabled = !on; $('#vostretch').disabled = !on; $('#vorm').hidden = !on; $('#voadd').textContent = on ? 'Change voice file' : 'Add a voice file'; buildChecks(); }
+  function voUI() { const on = !!vo; $('#vofit').disabled = !on; $('#vostretch').disabled = !on; $('#vorm').hidden = !on; $('#voadd').textContent = on ? 'Change voice file' : 'Add my voice file'; buildChecks(); }
   $('#copyvo').onclick = () => copyText(PSP.script(proj).join('\n\n'), 'Voiceover script copied (' + PSP.script(proj).join(' ').split(/\s+/).length + ' words). Paste it into ElevenLabs, download the MP3, then add it here.', vstatus);
   $('#voadd').onclick = () => $('#vofile').click();
   $('#vofile').onchange = async e => {
     const f = e.target.files[0]; e.target.value = ''; if (!f) return; setPlaying(false); vstatus('Reading ' + f.name + '…');
-    try { const buf = await actx().decodeAudioData(await f.arrayBuffer()); vo = { buf, name: f.name, dur: buf.duration, an: analyse(buf) }; voUI(); vstatus(f.name + ' added: ' + buf.duration.toFixed(1) + ' seconds, ' + vo.an.pauses.length + ' pauses found. The video is ' + dur().toFixed(1) + ' seconds. Press Play to hear them together, or fit the scenes to the voice.'); }
+    try { const buf = await actx().decodeAudioData(await f.arrayBuffer()); vo = { buf, name: f.name, dur: buf.duration, an: analyse(buf) }; voUI(); const n = proj.scenes.length, snapped = PSP.fitVoice(proj, vo.an, vo.dur); changed(true); t = 0; draw(); vstatus(f.name + ' added (' + buf.duration.toFixed(1) + ' seconds) and the scenes were moved to match it. Press Play and listen. ' + (snapped < (n - 1) / 2 ? 'Few clear pauses were found, so open "Fix the timing by hand" if a scene changes at the wrong moment.' : ''), snapped < (n - 1) / 2); }
     catch (err) { vstatus('That file could not be read as audio. Try an MP3 or WAV file.', true); }
   };
   $('#vorm').onclick = () => { setPlaying(false); vo = null; voUI(); vstatus('Voice removed. The scene timing was left as it is.'); };
   function retime(durs) { PSP.retime(proj, durs); changed(true); }
   $('#vofit').onclick = () => {
     if (!vo) return; setPlaying(false); const n = proj.scenes.length, snapped = PSP.fitVoice(proj, vo.an, vo.dur); changed(true); t = 0; draw();
-    vstatus('Scenes fitted to the voice: ' + snapped + ' of ' + (n - 1) + ' scene changes sit on a pause. Press Play and listen. If a change lands in the wrong place, use "Tap out the timing".', snapped < (n - 1) / 2);
+    vstatus('Scenes fitted to the voice again: ' + snapped + ' of ' + (n - 1) + ' scene changes sit on a pause. Press Play and listen. If a change lands in the wrong place, use "Tap out the timing".', snapped < (n - 1) / 2);
   };
   $('#vostretch').onclick = () => { if (!vo) return; setPlaying(false); const k = (vo.dur + 0.25) / dur(); retime(proj.scenes.map(s => s.dur * k)); t = 0; draw(); vstatus('Every scene stretched by the same amount so the video ends with the voice.'); };
   const tapNow = () => (vo && base ? AC.currentTime - base.ac : (performance.now() - tapping.t0) / 1000);

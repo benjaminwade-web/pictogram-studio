@@ -27,13 +27,23 @@ Ask the user a question only if the idea could mean two clearly different videos
 The spoken script and the captions are the same words, so the voice and the pictures always match.
 
 - **Word budget:** 70 to 90 spoken words in total. No scene over 14 words. This is what makes the timing checks pass.
-- **Scene 1 is `hook`:** one line, 8 words or fewer, on screen at 0. It makes a claim or asks a question that the last scenes pay off. Write three more hooks and put them in `hooks`.
+- **Scene 1 is the hook:** a `hook` scene or a custom picture, one line, 8 words or fewer, on screen at 0. It makes a claim or asks a question that the last scenes pay off. Write three more hooks and put them in `hooks`.
 - **Then 6 to 8 scenes**, one idea each: a small setup line (`kicker`) and a punch line (`lines[0]`) that read aloud as one sentence. Put `*stars*` around the one phrase to highlight in every main line.
 - **Order:** hook, the common belief or the setup, the turn, the proof with one real number, the consequence, the payoff that answers the hook, then `cta`.
-- **Variety:** never the same scene type twice in a row, no type more than twice, at least one number scene (counter, bars, ring, compare, grid).
+- **Variety:** never the same ready-made scene type twice in a row, no ready-made type more than twice, at least one number scene (counter, bars, ring, compare, grid, or a custom scene with a number, bar, ring or dots part). Custom scenes and the `tunnel` thread are exempt from the repeat rules.
 - **Loop:** the last content scene should land back on the hook's words so a rewatch feels natural.
 - Plain spoken English. No hashtags, emoji or filler like "did you know".
 - Labels inside `p` are 1 to 4 words in capitals. Change every default label and icon so nothing from another video is left over.
+
+## 3b. Draw the animation for this idea
+
+The user wants original animation tailored to each idea, not the same templates with new labels. So:
+
+- **At least half the scenes are `custom`:** pictures built for this exact topic out of parts (people, shapes, drawn lines, counters, groups that move). `CUSTOM-ANIMATION.md` is the full guide and `projects/why-plane-windows-are-round.json` is a worked example made only of custom scenes.
+- Each custom scene shows the thing the line is about and makes it do something when the main line lands: move, grow, tip, crack, count or get crossed out.
+- Use a ready-made scene type only where its picture is exactly what the line says (a bar chart for numbers over time, `compare` for two numbers, `cta` at the end).
+- A story can have a thread: one picture that returns two or three times and pays off at the end, like `tunnel` in `projects/buffett-dug-for-fifty-years.json` (digging, then the breakthrough).
+- If an idea needs a kind of part that does not exist yet, add it to `drawItems` in `engine.js`, document it in `CUSTOM-ANIMATION.md`, and rebuild the page with `node build.js`.
 
 ## 4. Build the project file
 
@@ -52,7 +62,7 @@ Leave out `dur` and `at`. The pipeline sets them from the word count. Scene type
 cd /mnt/project-files/infographic-generator/ && node -e "global.window=global;require('./engine.js');for(const k in PSP.VISUALS){const v=PSP.VISUALS[k];console.log(k+': '+v.hint+' | '+v.fields.map(f=>f.key+'='+JSON.stringify(f.def)).join(', '))}"
 ```
 
-`projects/why-2100-skips-leap-day.json` is a complete worked example.
+`projects/why-plane-windows-are-round.json` (custom animation throughout) and `projects/why-2100-skips-leap-day.json` (ready-made scenes) are complete worked examples.
 
 ## 5. Run the pipeline and look at the result
 
