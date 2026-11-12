@@ -1,6 +1,6 @@
 # Style notes
 
-## The seven styles and when to use each
+## The eight styles and when to use each
 
 A style changes the colors, font, background texture, how figures are drawn, how captions are highlighted and how scenes change. The words and scenes stay the same, so one script can be tried in any look. `out/style-reel_9x16.mp4` shows all seven.
 
@@ -12,6 +12,7 @@ A style changes the colors, font, background texture, how figures are drawn, how
 | Newsroom | Near black, big condensed capitals, red boxes, hard cuts | News, breaking stories, numbers that should feel urgent |
 | Arcade CRT | Purple with scan lines and strong cyan glow | Gaming, internet culture, playful rankings |
 | Magazine | Warm dark paper, serif type, orange underlines, soft fades | History, psychology, calmer story-driven pieces |
+| Storybook | Full-colour painted places (office, mine, courtroom, market, temple...) on a paper texture, serif captions on a paper card, outlined people | History, company origin stories, stories about people and places. Inspired by how educational history cartoons put every line in a fitting illustrated place. |
 | Sticker pop | Bright yellow, flat blue and black, boxed highlights, hard cuts | Self-improvement, lifestyle, anything aimed at a wide audience |
 
 Tips: keep one style per series so people recognise it, and change style between series so the feed does not look like one template. Light styles (Whiteboard, Sticker pop) stand out in a feed that is mostly dark video.

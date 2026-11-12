@@ -285,6 +285,8 @@
   "capLs": 0.045,
   "ambient": "pebbles",
   "grain": 0.3,
-  "capAnim": "words"
+  "capAnim": "words",
+  "scenery": "auto",
+  "paper": 0
  }
 }

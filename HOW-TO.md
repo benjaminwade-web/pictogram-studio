@@ -34,13 +34,13 @@ Your work is remembered in the browser. The voice file is not, so add it again i
 ## What the animation can do
 
 - **Custom animation.** A picture built for one line out of parts: realistic flat-vector people (adult proportions, clothes, skin tones, hairstyles) who show a mood, react when something happens, talk in short speech bubbles and point, wave, cheer, walk or dig, icons, coins, labels, counting numbers, boxes, circles, bars, dotted grids, arrows, paths and outlines that draw themselves, speech bubbles and stamps. Parts can arrive, move, turn, grow, pulse, shake and leave at set moments. Claude writes these. To change one, tell Claude what you want to see.
-- **Places and real photos.** Scenes can stand in a city, an office, the sky, the hills, on a runway or in space, drawn in layers that drift at different speeds so the picture has depth. Real photos from Wikimedia Commons can appear as a polaroid or a sticker that drops in and slowly zooms, with the credit added to the sources for you.
+- **Places and real photos.** Every scene with a person in it stands somewhere that fits what is happening: a mine when someone digs, a courtroom for a lawsuit, a market for selling, a lab, a factory, a classroom, a bank vault, a stage, the sea, the desert, an ancient temple, a castle, a farm and more (23 places). They are drawn in layers that drift at different speeds so the picture has depth. The Storybook style paints them in full colour on a paper texture. Real photos from Wikimedia Commons can appear as a polaroid or a sticker that drops in and slowly zooms, with the credit added to the sources for you.
 - **Ready-made scenes (29).** Big statement, Numbered steps, A versus B, Percent ring, Timeline, Bar chart, Growth curve, Big counting number, Follow button, Digging toward the goal, Late at night, Report card, Proof cards, What most people think, Forced or wanted, Teacher and student, and the story scenes with figures (crowds, pedestals, spotlight, tracking table and so on).
 - **Camera and texture.** Between scenes the camera drops, whips sideways or punches through. Hits shake the frame. Captions arrive word by word and the key words pop. People cast a soft shadow and are shaded on the side away from the light. Stones or dust drift behind the scene and a light film grain sits on top.
 
-## The seven styles
+## The eight styles
 
-Neon terminal, Whiteboard, Blueprint, Newsroom, Arcade CRT, Magazine, Sticker pop. `STYLE-NOTES.md` says what each one suits.
+Neon terminal, Whiteboard, Blueprint, Newsroom, Arcade CRT, Magazine, Storybook, Sticker pop. `STYLE-NOTES.md` says what each one suits.
 
 ## The retention check
 

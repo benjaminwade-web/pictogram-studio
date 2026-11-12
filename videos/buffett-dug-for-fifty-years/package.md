@@ -6,7 +6,6 @@ Style: Neon terminal. Shape: 9:16. Length: 32.8 seconds, 8 scenes, 74 spoken wor
 12 of 12 pass.
 
 ## Files
-- `buffett-dug-for-fifty-years_9x16.mp4`: the video (silent).
 - `check-sheet.jpg`: one picture per scene.
 - `voiceover.txt`: the script to paste into ElevenLabs, one paragraph per scene.
 - `post.txt`: caption, hashtags and other hooks to test.

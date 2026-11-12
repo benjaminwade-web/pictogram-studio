@@ -2763,6 +2763,8 @@
   "capLs": 0,
   "ambient": "dust",
   "grain": 0,
-  "capAnim": "words"
+  "capAnim": "words",
+  "scenery": "auto",
+  "paper": 0
  }
 }

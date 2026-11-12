@@ -6,7 +6,6 @@ Style: Blueprint. Shape: 9:16. Length: 33.0 seconds, 8 scenes, 78 spoken words.
 12 of 12 pass.
 
 ## Files
-- `why-plane-windows-are-round_9x16.mp4`: the video (silent).
 - `check-sheet.jpg`: one picture per scene.
 - `voiceover.txt`: the script to paste into ElevenLabs, one paragraph per scene.
 - `post.txt`: caption, hashtags and other hooks to test.

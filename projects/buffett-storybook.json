@@ -1,0 +1,259 @@
+{
+ "title": "Buffett dug for fifty years (storybook)",
+ "idea": "Almost all of Warren Buffett's money arrived after he turned 65",
+ "audience": "General audience, people 18 to 40 who are curious about money",
+ "aspect": "9:16",
+ "style": "storybook",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "tunnel",
+   "kicker": "",
+   "lines": [
+    {
+     "text": "Warren Buffett started digging at *eleven.*"
+    }
+   ],
+   "p": {
+    "label": "AGE",
+    "from": 11,
+    "to": 32,
+    "tag": "FIRST STOCK, 1942",
+    "tag2": "NOBODY NOTICED",
+    "symbol": "$",
+    "crowd": 0,
+    "crowdLabel": "",
+    "breakthrough": false
+   }
+  },
+  {
+   "visual": "equation",
+   "kicker": "Most people think",
+   "lines": [
+    {
+     "text": "he is a *genius* stock picker."
+    },
+    {
+     "text": "That is only *half.*"
+    }
+   ],
+   "p": {
+    "label": "MOST PEOPLE THINK",
+    "people": 3,
+    "icon": "chart",
+    "mark": "",
+    "verdict": "STOCK GENIUS",
+    "strike": true
+   }
+  },
+  {
+   "visual": "hook",
+   "kicker": "It took him twenty-one years",
+   "lines": [
+    {
+     "text": "to reach his first *million.*"
+    }
+   ],
+   "p": {
+    "big": "$1M",
+    "sub": "AT AGE 32",
+    "icon": "none",
+    "cast": [
+     {
+      "is": "person",
+      "x": 16,
+      "y": 99,
+      "h": 28,
+      "mood": "smug",
+      "act": "hips",
+      "look": [
+       50,
+       40
+      ],
+      "emote": "$"
+     }
+    ]
+   }
+  },
+  {
+   "visual": "habits",
+   "kicker": "",
+   "lines": [
+    {
+     "text": "He stayed invested and just *kept digging.*"
+    }
+   ],
+   "p": {
+    "items": "streak:STAYED INVESTED, log:LET IT COMPOUND, clock:WAITED DECADES",
+    "ticks": true
+   }
+  },
+  {
+   "visual": "compare",
+   "kicker": "Then compounding took over.",
+   "lines": [
+    {
+     "text": "*Ninety-six percent* of his fortune came after sixty-five."
+    }
+   ],
+   "p": {
+    "left": "BEFORE 65",
+    "right": "AFTER 65",
+    "label": "BILLION DOLLARS",
+    "leftValue": 3,
+    "rightValue": 81.5,
+    "prefix": "$",
+    "suffix": "B",
+    "winner": "right",
+    "cast": [
+     {
+      "is": "person",
+      "x": 50,
+      "y": 99,
+      "h": 21,
+      "mood": "think",
+      "act": "think",
+      "look": [
+       75,
+       30
+      ],
+      "then": [
+       {
+        "at": "line1+0.4",
+        "mood": "shock",
+        "act": "",
+        "emote": "$"
+       },
+       {
+        "at": "line1+1.4",
+        "mood": "happy",
+        "act": "point",
+        "look": [
+         75,
+         30
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "visual": "report",
+   "kicker": "",
+   "lines": [
+    {
+     "text": "His *skill* was investing."
+    },
+    {
+     "text": "His secret was *time.*"
+    }
+   ],
+   "p": {
+    "title": "WHAT MADE HIM RICH",
+    "rows": "SKILL:A, PATIENCE:A+, YEARS IN:75",
+    "stamp": "TIME DID IT",
+    "person": true,
+    "reaction": "happy"
+   }
+  },
+  {
+   "visual": "tunnel",
+   "kicker": "",
+   "lines": [
+    {
+     "text": "Everyone saw the *breakthrough.*"
+    },
+    {
+     "text": "Nobody saw the *fifty years* of digging."
+    }
+   ],
+   "p": {
+    "label": "AGE",
+    "from": 60,
+    "to": 65,
+    "tag": "STILL DIGGING",
+    "tag2": "ALMOST THROUGH",
+    "symbol": "$",
+    "crowd": 3,
+    "crowdLabel": "OVERNIGHT SUCCESS?",
+    "breakthrough": true
+   }
+  },
+  {
+   "visual": "cta",
+   "kicker": "",
+   "lines": [
+    {
+     "text": "*Follow* for more money in plain words."
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "KEEP DIGGING"
+   }
+  }
+ ],
+ "hooks": [
+  "Buffett made *96 percent* of his money after 65.",
+  "Warren Buffett was *not* rich for most of his life.",
+  "The richest investor alive got rich *late.*"
+ ],
+ "caption": "Warren Buffett bought his first stock at 11. Almost all of his fortune showed up after 65. The secret was not the stock picks.",
+ "hashtags": [
+  "warrenbuffett",
+  "investing",
+  "compounding",
+  "money",
+  "personalfinance"
+ ],
+ "sources": [
+  {
+   "claim": "$81.5 billion of Buffett's $84.5 billion net worth came after his 65th birthday (about 96 percent). Figures are from when the book was written, around 2020",
+   "source": "Morgan Housel, The Psychology of Money (2020), chapter 4, Confounding Compounding",
+   "url": "https://grahammann.net/book-notes/the-psychology-of-money-morgan-housel"
+  },
+  {
+   "claim": "First stock at age 11 in 1942 (three shares of Cities Service). His partnership stake passed $1 million in 1962, at 32",
+   "source": "Yahoo Finance / GOBankingRates, 11 Financial Milestones Warren Buffett Had Throughout the Years",
+   "url": "https://uk.finance.yahoo.com/news/11-financial-milestones-warren-buffett-120031869.html"
+  },
+  {
+   "claim": "He has been investing for about three quarters of a century, and that span is the real key (Housel's argument, paraphrased as skill versus time)",
+   "source": "Morgan Housel, The Psychology of Money (2020), chapter 4",
+   "url": "https://grahammann.net/book-notes/the-psychology-of-money-morgan-housel"
+  }
+ ],
+ "notes": "The report card grades are a visual joke, not data. The tunnel and the ages on its counter are a metaphor for years invested.",
+ "hero": {
+  "outfit": "suit",
+  "hair": "side",
+  "hairCol": "#c4beb4",
+  "skin": 1
+ },
+ "colors": {
+  "bg": "#efe4cc",
+  "fg": "#2a211b",
+  "accent": "#c4472d"
+ },
+ "font": "DM Serif Display",
+ "transition": "whip",
+ "look": {
+  "pattern": "paper",
+  "glow": 0,
+  "figure": "outline",
+  "people": "real",
+  "cap": "box",
+  "caps": false,
+  "ground": "none",
+  "vignette": 0.45,
+  "capScale": 1.12,
+  "capLs": 0,
+  "ambient": "none",
+  "grain": 0.2,
+  "capAnim": "words",
+  "scenery": "painted",
+  "paper": 0.55
+ }
+}

@@ -46,7 +46,7 @@ Scene lengths are set from the word count after you write the scene, so anchor t
 | `coin` | `size`, `symbol`, `spin` |
 | `text` | `text`, `size` (3 to 6), `w` (widest it may be), `align`, `caps: false` |
 | `tag` | `text`, `size`, `style` (`outline`, `solid`, `accent`), `strike` (time it is crossed out) |
-| `number` | `from`, `to`, `prefix`, `suffix`, `decimals`, `size` (12 to 22), `over` (seconds it counts), `start`, `label` |
+| `number` | `from`, `to`, `prefix`, `suffix`, `decimals`, `plain: true` (no thousands comma, for years), `size` (12 to 22), `over` (seconds it counts), `start`, `label` |
 | `box` | `w`, `h`, `r`, `fill`, `stroke`, `dash` |
 | `circle` | `r`, `fill`, `stroke`, `dash` |
 | `ring` | `r`, `percent`, `show: false` hides the number |
@@ -102,10 +102,11 @@ Casting rules:
 
 A scene can stand somewhere instead of on a bare background. Scenery is drawn in soft layers that drift at different speeds (far layers slower and blurred), with a floor that fades toward the viewer under the ground line, so the picture has depth and the empty band under the ground in the tall shape is filled.
 
-- Kinds: `city`, `office`, `sky`, `hills`, `runway`, `space`. Hills and runway also get a low sun.
-- In a custom scene, make it the first part: `{"is": "scenery", "kind": "city"}`.
-- In any ready-made scene, add `"scenery": "office"` to its `p`.
-- Pick one that fits the line, and change it when the story moves (office for the planning, city for the result). Leave the first scene or a big number scene plain when the text needs all the attention.
+- Places: `city`, `night`, `street`, `office`, `bank`, `lab`, `factory`, `classroom`, `mine`, `market`, `home`, `courtroom`, `stage`, `sea`, `desert`, `ancient` (a temple with columns), `castle`, `farm`, `forest`, `hills`, `sky`, `runway`, `space`. Many move a little: clouds drift, gears turn, lanterns flicker, waves roll, boxes ride the conveyor.
+- The place should match what the character is doing and what the line says: digging happens in a mine, a lawsuit in a courtroom, selling at a market, an invention in a lab, a launch on a stage. Change the place when the story moves.
+- Any scene with a person in it gets a matching place automatically when none is set. It reads the scene's words (and the character's action) and picks from the list above; if nothing matches it keeps the previous scene's place, then the video's topic. Set one yourself when you know better, or `"none"` to keep the scene plain.
+- In a custom scene, make it the first part: `{"is": "scenery", "kind": "city"}`. In any ready-made scene, add `"scenery": "office"` to its `p`.
+- Two ways to draw them, set by the style: soft shapes in the style's own colours (all styles), or full colour painted places with light, shade and a paper texture (the **Storybook** style, or Look > Backgrounds > Painted). In painted mode the captions sit on a paper card so they stay readable.
 
 ## Real photos
 
