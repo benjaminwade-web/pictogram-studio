@@ -269,7 +269,7 @@
  "look": {
   "pattern": "paper",
   "glow": 0,
-  "figure": "outline",
+  "figure": "solid",
   "people": "real",
   "cap": "box",
   "caps": false,
