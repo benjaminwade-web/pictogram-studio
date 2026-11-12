@@ -1,0 +1,138 @@
+{
+ "title": "This vs that (format starter)",
+ "aspect": "9:16",
+ "style": "magazine",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "hook",
+   "dur": 2.6,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Which one really *wakes you up* more?",
+     "at": 0
+    }
+   ],
+   "p": {
+    "big": "VS",
+    "sub": "COFFEE OR TEA",
+    "icon": "none"
+   }
+  },
+  {
+   "visual": "compare",
+   "dur": 4.4,
+   "kicker": "Cup for cup, it is not close.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Coffee has about *twice* the caffeine.",
+     "at": 1.9
+    }
+   ],
+   "p": {
+    "left": "TEA",
+    "right": "COFFEE",
+    "label": "MG OF CAFFEINE",
+    "leftValue": 48,
+    "rightValue": 96,
+    "prefix": "",
+    "suffix": "",
+    "winner": "right"
+   }
+  },
+  {
+   "visual": "bars",
+   "dur": 4.4,
+   "kicker": "It even beats an energy drink",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "when the cup is the *same size.*",
+     "at": 1.6
+    }
+   ],
+   "p": {
+    "bars": "BLACK TEA:48, ENERGY DRINK:79, COFFEE:96",
+    "prefix": "",
+    "suffix": " MG",
+    "highlight": 3,
+    "label": "PER 8 OZ CUP"
+   }
+  },
+  {
+   "visual": "counter",
+   "dur": 4,
+   "kicker": "Most healthy adults can have up to",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "about *400 milligrams* a day.",
+     "at": 1.4
+    }
+   ],
+   "p": {
+    "label": "MG A DAY",
+    "value": 400,
+    "prefix": "",
+    "pill": "ABOUT 4 COFFEES",
+    "heroes": 1,
+    "object": "heart",
+    "symbol": ""
+   }
+  },
+  {
+   "visual": "steps",
+   "dur": 4,
+   "kicker": "So the choice is simple.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Pick the *dose,* not the drink.",
+     "at": 2.4
+    }
+   ],
+   "p": {
+    "items": "NEED A JOLT = COFFEE, WANT IT GENTLE = TEA",
+    "highlight": 0
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "*Follow* for more quick comparisons.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "THIS VS THAT"
+   }
+  }
+ ],
+ "font": "DM Serif Display",
+ "colors": {
+  "bg": "#18140f",
+  "fg": "#f3eadc",
+  "accent": "#ff8a3d"
+ },
+ "transition": "fade",
+ "look": {
+  "pattern": "paper",
+  "glow": 0.12,
+  "figure": "solid",
+  "cap": "underline",
+  "caps": false,
+  "ground": "solid",
+  "vignette": 0.7,
+  "capScale": 1.18,
+  "capLs": 0
+ }
+}

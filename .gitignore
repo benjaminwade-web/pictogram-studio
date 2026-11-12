@@ -1,0 +1,13 @@
+out/
+videos/*/*.mp4
+node_modules/
+*.bak.*
+engine.v1.js
+presets.example.js
+projects/example-recreation.json
+reference-example.mp4
+*.mp3
+*.wav
+*.mp4
+.DS_Store
+studio.artifact.html

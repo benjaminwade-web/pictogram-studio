@@ -1,0 +1,25 @@
+{
+ "title": "Why 2100 skips leap day",
+ "idea": "Why the year 2100 will not have a February 29",
+ "audience": "General audience, curious people 16 to 35",
+ "aspect": "9:16", "style": "blueprint", "progress": true,
+ "scenes": [
+  { "visual": "hook", "kicker": "", "lines": [ { "text": "The year 2100 will *skip* leap day." } ], "p": { "big": "2100", "sub": "NO FEBRUARY 29", "icon": "none" } },
+  { "visual": "compare", "kicker": "A year is not 365 days.", "lines": [ { "text": "Earth needs about *365 and a quarter.*" } ], "p": { "left": "CALENDAR", "right": "EARTH", "label": "DAYS PER LAP", "leftValue": 365, "rightValue": 365.24, "prefix": "", "suffix": "", "winner": "right" } },
+  { "visual": "timeline", "kicker": "So every four years", "lines": [ { "text": "we add *one extra day.*" } ], "p": { "points": "2016:+1 DAY, 2020:+1 DAY, 2024:+1 DAY, 2028:+1 DAY", "highlight": 0 } },
+  { "visual": "counter", "kicker": "But that is slightly too much.", "lines": [ { "text": "About *11 minutes* too much, every year." } ], "p": { "label": "EXTRA MINUTES A YEAR", "value": 11, "prefix": "", "pill": "IT ADDS UP", "heroes": 1, "object": "globe", "symbol": "" } },
+  { "visual": "grid", "kicker": "By 1582 it had grown to ten days.", "lines": [ { "text": "So the Pope *deleted ten days.*" } ], "p": { "rows": 2, "cols": 5, "from": 0, "to": 10, "label": "DAYS LEFT TO CUT", "tag": "OCTOBER 1582", "object": "doc" } },
+  { "visual": "steps", "kicker": "His new rule:", "lines": [ { "text": "century years *skip* it, unless they divide by 400." } ], "p": { "items": "EVERY 4TH YEAR = LEAP, CENTURY YEARS = SKIP, DIVIDES BY 400 = LEAP", "highlight": 2 } },
+  { "visual": "timeline", "kicker": "1900 skipped. 2000 kept it.", "lines": [ { "text": "2100 *skips* again." } ], "p": { "points": "1900:SKIPPED, 2000:KEPT, 2100:SKIPPED", "highlight": 3 } },
+  { "visual": "cta", "kicker": "", "lines": [ { "text": "*Follow* for more things nobody explained." } ], "p": { "button": "+ FOLLOW", "buttonDone": "FOLLOWING", "foot": "SEE YOU FEBRUARY 29" } }
+ ],
+ "hooks": [ "February 29, 2100 *does not exist.*", "Leap years are *not* every four years.", "A Pope once *deleted* ten days from the calendar." ],
+ "caption": "2100 divides by 4 and it still is not a leap year. This is the 400-year-old rule behind it.",
+ "hashtags": [ "leapyear", "calendar", "didyouknow", "science", "history" ],
+ "sources": [
+  { "claim": "Leap year rule: divisible by 4, except century years not divisible by 400. 1900 and 2100 are not leap years, 2000 was", "source": "US Naval Observatory", "url": "https://aa.usno.navy.mil/faq/leap_years" },
+  { "claim": "A year (tropical year) is about 365.2422 days. The old 365.25-day average ran about 0.0078 days long, which is about 11 minutes a year", "source": "US Naval Observatory", "url": "https://aa.usno.navy.mil/faq/leap_years" },
+  { "claim": "Ten days were dropped in October 1582: 15 October followed 4 October", "source": "Claus Tondering, Calendar FAQ", "url": "https://www.tondering.dk/claus/cal/gregorian.php" }
+ ],
+ "notes": "\"365 and a quarter\" is the rounded figure the old calendar assumed. The 11 minutes is my conversion of 0.0078 days. The reform was ordered by Pope Gregory XIII."
+}

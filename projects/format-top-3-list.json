@@ -1,0 +1,147 @@
+{
+ "title": "Top 3 list (format starter)",
+ "aspect": "9:16",
+ "style": "whiteboard",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "hook",
+   "dur": 2.6,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Rereading your notes *barely works.*",
+     "at": 0
+    }
+   ],
+   "p": {
+    "big": "3",
+    "sub": "FIXES THAT DO",
+    "icon": "none"
+   }
+  },
+  {
+   "visual": "steps",
+   "dur": 4.4,
+   "kicker": "Three things work much better.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "And none of them take *more time.*",
+     "at": 3
+    }
+   ],
+   "p": {
+    "items": "SPACE IT OUT, TEST YOURSELF, SLEEP ON IT",
+    "highlight": 0
+   }
+  },
+  {
+   "visual": "timeline",
+   "dur": 4.4,
+   "kicker": "One. Space it out.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Short reviews *days apart* beat one long night.",
+     "at": 2.8
+    }
+   ],
+   "p": {
+    "points": "DAY 1:LEARN, DAY 3:REVIEW, DAY 7:REVIEW, DAY 21:REVIEW",
+    "highlight": 0
+   }
+  },
+  {
+   "visual": "hero",
+   "dur": 4.2,
+   "kicker": "Two. Close the book and test yourself.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Pulling it *from memory* makes it stick.",
+     "at": 2
+    }
+   ],
+   "p": {
+    "tag": "REREAD",
+    "strike": true,
+    "icon": "book",
+    "symbols": false,
+    "doubters": false
+   }
+  },
+  {
+   "visual": "counter",
+   "dur": 4,
+   "kicker": "Three. Sleep on it.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Your brain *files it away* overnight.",
+     "at": 1.6
+    }
+   ],
+   "p": {
+    "label": "HOURS OF SLEEP",
+    "value": 8,
+    "prefix": "",
+    "pill": "NOT OPTIONAL",
+    "heroes": 1,
+    "object": "book",
+    "symbol": ""
+   }
+  },
+  {
+   "visual": "pedestals",
+   "dur": 3.6,
+   "kicker": "Space it, test it, sleep on it.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Same hours. *Far more* remembered.",
+     "at": 1.6
+    }
+   ],
+   "p": {
+    "items": "book:SPACE, target:TEST, star:SLEEP"
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "*Follow* for more ways to learn faster.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "SAVE THIS FOR EXAM WEEK"
+   }
+  }
+ ],
+ "font": "Fredoka",
+ "colors": {
+  "bg": "#f1f3f5",
+  "fg": "#16191d",
+  "accent": "#ff4b3e"
+ },
+ "transition": "whip",
+ "look": {
+  "pattern": "grid",
+  "glow": 0,
+  "figure": "outline",
+  "cap": "underline",
+  "caps": false,
+  "ground": "solid",
+  "vignette": 0,
+  "capScale": 1.08,
+  "capLs": 0.01
+ }
+}

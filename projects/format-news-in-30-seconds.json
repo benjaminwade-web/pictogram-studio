@@ -1,0 +1,154 @@
+{
+ "title": "News in 30 seconds (fill in the blanks)",
+ "aspect": "9:16",
+ "style": "newsroom",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "hook",
+   "dur": 2.6,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "[What happened, with one *surprising* word.]",
+     "at": 0
+    }
+   ],
+   "p": {
+    "big": "[#]",
+    "sub": "[WHAT THE NUMBER MEASURES]",
+    "icon": "none"
+   }
+  },
+  {
+   "visual": "timeline",
+   "dur": 4.6,
+   "kicker": "[How we got here, in one line.]",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "[The moment it *changed.*]",
+     "at": 3
+    }
+   ],
+   "p": {
+    "points": "[DATE]:[EVENT], [DATE]:[EVENT], [DATE]:[EVENT]",
+    "highlight": 3
+   }
+  },
+  {
+   "visual": "compare",
+   "dur": 4.2,
+   "kicker": "[What is being compared.]",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "[The gap, in *plain words.*]",
+     "at": 1.9
+    }
+   ],
+   "p": {
+    "left": "BEFORE",
+    "right": "NOW",
+    "label": "[UNIT]",
+    "leftValue": 1,
+    "rightValue": 2,
+    "prefix": "",
+    "suffix": "",
+    "winner": "right"
+   }
+  },
+  {
+   "visual": "versus",
+   "dur": 3.8,
+   "kicker": "[Who is unhappy about it.]",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "[Their argument in *five words.*]",
+     "at": 1.6
+    }
+   ],
+   "p": {
+    "crowd": 3,
+    "tag": "[THEIR CLAIM]"
+   }
+  },
+  {
+   "visual": "counter",
+   "dur": 4,
+   "kicker": "[The number that matters most]",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "[and why it is *a big deal.*]",
+     "at": 1.4
+    }
+   ],
+   "p": {
+    "label": "[UNIT]",
+    "value": 100,
+    "prefix": "",
+    "pill": "[SOURCE]",
+    "heroes": 1,
+    "object": "doc",
+    "symbol": ""
+   }
+  },
+  {
+   "visual": "hero",
+   "dur": 4,
+   "kicker": "[What happens next.]",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "[What it means *for you.*]",
+     "at": 1.5
+    }
+   ],
+   "p": {
+    "tag": "[OLD ASSUMPTION]",
+    "strike": true,
+    "icon": "bulb",
+    "symbols": false,
+    "doubters": false
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "*Follow* for the news in 30 seconds.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "[YOUR ACCOUNT]"
+   }
+  }
+ ],
+ "font": "Bebas Neue",
+ "colors": {
+  "bg": "#101216",
+  "fg": "#ffffff",
+  "accent": "#ff3b3b"
+ },
+ "transition": "cut",
+ "look": {
+  "pattern": "none",
+  "glow": 0.15,
+  "figure": "solid",
+  "cap": "box",
+  "caps": true,
+  "ground": "solid",
+  "vignette": 0.6,
+  "capScale": 1.45,
+  "capLs": 0.03
+ }
+}

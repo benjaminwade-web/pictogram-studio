@@ -1,0 +1,152 @@
+{
+ "title": "One percent better (general sample)",
+ "aspect": "9:16",
+ "style": "pop",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "hook",
+   "dur": 2.6,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Getting *1% better* a day sounds like nothing.",
+     "at": 0
+    }
+   ],
+   "p": {
+    "big": "1%",
+    "sub": "BETTER EACH DAY",
+    "icon": "none"
+   }
+  },
+  {
+   "visual": "curve",
+   "dur": 4.2,
+   "kicker": "But small gains stack on top of each other.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "After a year, that's about *37 times* better.",
+     "at": 2.2
+    }
+   ],
+   "p": {
+    "pileLabel": "DAY 1",
+    "yLabel": "SKILL",
+    "xLabel": "DAYS →",
+    "endTag": "37X"
+   }
+  },
+  {
+   "visual": "row",
+   "dur": 3.6,
+   "kicker": "Most people start strong,",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "see *no change* in week two, and stop.",
+     "at": 1.4
+    }
+   ],
+   "p": {
+    "count": 3,
+    "who": "everyone",
+    "object": "target",
+    "label": "NO CHANGE",
+    "leave": true,
+    "sparks": false
+   }
+  },
+  {
+   "visual": "steps",
+   "dur": 4.6,
+   "kicker": "The ones who make it do three things.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "They make it *too small to skip.*",
+     "at": 3
+    }
+   ],
+   "p": {
+    "items": "PICK ONE SKILL, DO 10 MINUTES A DAY, NEVER MISS TWICE",
+    "highlight": 2
+   }
+  },
+  {
+   "visual": "timeline",
+   "dur": 4.6,
+   "kicker": "Nothing seems to happen for a long time.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Then it shows up *all at once.*",
+     "at": 3
+    }
+   ],
+   "p": {
+    "points": "WEEK 1:NOTHING, MONTH 1:STILL NOTHING, MONTH 6:A LITTLE, YEAR 1:OBVIOUS",
+    "highlight": 0
+   }
+  },
+  {
+   "visual": "compare",
+   "dur": 4.2,
+   "kicker": "Same two people, one year later.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "The gap is *consistency,* not talent.",
+     "at": 1.9
+    }
+   ],
+   "p": {
+    "left": "STOPPED",
+    "right": "KEPT GOING",
+    "label": "SKILL LEVEL",
+    "leftValue": 1,
+    "rightValue": 37,
+    "prefix": "",
+    "suffix": "x",
+    "winner": "right"
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "*Follow* for one idea a day.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "SEE YOU TOMORROW"
+   }
+  }
+ ],
+ "font": "Archivo",
+ "colors": {
+  "bg": "#ffd84d",
+  "fg": "#15151a",
+  "accent": "#2f55ff"
+ },
+ "transition": "cut",
+ "look": {
+  "pattern": "dots",
+  "glow": 0,
+  "figure": "solid",
+  "cap": "box",
+  "caps": true,
+  "ground": "solid",
+  "vignette": 0,
+  "capScale": 1.02,
+  "capLs": 0.02
+ }
+}

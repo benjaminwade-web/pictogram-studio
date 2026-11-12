@@ -1,0 +1,132 @@
+{
+ "title": "How it works (format starter)",
+ "aspect": "9:16",
+ "style": "blueprint",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "hook",
+   "dur": 2.8,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Your headphones *make noise* to create silence.",
+     "at": 0
+    }
+   ],
+   "p": {
+    "big": "SHHH",
+    "sub": "HOW NOISE CANCELLING WORKS",
+    "icon": "none"
+   }
+  },
+  {
+   "visual": "steps",
+   "dur": 5,
+   "kicker": "It happens in three steps.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Faster than you can *notice.*",
+     "at": 3.4
+    }
+   ],
+   "p": {
+    "items": "A MIC HEARS THE NOISE, A CHIP FLIPS THE WAVE, THE TWO CANCEL OUT",
+    "highlight": 2
+   }
+  },
+  {
+   "visual": "compare",
+   "dur": 4.2,
+   "kicker": "The second wave is a mirror image.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Add them together and you get *zero.*",
+     "at": 1.9
+    }
+   ],
+   "p": {
+    "left": "NOISE",
+    "right": "ANTI-NOISE",
+    "label": "WAVE HEIGHT",
+    "leftValue": 1,
+    "rightValue": -1,
+    "prefix": "",
+    "suffix": "",
+    "winner": "none"
+   }
+  },
+  {
+   "visual": "pedestals",
+   "dur": 4.4,
+   "kicker": "It works best on steady, low sounds.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "Engines, air con and traffic *disappear.*",
+     "at": 2
+    }
+   ],
+   "p": {
+    "items": "rocket:ENGINES, house:AIR CON, globe:TRAFFIC"
+   }
+  },
+  {
+   "visual": "hero",
+   "dur": 3.8,
+   "kicker": "Sudden sounds are too fast to predict.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "So you still hear *your name.*",
+     "at": 1.5
+    }
+   ],
+   "p": {
+    "tag": "TOTAL SILENCE",
+    "strike": true,
+    "icon": "bulb",
+    "symbols": false,
+    "doubters": false
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "*Follow* to see how more things work.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "HOW IT WORKS"
+   }
+  }
+ ],
+ "font": "JetBrains Mono",
+ "colors": {
+  "bg": "#0c2f66",
+  "fg": "#e8f1ff",
+  "accent": "#ffd84d"
+ },
+ "transition": "fade",
+ "look": {
+  "pattern": "grid",
+  "glow": 0.3,
+  "figure": "outline",
+  "cap": "color",
+  "caps": true,
+  "ground": "solid",
+  "vignette": 0.5,
+  "capScale": 0.84,
+  "capLs": 0
+ }
+}

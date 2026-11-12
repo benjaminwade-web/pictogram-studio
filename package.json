@@ -1,0 +1,10 @@
+{
+  "name": "pictogram-studio",
+  "version": "0.3.0",
+  "private": true,
+  "description": "Short animated pictogram explainer videos from a JSON project",
+  "scripts": {
+    "build": "node build.js",
+    "render": "node render.js"
+  }
+}

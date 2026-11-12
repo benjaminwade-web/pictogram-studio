@@ -1,0 +1,132 @@
+{
+ "title": "Myth vs fact (format starter)",
+ "aspect": "9:16",
+ "style": "newsroom",
+ "progress": true,
+ "scenes": [
+  {
+   "visual": "hook",
+   "dur": 2.6,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "You have heard this your *whole life.*",
+     "at": 0
+    }
+   ],
+   "p": {
+    "big": "MYTH",
+    "sub": "LIGHTNING NEVER STRIKES TWICE",
+    "icon": "bolt"
+   }
+  },
+  {
+   "visual": "versus",
+   "dur": 3.6,
+   "kicker": "Everyone repeats it.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "It is *completely wrong.*",
+     "at": 1.6
+    }
+   ],
+   "p": {
+    "crowd": 3,
+    "tag": "NEVER TWICE"
+   }
+  },
+  {
+   "visual": "counter",
+   "dur": 4.2,
+   "kicker": "The Empire State Building gets hit",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "about *23 times* every year.",
+     "at": 1.4
+    }
+   ],
+   "p": {
+    "label": "STRIKES PER YEAR",
+    "value": 23,
+    "prefix": "",
+    "pill": "ONE BUILDING",
+    "heroes": 1,
+    "object": "bolt",
+    "symbol": ""
+   }
+  },
+  {
+   "visual": "steps",
+   "dur": 4.4,
+   "kicker": "Lightning looks for three things.",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "The same spot wins *again and again.*",
+     "at": 3
+    }
+   ],
+   "p": {
+    "items": "TALL, POINTED, STANDING ALONE",
+    "highlight": 0
+   }
+  },
+  {
+   "visual": "hero",
+   "dur": 4,
+   "kicker": "So a spot that was just hit",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "is *not* the safe place to stand.",
+     "at": 1.5
+    }
+   ],
+   "p": {
+    "tag": "SAFE HERE",
+    "strike": true,
+    "icon": "bolt",
+    "symbols": false,
+    "doubters": false
+   }
+  },
+  {
+   "visual": "cta",
+   "dur": 3,
+   "kicker": "",
+   "kickerAt": 0,
+   "lines": [
+    {
+     "text": "*Follow* for more myths that are wrong.",
+     "at": 0.1
+    }
+   ],
+   "p": {
+    "button": "+ FOLLOW",
+    "buttonDone": "FOLLOWING",
+    "foot": "MYTH VS FACT"
+   }
+  }
+ ],
+ "font": "Bebas Neue",
+ "colors": {
+  "bg": "#101216",
+  "fg": "#ffffff",
+  "accent": "#ff3b3b"
+ },
+ "transition": "cut",
+ "look": {
+  "pattern": "none",
+  "glow": 0.15,
+  "figure": "solid",
+  "cap": "box",
+  "caps": true,
+  "ground": "solid",
+  "vignette": 0.6,
+  "capScale": 1.45,
+  "capLs": 0.03
+ }
+}
