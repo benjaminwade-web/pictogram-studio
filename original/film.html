@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style><canvas id="c"></canvas>
+<script src="stage.js"></script>
+<script>
+let S, ctx, film;
+async function setup(words, w) {
+  film = window.__film; const size = film.size || [1080, 1920]; const c = document.getElementById('c');
+  c.width = w ? Math.round(w * size[0] / size[1]) : size[0]; c.height = w || size[1]; ctx = c.getContext('2d');
+  S = Stage.makeStage(film, words, size[0], size[1]);
+  if (film.fonts && film.fonts.length) {
+    const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?' + film.fonts.map(f => 'family=' + f.replace(/ /g, '+')).join('&') + '&display=block'; document.head.appendChild(l);
+    await new Promise(r => { l.onload = r; l.onerror = r; setTimeout(r, 8000); });
+    try { await Promise.all(film.fonts.map(f => document.fonts.load('400 40px "' + f.split(':')[0] + '"'))); await document.fonts.ready; } catch (e) {}
+  }
+  if (film.init) await film.init(S);
+  return { w: c.width, h: c.height, dur: S.length, sentences: S.sentences.map(s => [s.s, s.e, s.text]) };
+}
+function frame(t, q) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  ctx.setTransform(ctx.canvas.width / S.W, 0, 0, ctx.canvas.height / S.H, 0, 0); ctx.save(); film.draw(ctx, t, S); ctx.restore();
+  return ctx.canvas.toDataURL('image/jpeg', q || 0.93).slice(23);
+}
+function missing() { return [...S.missing]; }
+</script>

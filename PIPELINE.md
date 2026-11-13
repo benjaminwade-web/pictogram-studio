@@ -1,5 +1,11 @@
 # Video idea in, finished package out
 
+> **Since 2026-11-13 every video is an original film.** The user said the studio should not be "a template thing" and
+> should "generate an original one every time". Do steps 1 to 3 below (brief, research, script), then follow
+> `ORIGINAL.md`: voice the script, pick a new art direction, hand-write `videos/<slug>/film.js` and render it with
+> `original.js`. The ready-made scenes, styles and places in steps 3b to 7 are the old template route; use them only
+> if the user asks for a quick template version.
+
 Use this when the user gives a video idea (for example "Video idea: why 2100 has no leap day") and wants a short animated infographic video for TikTok, Reels or Shorts. The user is not technical and does not want to be asked questions. Decide everything below yourself, make the package, and report what you chose.
 
 The tool is Pictogram Studio in `/mnt/project-files/infographic-generator/` (also on GitHub as `pictogram-studio` once that repository exists). Read its `README.md` first if you have not used it in this conversation.
