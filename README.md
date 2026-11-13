@@ -48,3 +48,10 @@ After a change, run `node build.js` and render a still sheet to check it.
 { "title": "…", "aspect": "9:16", "style": "pop", "progress": true,
   "scenes": [ { "visual": "hook", "dur": 2.6, "kicker": "", "lines": [ { "text": "Main line with a *starred* phrase.", "at": 0 } ], "p": { "big": "1%", "sub": "BETTER EACH DAY" } } ] }
 ```
+
+## Original films (the default since November 2026)
+
+`studio.artifact.html` is now built by `node build-original.js` from `studio-original.src.html`: type an idea and
+Claude writes the script, invents a new art direction and writes a brand-new canvas animation for it, then tests
+and repairs every scene. The old template page is still built by `node build.js`. For films made outside the page,
+see `ORIGINAL.md` and `original.js`.
