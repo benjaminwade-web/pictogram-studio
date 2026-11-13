@@ -6,5 +6,8 @@
   "scripts": {
     "build": "node build.js",
     "render": "node render.js"
+  },
+  "dependencies": {
+    "three": "0.160.0"
   }
 }

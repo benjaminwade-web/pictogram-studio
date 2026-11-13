@@ -1,0 +1,27 @@
+<!doctype html><meta charset="utf8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+<script src="/original/stage.js"></script>
+<script type="module">
+import * as THREE from 'three';
+import { makeKit } from '/original3d/kit.js';
+let film, k, out, octx;
+window.setup = async (filmUrl, words, h) => {
+  film = (await import(filmUrl)).default; const size = film.size || [1080, 1920];
+  const W = h ? Math.round(h * size[0] / size[1]) : size[0], H = h || size[1];
+  out = document.createElement('canvas'); out.width = W; out.height = H; document.body.appendChild(out); octx = out.getContext('2d');
+  const S = Stage.makeStage(film, words, size[0], size[1]);
+  if (film.fonts && film.fonts.length) { const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?' + film.fonts.map(f => 'family=' + f.replace(/ /g, '+')).join('&') + '&display=block'; document.head.appendChild(l);
+    await new Promise(r => { l.onload = r; l.onerror = r; setTimeout(r, 8000); }); try { await Promise.all(film.fonts.map(f => document.fonts.load('400 40px "' + f.split(':')[0] + '"'))); } catch (e) {} }
+  k = makeKit(THREE, S, W, H); await film.build(k);
+  return { w: W, h: H, dur: S.length, sentences: S.sentences.map(s => [s.s, s.e, s.text]) };
+};
+window.frame = (t, q) => {
+  k.t = t; film.update(t, k); k.renderFrame(t);
+  octx.setTransform(1, 0, 0, 1, 0, 0); octx.drawImage(k.renderer.domElement, 0, 0, out.width, out.height);
+  if (film.overlay) { octx.save(); octx.setTransform(out.width / k.S.W, 0, 0, out.height / k.S.H, 0, 0); film.overlay(octx, t, k); octx.restore(); }
+  return out.toDataURL('image/jpeg', q || 0.92).slice(23);
+};
+window.sound = () => film.sound ? film.sound(k) : null;
+window.missing = () => [...k.S.missing];
+</script>

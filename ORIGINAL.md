@@ -78,3 +78,28 @@ elastic / bounce`; `S.lerp`; `S.clamp`; `S.rng(seed)`; `S.noise(x)`; `S.hash(n)`
 
 The first film made this way is `videos/tulip-mania-original/` (1630s Dutch ink engraving with oil-painting
 bookends). Read it to see the plumbing in use, then make the next one look nothing like it.
+
+## 3D films with sound (since 2026-11-13, the default for new videos)
+
+The user called the flat canvas films "rudimentary... lifeless", with things "overlaying wrong over the background",
+a robotic voice and no sound effects. So new films are 3D scenes rendered with three.js, voiced with ElevenLabs v3
+and mixed with music and sound effects. Everything visible is still made new for each film.
+
+1. Script in `videos/<slug>/voiceover.txt`, conversational (contractions, short sentences, one idea each).
+2. Voice with the v3 model: `python3 voice3.py videos/<slug> [voice id] [stability 0.5]` (George is
+   `JBFqnCBsd6RMkjVDRZzb`). v3 leaves long dramatic pauses, so run
+   `python3 tighten.py videos/<slug> 0.36 1.06` (shortens silences over 0.36 s, speeds up 6%). That writes
+   `voice-tight.wav` and `voice-words-tight.json`, which the renderer and the mixer use automatically.
+3. Write `film3d.js` (an ES module, see `videos/tulip-mania-3d/film3d.js`): `build(k)` makes the scene with
+   `k.THREE`, calls `k.setup(scene, camera, {bloom, dof, grain, vignette})`; `update(t, k)` sets every transform from
+   `t` only; `overlay(ctx, t, k)` draws captions in 2D on top; `sound(k)` returns the music plan and sound cues.
+   `original3d/kit.js` is plumbing only (renderer, post effects, canvas textures).
+   Tall frames are narrow: use a vertical field of view around 50 and keep the cast within about half the camera
+   distance in width, or the edges get cut. Characters must stand on the set floor and be lit by the set's light.
+4. Check: `node original3d.js sheet videos/<slug>` (add `--at` times for transitions). About 0.5 s a frame.
+5. Sound: `node original3d.js cues videos/<slug>` then `python3 soundtrack.py videos/<slug>`. Music comes from
+   the film's chords through FluidSynth with the General MIDI soundfont; every sound effect is synthesised in
+   `soundtrack.py` (the ElevenLabs key has no sound-effect or music permission). The music ducks under the voice
+   and the mix is normalised to about -14 LUFS.
+6. Render: `node original3d.js render videos/<slug> --from 0 --to 11` in 3 or 4 parallel parts (about 1 s a frame
+   at 1080x1920), then `python3 encode3d.py videos/<slug>` to join frames and soundtrack into `<slug>_9x16.mp4`.

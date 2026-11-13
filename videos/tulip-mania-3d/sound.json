@@ -1,0 +1,381 @@
+{
+ "length": 42.76,
+ "cues": [
+  {
+   "t": 4.23,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 7.268,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 11.802,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 16.975,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 20.858,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 23.149,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 26.991,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 30.631,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 33.43,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 38.908,
+   "sfx": "whoosh",
+   "vol": 0.55
+  },
+  {
+   "t": 1.666,
+   "sfx": "grow",
+   "vol": 0.6
+  },
+  {
+   "t": 2.266,
+   "sfx": "sparkle",
+   "vol": 0.5
+  },
+  {
+   "t": 3.274,
+   "sfx": "swing",
+   "vol": 0.5
+  },
+  {
+   "t": 3.524,
+   "sfx": "ding",
+   "vol": 0.6
+  },
+  {
+   "t": 3.574,
+   "sfx": "coins",
+   "vol": 0.7
+  },
+  {
+   "t": 4.72,
+   "sfx": "hammer",
+   "vol": 0.55
+  },
+  {
+   "t": 5.14,
+   "sfx": "hammer",
+   "vol": 0.55
+  },
+  {
+   "t": 5.56,
+   "sfx": "hammer",
+   "vol": 0.55
+  },
+  {
+   "t": 5.98,
+   "sfx": "hammer",
+   "vol": 0.55
+  },
+  {
+   "t": 6.644,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.694,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.744,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.794,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.844,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.894,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.944,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.994,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 7.044,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 7.094,
+   "sfx": "clink",
+   "vol": 0.35
+  },
+  {
+   "t": 6.994,
+   "sfx": "boing",
+   "vol": 0.45
+  },
+  {
+   "t": 9.723,
+   "sfx": "pop",
+   "vol": 0.6
+  },
+  {
+   "t": 10.023,
+   "sfx": "pop",
+   "vol": 0.6
+  },
+  {
+   "t": 10.114,
+   "sfx": "pop",
+   "vol": 0.7
+  },
+  {
+   "t": 7.648,
+   "sfx": "murmur",
+   "vol": 0.35,
+   "dur": 4.534000000000001
+  },
+  {
+   "t": 10.712,
+   "sfx": "swoop",
+   "vol": 0.5
+  },
+  {
+   "t": 12.881,
+   "sfx": "wind",
+   "vol": 0.6,
+   "dur": 4.5
+  },
+  {
+   "t": 14.096,
+   "sfx": "pop",
+   "vol": 0.5
+  },
+  {
+   "t": 14.862,
+   "sfx": "clap",
+   "vol": 0.5
+  },
+  {
+   "t": 15.967,
+   "sfx": "paper",
+   "vol": 0.7,
+   "dur": 1.6
+  },
+  {
+   "t": 18.771,
+   "sfx": "gavel",
+   "vol": 0.8
+  },
+  {
+   "t": 19.221,
+   "sfx": "gavel",
+   "vol": 0.7
+  },
+  {
+   "t": 20.157,
+   "sfx": "cricket",
+   "vol": 0.5,
+   "dur": 1.6
+  },
+  {
+   "t": 20.357,
+   "sfx": "tweet",
+   "vol": 0.5
+  },
+  {
+   "t": 22.244,
+   "sfx": "rise",
+   "vol": 0.5
+  },
+  {
+   "t": 22.785,
+   "sfx": "crash",
+   "vol": 0.9
+  },
+  {
+   "t": 22.835,
+   "sfx": "hit",
+   "vol": 0.8
+  },
+  {
+   "t": 25.356,
+   "sfx": "slide",
+   "vol": 0.6
+  },
+  {
+   "t": 25.506,
+   "sfx": "pop",
+   "vol": 0.6
+  },
+  {
+   "t": 26.701,
+   "sfx": "steps",
+   "vol": 0.4,
+   "dur": 1.2
+  },
+  {
+   "t": 26.801,
+   "sfx": "whistle",
+   "vol": 0.5
+  },
+  {
+   "t": 28.477,
+   "sfx": "stamp",
+   "vol": 0.9
+  },
+  {
+   "t": 28.815,
+   "sfx": "steps",
+   "vol": 0.4,
+   "dur": 0.9
+  },
+  {
+   "t": 30.487,
+   "sfx": "pop",
+   "vol": 0.5
+  },
+  {
+   "t": 31.609,
+   "sfx": "thunder",
+   "vol": 0.5
+  },
+  {
+   "t": 31.709,
+   "sfx": "rain",
+   "vol": 0.35,
+   "dur": 1.8
+  },
+  {
+   "t": 33.81,
+   "sfx": "jingle",
+   "vol": 0.45,
+   "dur": 2.6
+  },
+  {
+   "t": 35.554,
+   "sfx": "pop",
+   "vol": 0.5
+  },
+  {
+   "t": 37.67,
+   "sfx": "thud",
+   "vol": 1
+  },
+  {
+   "t": 40.428,
+   "sfx": "bubble",
+   "vol": 0.8
+  },
+  {
+   "t": 40.948,
+   "sfx": "chime",
+   "vol": 0.5
+  }
+ ],
+ "music": {
+  "bpm": 104,
+  "key": "D minor",
+  "feel": "playful baroque miniature: harpsichord, pizzicato strings, bassoon, light woodblock",
+  "sections": [
+   {
+    "t": 0,
+    "chords": [
+     "Dm",
+     "A",
+     "Dm",
+     "Gm",
+     "C",
+     "F",
+     "Gm",
+     "A"
+    ],
+    "style": "baroque",
+    "energy": 0.7
+   },
+   {
+    "t": 17.25,
+    "chords": [
+     "Dm",
+     "Dm",
+     "Bb",
+     "A"
+    ],
+    "style": "sparse",
+    "energy": 0.4
+   },
+   {
+    "t": 22.73,
+    "chords": [
+     "Bb",
+     "A"
+    ],
+    "style": "stinger",
+    "energy": 1
+   },
+   {
+    "t": 23.43,
+    "chords": [
+     "F",
+     "C",
+     "Dm",
+     "Bb",
+     "F",
+     "C",
+     "Gm",
+     "A"
+    ],
+    "style": "baroque",
+    "energy": 0.6
+   },
+   {
+    "t": 39.19,
+    "chords": [
+     "Dm",
+     "Gm",
+     "A",
+     "D"
+    ],
+    "style": "ending",
+    "energy": 0.6
+   }
+  ]
+ }
+}
